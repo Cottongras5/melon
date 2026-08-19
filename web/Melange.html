@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+:root {
+  --bg: #eef0ff;
+  --card: #ffffff;
+  --text: #1c2038;
+  --accent: #0051ee;
+  --border: #0051ee;
+  --side: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; overflow: hidden; height: 100vh; transition: background 0.2s ease, color 0.2s ease; }
+
+#side {
+  position: fixed;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--side);
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+button {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  width: 50px;
+  height: 50px;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+button svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.sep { height: 1px; background: var(--border); margin: 2px 4px; }
+#file { display: none; }
+
+#svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#svg path {
+  pointer-events: visibleStroke;
+  cursor: pointer;
+  transition: stroke-width 0.15s ease, stroke 0.15s ease;
+}
+
+#svg path:hover {
+  stroke-width: 8;
+  stroke: #ff4444;
+}
+
+#board { width: 100vw; height: 100vh; position: relative; overflow: auto; }
+
+.card {
+  position: absolute;
+  width: 290px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  z-index: 2;
+  cursor: grab;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:active { cursor: grabbing; }
+
+.card.column {
+  width: 340px;
+  min-height: 200px;
+}
+
+.card.doc, .card.color {
+  width: 150px;
+}
+
+.card.linking {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px var(--accent);
+}
+
+.btns {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+mark {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+mark svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; pointer-events: none; }
+
+mark:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.card content {
+  display: block;
+  outline: none;
+  min-height: 40px;
+  color: inherit;
+  user-select: text;
+  margin-top: 32px;
+  font-size: 16px;
+  line-height: 1.5;
+  cursor: text;
+}
+
+.card content strong { font-weight: bold; }
+.card content em { font-style: italic; }
+.card content code { background: rgba(0,0,0,0.08); padding: 2px 4px; border-radius: 4px; font-family: monospace; font-size: 14px; }
+.card content h1, .card content h2, .card content h3 { margin: 6px 0; font-weight: bold; }
+.card content h1 { font-size: 20px; }
+.card content h2 { font-size: 18px; }
+.card content h3 { font-size: 16px; }
+
+.card img { max-width: 100%; border-radius: 8px; display: block; pointer-events: none; }
+
+.doc-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 6px 6px 6px;
+  cursor: pointer;
+}
+
+.doc-icon {
+  width: 64px;
+  height: 80px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px 16px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.doc-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: var(--border);
+  border-bottom-left-radius: 8px;
+}
+
+.doc-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doc-lines span {
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.doc-lines span:nth-child(1) { width: 80%; }
+.doc-lines span:nth-child(2) { width: 50%; }
+.doc-lines span:nth-child(3) { width: 90%; }
+
+.doc-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  outline: none;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doc-meta {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+#doc-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 3000;
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+}
+
+.doc-dialog {
+  background: var(--card);
+  border: 1px solid var(--border);
+  width: 650px;
+  height: 80vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.doc-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-header input {
+  font-size: 20px;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  outline: none;
+  width: 60%;
+}
+
+.doc-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.doc-body {
+  flex: 1;
+  padding: 20px;
+  font-family: monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  background: rgba(0,0,0,0.02);
+  color: var(--text);
+  border: none;
+  outline: none;
+  resize: none;
+  width: 100%;
+}
+
+.todo { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 16px; }
+.todo input[type="checkbox"] { accent-color: var(--accent); cursor: pointer; width: 20px; height: 20px; }
+.todo span { outline: none; color: inherit; flex: 1; user-select: text; cursor: text; }
+.todo span.done { text-decoration: line-through; opacity: 0.4; }
+.todo del { cursor: pointer; font-size: 16px; color: #888; font-weight: bold; padding: 4px 6px; border-radius: 8px; }
+.todo del:hover { color: #ff4444; background: rgba(255,68,68,0.1); }
+
+.swatch {
+  width: 100%;
+  height: 60px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: background 0.2s ease;
+}
+
+.hex {
+  width: 100%;
+  background: rgba(0,0,0,0.03);
+  border: none;
+  color: inherit;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 14px;
+  outline: none;
+  text-align: center;
+}
+
+.head { margin-top: 20px; margin-bottom: 12px; }
+.title { outline: none; font-size: 20px; font-weight: bold; user-select: text; cursor: text; }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  min-height: 80px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.04);
+}
+
+.list .card {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  width: 100% !important;
+  box-shadow: none;
+}
+
+#modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  z-index: 2000;
+  width: 300px;
+}
+
+#modal h3 { height: 25px; margin-bottom: 14px; font-size: 20px; color: var(--text); }
+#modal select { width: 100%; height: 60px; padding: 15px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; font-size: 18px; cursor: pointer; }
+#modal button { height: 50px; margin-top: 16px; width: 100%; background: var(--accent); color: #ffffff; border-radius: 16px; font-size: 18px; font-weight: bold; }
+
+.popin { animation: popIn 0.12s ease-out forwards; }
+.popout { animation: popOut 0.12s ease-in forwards; }
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes popOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.92); }
+}
+
+.menu {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 150px;
+  padding: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.dot:hover {
+  transform: scale(1.2);
+}
+</style>
+</head>
+<body>
+
+<div id="side">
+  <button onclick="add('text')" title="Nueva tarjeta">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+  </button>
+  <button onclick="add('column')" title="Nueva columna">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+  </button>
+  <button onclick="add('doc')" title="Nuevo documento">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+  </button>
+  <button onclick="add('todo')" title="Nueva lista">
+    <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+  </button>
+  <button onclick="add('color')" title="Nueva paleta de color">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
+  </button>
+  <div class="sep"></div>
+  <button onclick="inp()" title="Importar JSON">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  </button>
+  <button onclick="out()" title="Exportar JSON">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+  </button>
+  <button onclick="pop()" title="Ajustes">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+  <button onclick="wipe()" title="Limpiar el tablero">
+    <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+  </button>
+  <input type="file" id="file" onchange="read(event)">
+</div>
+
+<div id="modal">
+  <h3>Temas</h3>
+  <select id="select" onchange="apply(this.value)"></select>
+  <button onclick="pop()">Cerrar</button>
+</div>
+
+<div id="doc-modal">
+  <div class="doc-dialog popin">
+    <div class="doc-header">
+      <input type="text" id="doc-title-input" placeholder="Título">
+      <div class="doc-actions">
+        <mark onclick="downloadDoc()" title="Descargar .md">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </mark>
+        <mark onclick="closeDocModal()" title="Cerrar">
+          ✕
+        </mark>
+      </div>
+    </div>
+    <textarea id="doc-textarea" class="doc-body" placeholder="Escribe tus próximas proyectadas en **markdown** aquí..."></textarea>
+  </div>
+</div>
+
+<svg id="svg"></svg>
+<div id="board"></div>
+
+<script>
+let board = document.getElementById('board');
+let svg = document.getElementById('svg');
+let file = document.getElementById('file');
+let modal = document.getElementById('modal');
+let select = document.getElementById('select');
+let docmodal = document.getElementById('doc-modal');
+let titlebox = document.getElementById('doc-title-input');
+let textarea = document.getElementById('doc-textarea');
+let activeid = null;
+
+let cards = [];
+let links = [];
+let drag = null;
+let source = null;
+let ox = 0;
+let oy = 0;
+let sx = 0;
+let sy = 0;
+let shift = false;
+let theme = 'light';
+
+let themes = {
+  "light": {
+    "name": "Claro",
+    "bg": "#daeaff",
+    "card": "#ffffff",
+    "text": "#1c2038",
+    "accent": "#00aaee",
+    "border": "#ffffff",
+    "side": "#ffffff"
+  },
+  "dark": {
+    "name": "Oscuro",
+    "bg": "#14161c",
+    "card": "#21252b",
+    "text": "#abb2bf",
+    "accent": "#00aaee",
+    "border": "#3b4048",
+    "side": "#21252b"
+  },
+  "melonlight": {
+    "name": "Melon Claro",
+    "bg": "#9ef5ff",
+    "card": "#e3fbff",
+    "text": "#224248",
+    "accent": "#ff9a00",
+    "border": "#e3fbff",
+    "side": "#e3fbff"
+  },
+  "melon": {
+    "name": "Melon Oscuro",
+    "bg": "#204044",
+    "card": "rgba(50, 94, 106, 0.95)",
+    "text": "#e3fbff",
+    "accent": "#ff9a00",
+    "border": "2f4a4f",
+    "side": "rgba(50, 94, 106, 0.95)"
+  },
+  "redspace": {
+    "name": "Crimson",
+    "bg": "#0d0204",
+    "card": "#1a050a",
+    "text": "#f0cfd5",
+    "accent": "#ff2a55",
+    "border": "#5e0f1d",
+    "side": "#1a050a"
+  },
+  "purplespace": {
+    "name": "Nebula",
+    "bg": "#090312",
+    "card": "#130826",
+    "text": "#dcd0f5",
+    "accent": "#a855f7",
+    "border": "#4c1d95",
+    "side": "#0e051c"
+  },
+  "eyeburn": {
+    "name": "Eyeburn",
+    "bg": "#000000",
+    "card": "#111113",
+    "text": "#ffffff",
+    "accent": "#666666",
+    "border": "#000000",
+    "side": "#111113"
+  }
+};
+
+const colors = {
+  "default": "var(--card)",
+  "red": "#d03040",
+  "orange": "#f07000",
+  "yellow": "#ffba00",
+  "lime": "#a0c000",
+  "green": "#209080",
+  "cyan": "#0090c0",
+  "blue": "#0050b0",
+  "purple": "#6010b0",
+  "pink": "#e02090",
+  "brown": "#7a3a2a",
+  "white": "#f0f0f0",
+  "silver": "#707a80",
+  "gray": "#414243",
+  "black": "#101010"
+};
+
+function setup() {
+  select.innerHTML = '';
+  Object.keys(themes).forEach(key => {
+    let opt = document.createElement('option');
+    opt.value = key;
+    opt.innerText = themes[key].name || key;
+    if (key === theme) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+
+function apply(name) {
+  theme = name;
+  let cfg = themes[name] || Object.values(themes)[0];
+  if (!cfg) return;
+  document.documentElement.style.setProperty('--bg', cfg.bg);
+  document.documentElement.style.setProperty('--card', cfg.card);
+  document.documentElement.style.setProperty('--text', cfg.text);
+  document.documentElement.style.setProperty('--accent', cfg.accent);
+  document.documentElement.style.setProperty('--border', cfg.border);
+  document.documentElement.style.setProperty('--side', cfg.side);
+  save();
+}
+
+function pop() {
+  modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+}
+
+function load() {
+  let raw = localStorage.getItem('melange');
+  if (raw) {
+    let data = JSON.parse(raw);
+    cards = data.cards || [];
+    cards.sort((a, b) => a.order - b.order);
+    links = data.links || [];
+    theme = data.theme || 'light';
+    render();
+    draw();
+  }
+  setup();
+  apply(theme);
+}
+
+function save() {
+  localStorage.setItem('melange', JSON.stringify({ cards: cards, links: links, theme: theme }));
+  draw();
+}
+
+function wipe() {
+  cards = [];
+  links = [];
+  board.innerHTML = '';
+  localStorage.removeItem('melange');
+  draw();
+}
+
+function out() {
+  let blob = new Blob([JSON.stringify({ cards: cards, links: links, theme: theme }, null, 2)], { type: 'application/json' });
+  let link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'melange.json';
+  link.click();
+}
+
+function inp() { file.click(); }
+
+function read(e) {
+  let item = e.target.files[0];
+  if (!item) return;
+  let reader = new FileReader();
+  reader.onload = (res) => {
+    let data = JSON.parse(res.target.result);
+    cards = data.cards || [];
+    cards.sort((a, b) => a.order - b.order);
+    links = data.links || [];
+    theme = data.theme || 'light';
+    render();
+    apply(theme);
+    save();
+  };
+  reader.readAsText(item);
+}
+
+function add(type, x, y, val) {
+  let initial = val;
+  if (!initial) {
+    if (type === 'todo') initial = [{ text: '-', done: false }];
+    else if (type === 'color') initial = '#e65100';
+    else if (type === 'column') initial = { title: 'Columna' };
+    else if (type === 'doc') initial = { title: 'Nuevo documento', content: ''};
+    else initial = 'La nota';
+  }
+
+  let item = {
+    id: Date.now(),
+    type: type || 'text',
+    x: x || 120,
+    y: y || 120,
+    color: 'default',
+    val: initial,
+    parent: null,
+    order: Date.now()
+  };
+  cards.push(item);
+  render(item.id);
+  save();
+}
+
+function nest(parent, child) {
+  let cur = cards.find(c => c.id === child);
+  while (cur && cur.parent) {
+    if (cur.parent === parent) return true;
+    cur = cards.find(c => c.id === cur.parent);
+  }
+  return false;
+}
+
+function parseMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\n/g, '<br>');
+  return html;
+}
+
+function getCaret(node) {
+  let sel = window.getSelection();
+  if (!sel.rangeCount) return 0;
+  let range = sel.getRangeAt(0);
+  let pre = range.cloneRange();
+  pre.selectNodeContents(node);
+  pre.setEnd(range.endContainer, range.endOffset);
+  return pre.toString().length;
+}
+
+function setCaret(node, pos) {
+  let range = document.createRange();
+  let stack = [node];
+  let found = false, count = 0;
+  while (stack.length > 0) {
+    let n = stack.pop();
+    if (n.nodeType === 3) {
+      let next = count + n.nodeValue.length;
+      if (!found && pos >= count && pos <= next) {
+        range.setStart(n, pos - count);
+        range.collapse(true);
+        found = true;
+        break;
+      }
+      count = next;
+    } else {
+      let i = n.childNodes.length;
+      while (i--) stack.push(n.childNodes[i]);
+    }
+  }
+  if (found) {
+    let sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+function render(fresh) {
+  board.innerHTML = '';
+
+  let bases = cards.filter(c => c.type === 'column');
+  let rests = cards.filter(c => c.type !== 'column');
+  let queue = [...bases, ...rests];
+
+  queue.forEach(item => {
+    let elem = document.createElement('div');
+    elem.className = 'card' + (item.type === 'column' ? ' column' : '') + (item.type === 'doc' ? ' doc' : '') + (item.type === 'color' ? ' color' : '');
+    if (fresh === item.id) elem.classList.add('popin');
+
+    elem.id = 'c' + item.id;
+    
+    if (!item.parent) {
+      elem.style.left = item.x + 'px';
+      elem.style.top = item.y + 'px';
+    }
+
+    let color = item.color || 'default';
+    elem.style.background = colors[color] || colors['default'];
+    if (['white', 'yellow', 'lime'].includes(color)) elem.style.color = '#000000';
+    else if (color !== 'default') elem.style.color = '#ffffff';
+
+    let btns = document.createElement('div');
+    btns.className = 'btns';
+
+    let pal = document.createElement('mark');
+    pal.title = 'Cambiar color';
+    pal.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>`;
+    pal.onclick = (e) => { e.stopPropagation(); menu(item.id, e); };
+
+    let pin = document.createElement('mark');
+    pin.innerText = '➔';
+    pin.title = 'Conectar enlace';
+    pin.onclick = (e) => { e.stopPropagation(); connect(item.id); };
+
+    let close = document.createElement('mark');
+    close.innerText = '✕';
+    close.title = 'Eliminar tarjeta';
+    close.onclick = (e) => { e.stopPropagation(); remove(item.id); };
+
+    btns.appendChild(pal);
+    btns.appendChild(pin);
+
+    if (item.type === 'todo') {
+      let addbtn = document.createElement('mark');
+      addbtn.title = 'Añadir tarea';
+      addbtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+      addbtn.onclick = (e) => {
+        e.stopPropagation();
+        item.val.push({ text: 'Nueva tarea', done: false });
+        save();
+        render();
+      };
+      btns.appendChild(addbtn);
+    }
+
+    btns.appendChild(close);
+
+    let body = document.createElement('content');
+
+    if (item.type === 'img') {
+      let img = document.createElement('img');
+      img.src = item.val;
+      body.appendChild(img);
+    } else if (item.type === 'todo') {
+      body.contentEditable = false;
+      todos(body, item);
+    } else if (item.type === 'color') {
+      body.contentEditable = false;
+      swatch(body, item);
+    } else if (item.type === 'column') {
+      body.contentEditable = false;
+      column(body, item);
+    } else if (item.type === 'doc') {
+      body.contentEditable = false;
+      documentCard(body, item);
+    } else {
+      body.contentEditable = true;
+      body.innerHTML = parseMarkdown(item.val);
+      body.oninput = () => {
+        let pos = getCaret(body);
+        item.val = body.innerText;
+        body.innerHTML = parseMarkdown(item.val);
+        setCaret(body, pos);
+        save();
+      };
+      body.onfocus = () => {
+        body.innerText = item.val;
+      };
+      body.onblur = () => {
+        item.val = body.innerText;
+        body.innerHTML = parseMarkdown(item.val);
+        save();
+      };
+    }
+
+    elem.onmousedown = (e) => {
+      if (e.target.closest('.btns') || e.target.closest('input') || e.target.closest('select') || e.target.closest('del') || e.target.closest('button') || e.target.isContentEditable) return;
+      e.stopPropagation();
+      drag = item;
+      shift = false;
+      sx = e.clientX;
+      sy = e.clientY;
+      let rect = elem.getBoundingClientRect();
+      ox = e.clientX - rect.left;
+      oy = e.clientY - rect.top;
+    };
+
+    elem.appendChild(btns);
+    elem.appendChild(body);
+
+    if (item.parent) {
+      let node = document.getElementById('list' + item.parent);
+      if (node) node.appendChild(elem);
+      else board.appendChild(elem);
+    } else {
+      board.appendChild(elem);
+    }
+  });
+
+  draw();
+}
+
+function documentCard(container, item) {
+  container.innerHTML = '';
+  let preview = document.createElement('div');
+  preview.className = 'doc-preview';
+  
+  let words = item.val.content ? item.val.content.trim().split(/\s+/).length : 0;
+
+  preview.innerHTML = `
+    <div class="doc-icon">
+      <div class="doc-lines">
+        <span></span><span></span><span></span>
+      </div>
+      <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="doc-title">${escapeHTML(item.val.title || 'Sin título')}</div>
+    <div class="doc-meta">${words} palabras</div>
+  `;
+
+  preview.onclick = (e) => {
+    e.stopPropagation();
+    openDocModal(item);
+  };
+
+  container.appendChild(preview);
+}
+
+function openDocModal(item) {
+  activeid = item.id;
+  titlebox.value = item.val.title;
+  textarea.value = item.val.content;
+  docmodal.style.display = 'flex';
+}
+
+function closeDocModal() {
+  if (!activeid) return;
+  let item = cards.find(c => c.id === activeid);
+  if (item) {
+    item.val.title = titlebox.value;
+    item.val.content = textarea.value;
+    save();
+    render();
+  }
+  docmodal.style.display = 'none';
+  activeid = null;
+}
+
+titlebox.oninput = () => {
+  if (!activeid) return;
+  let item = cards.find(c => c.id === activeid);
+  if (item) {
+    item.val.title = titlebox.value;
+    save();
+  }
+};
+
+textarea.oninput = () => {
+  if (!activeid) return;
+  let item = cards.find(c => c.id === activeid);
+  if (item) {
+    item.val.content = textarea.value;
+    save();
+  }
+};
+
+function downloadDoc() {
+  if (!activeid) return;
+  let item = cards.find(c => c.id === activeid);
+  if (!item) return;
+  let blob = new Blob([item.val.content], { type: 'text/markdown' });
+  let link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = (item.val.title || 'documento').toLowerCase().replace(/\s+/g, '-') + '.md';
+  link.click();
+}
+
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+  );
+}
+
+function column(container, item) {
+  container.innerHTML = '';
+
+  let head = document.createElement('div');
+  head.className = 'head';
+
+  let title = document.createElement('div');
+  title.className = 'title';
+  title.contentEditable = true;
+  title.innerText = item.val.title || 'Columna';
+  title.oninput = () => { item.val.title = title.innerText; save(); };
+
+  head.appendChild(title);
+
+  let list = document.createElement('div');
+  list.className = 'list';
+  list.id = 'list' + item.id;
+
+  container.appendChild(head);
+  container.appendChild(list);
+}
+
+function menu(id, e) {
+  let active = document.querySelector('.menu');
+  if (active) dismiss(active);
+
+  let item = cards.find(c => c.id === id);
+  let elem = document.getElementById('c' + id);
+  if (!item || !elem) return;
+
+  let pop = document.createElement('div');
+  pop.className = 'menu popin';
+  pop.style.left = e.clientX + 'px';
+  pop.style.top = e.clientY + 'px';
+
+  Object.keys(colors).forEach(name => {
+    let dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.background = colors[name];
+    dot.title = name;
+    dot.onclick = (ev) => {
+      ev.stopPropagation();
+      item.color = name;
+      elem.style.background = colors[name];
+      if (['white', 'yellow', 'lime'].includes(name)) elem.style.color = '#000000';
+      else if (name !== 'default') elem.style.color = '#ffffff';
+      else elem.style.color = 'var(--text)';
+      dismiss(pop);
+      save();
+    };
+    pop.appendChild(dot);
+  });
+
+  document.body.appendChild(pop);
+}
+
+function dismiss(elem) {
+  elem.classList.remove('popin');
+  elem.classList.add('popout');
+  setTimeout(() => elem.remove(), 110);
+}
+
+function todos(container, item) {
+  container.innerHTML = '';
+  item.val.forEach((task, idx) => {
+    let row = document.createElement('div');
+    row.className = 'todo';
+
+    let box = document.createElement('input');
+    box.type = 'checkbox';
+    box.checked = task.done;
+    box.onchange = () => { task.done = box.checked; label.className = task.done ? 'done' : ''; save(); };
+
+    let label = document.createElement('span');
+    label.contentEditable = true;
+    label.innerText = task.text;
+    if (task.done) label.className = 'done';
+    label.oninput = () => { task.text = label.innerText; save(); };
+
+    let del = document.createElement('del');
+    del.innerText = '✕';
+    del.onclick = (e) => { e.stopPropagation(); item.val.splice(idx, 1); todos(container, item); save(); };
+
+    row.appendChild(box);
+    row.appendChild(label);
+    row.appendChild(del);
+    container.appendChild(row);
+  });
+}
+
+function swatch(container, item) {
+  container.innerHTML = '';
+  let preview = document.createElement('div');
+  preview.className = 'swatch';
+  preview.style.background = item.val || '#e65100';
+
+  let input = document.createElement('input');
+  input.className = 'hex';
+  input.type = 'text';
+  input.value = item.val || '#e65100';
+
+  input.oninput = () => { item.val = input.value; preview.style.background = input.value; save(); };
+  container.appendChild(preview);
+  container.appendChild(input);
+}
+
+function connect(id) {
+  let elem = document.getElementById('c' + id);
+  if (!source) {
+    source = id;
+    if (elem) elem.classList.add('linking');
+  } else if (source === id) {
+    if (elem) elem.classList.remove('linking');
+    source = null;
+  } else {
+    let prev = document.getElementById('c' + source);
+    if (prev) prev.classList.remove('linking');
+    let exist = links.find(l => (l.from === source && l.to === id) || (l.from === id && l.to === source));
+    if (exist) links = links.filter(l => l.id !== exist.id);
+    else links.push({ id: Date.now(), from: source, to: id });
+    source = null;
+    save();
+  }
+}
+
+function draw() {
+  let cfg = themes[theme] || Object.values(themes)[0] || {};
+  let col = cfg.accent || '#e65100';
+  svg.innerHTML = '';
+  let rect = board.getBoundingClientRect();
+
+  links.forEach(l => {
+    let c1 = cards.find(c => c.id === l.from);
+    let c2 = cards.find(c => c.id === l.to);
+    if (!c1 || !c2) return;
+    let e1 = document.getElementById('c' + c1.id);
+    let e2 = document.getElementById('c' + c2.id);
+    if (!e1 || !e2) return;
+
+    let r1 = e1.getBoundingClientRect();
+    let r2 = e2.getBoundingClientRect();
+    let x1 = r1.left - rect.left + r1.width / 2;
+    let y1 = r1.top - rect.top + r1.height / 2;
+    let x2 = r2.left - rect.left + r2.width / 2;
+    let y2 = r2.top - rect.top + r2.height / 2;
+
+    let dx = (x2 - x1) / 2;
+    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`);
+    path.setAttribute('stroke', col);
+    path.setAttribute('stroke-width', '4');
+    path.setAttribute('fill', 'none');
+    path.onclick = () => { links = links.filter(item => item.id !== l.id); save(); };
+    svg.appendChild(path);
+  });
+}
+
+function remove(id) {
+  cards = cards.filter(c => c.id !== id && c.parent !== id);
+  links = links.filter(l => l.from !== id && l.to !== id);
+  let elem = document.getElementById('c' + id);
+  if (elem) {
+    elem.classList.remove('popin');
+    elem.classList.add('popout');
+    setTimeout(() => { elem.remove(); render(); }, 110);
+  } else {
+    render();
+  }
+  save();
+}
+
+window.onclick = (e) => {
+  let pop = document.querySelector('.menu');
+  if (pop && !e.target.closest('.menu')) dismiss(pop);
+};
+
+window.onmousemove = (e) => {
+  if (!drag) return;
+  let elem = document.getElementById('c' + drag.id);
+  if (!elem) return;
+  let brect = board.getBoundingClientRect();
+
+  if (!shift) {
+    if (Math.hypot(e.clientX - sx, e.clientY - sy) > 5) {
+      shift = true;
+      if (drag.parent) {
+        let erect = elem.getBoundingClientRect();
+        drag.x = erect.left - brect.left;
+        drag.y = erect.top - brect.top;
+        drag.parent = null;
+        board.appendChild(elem);
+        elem.style.position = 'absolute';
+        elem.style.left = drag.x + 'px';
+        elem.style.top = drag.y + 'px';
+        ox = e.clientX - erect.left;
+        oy = e.clientY - erect.top;
+      }
+    } else {
+      return;
+    }
+  }
+
+  drag.x = e.clientX - brect.left - ox;
+  drag.y = e.clientY - brect.top - oy;
+  elem.style.left = drag.x + 'px';
+  elem.style.top = drag.y + 'px';
+  draw();
+};
+
+window.onmouseup = (e) => {
+  if (!drag) return;
+
+  if (!shift) {
+    drag = null;
+    return;
+  }
+
+  let cols = cards.filter(c => c.type === 'column' && c.id !== drag.id);
+  let target = null;
+
+  cols.forEach(c => {
+    let node = document.getElementById('c' + c.id);
+    if (!node) return;
+    let rect = node.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+      target = c;
+    }
+  });
+
+  if (target) {
+    if (drag.type === 'column' && nest(drag.id, target.id)) {
+      drag.parent = null;
+    } else {
+      drag.parent = target.id;
+      let kids = cards.filter(c => c.parent === target.id && c.id !== drag.id);
+      kids.sort((a, b) => a.order - b.order);
+
+      let rank = Date.now();
+      let hit = false;
+
+      for (let i = 0; i < kids.length; i++) {
+        let kid = kids[i];
+        let knode = document.getElementById('c' + kid.id);
+        if (knode) {
+          let krect = knode.getBoundingClientRect();
+          let mid = krect.top + (krect.height / 2);
+          if (e.clientY < mid) {
+            rank = kid.order - 0.5;
+            hit = true;
+            break;
+          }
+        }
+      }
+
+      if (!hit && kids.length > 0) rank = kids[kids.length - 1].order + 1;
+      else if (kids.length === 0) rank = 0;
+
+      drag.order = rank;
+    }
+  } else {
+    drag.parent = null;
+    let brect = board.getBoundingClientRect();
+    drag.x = e.clientX - brect.left - ox;
+    drag.y = e.clientY - brect.top - oy;
+  }
+
+  drag = null;
+  shift = false;
+
+  cards.sort((a, b) => a.order - b.order);
+  let roots = [...new Set(cards.map(c => c.parent))];
+  roots.forEach(p => {
+    let kids = cards.filter(c => c.parent === p);
+    kids.forEach((k, i) => k.order = i);
+  });
+
+  render();
+  save();
+};
+
+window.ondragover = (e) => e.preventDefault();
+window.ondrop = (e) => {
+  e.preventDefault();
+  let item = e.dataTransfer.files[0];
+  if (item && item.type.startsWith('image/')) {
+    let reader = new FileReader();
+    reader.onload = (res) => { add('img', e.clientX, e.clientY, res.target.result); };
+    reader.readAsDataURL(item);
+  }
+};
+
+load();
+</script>
+</body>
+</html>
