@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>The Melon Project</title>
+<style>
+:root {
+  --bg: #daeaff;
+  --card: #ffffff;
+  --text: #1c2038;
+  --accent: #00aaee;
+  --border: #ffffff;
+  --side: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, color 0.2s ease; overflow: hidden; }
+
+#side {
+  position: fixed;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: var(--side);
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+}
+
+button, .btn-link {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  width: 50px;
+  height: 50px;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+button:hover, .btn-link:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+button svg, .btn-link svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.sep { height: 1px; background: var(--border); margin: 2px 4px; }
+
+.wrap {
+  width: 520px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+h1 { font-size: 28px; font-weight: bold; }
+p { font-size: 16px; line-height: 1.6; opacity: 0.85; }
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  height: 54px;
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+#modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  z-index: 2000;
+  width: 300px;
+}
+
+#modal h3 { height: 25px; margin-bottom: 14px; font-size: 20px; color: var(--text); }
+#modal select { width: 100%; height: 60px; padding: 15px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; font-size: 18px; cursor: pointer; }
+#modal button { width: 100%; height: 50px; margin-top: 16px; background: var(--accent); color: #ffffff; border-radius: 16px; font-size: 18px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div id="side">
+  <button onclick="toggleLang()" title="Cambiar idioma / Switch language">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+  </button>
+  <button onclick="pop()" title="Ajustes de tema">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+</div>
+
+<div id="modal">
+  <h3>Temas</h3>
+  <select id="select" onchange="apply(this.value)"></select>
+  <button onclick="pop()">Cerrar</button>
+</div>
+
+<div class="wrap">
+  <h1 id="title">Melon 🍈</h1>
+  <p id="desc">Apps y herramientas tranquilas. Sin dependencias gigantes, sin Node.js, sin excusas baratas, libres y de código abierto, aprovechando todo el poder de tu computadora. Tu RAM lo va a agradecer.</p>
+  <div class="actions">
+    <a href="Melange.html?lang=es" class="action-btn" id="btn-es">Melange (ES)</a>
+    <a href="Melange.html?lang=en" class="action-btn" id="btn-en">Melange (EN)</a>
+  </div>
+</div>
+
+<script>
+let select = document.getElementById('select');
+let modal = document.getElementById('modal');
+let title = document.getElementById('title');
+let desc = document.getElementById('desc');
+let btnEs = document.getElementById('btn-es');
+let btnEn = document.getElementById('btn-en');
+
+let lang = 'es';
+let theme = 'light';
+
+let themes = {
+  "light": { "name": "Claro", "bg": "#daeaff", "card": "#ffffff", "text": "#1c2038", "accent": "#00aaee", "border": "#ffffff", "side": "#ffffff" },
+  "dark": { "name": "Oscuro", "bg": "#14161c", "card": "#21252b", "text": "#abb2bf", "accent": "#00aaee", "border": "#3b4048", "side": "#21252b" },
+  "melonlight": { "name": "Melon Claro", "bg": "#9ef5ff", "card": "#e3fbff", "text": "#224248", "accent": "#ff9a00", "border": "#e3fbff", "side": "#e3fbff" },
+  "melon": { "name": "Melon Oscuro", "bg": "#204044", "card": "rgba(50, 94, 106, 0.95)", "text": "#e3fbff", "accent": "#ff9a00", "border": "#2f4a4f", "side": "rgba(50, 94, 106, 0.95)" },
+  "redspace": { "name": "Crimson", "bg": "#0d0204", "card": "#1a050a", "text": "#f0cfd5", "accent": "#ff2a55", "border": "#5e0f1d", "side": "#1a050a" },
+  "purplespace": { "name": "Nebula", "bg": "#090312", "card": "#130826", "text": "#dcd0f5", "accent": "#a855f7", "border": "#4c1d95", "side": "#0e051c" },
+  "eyeburn": { "name": "Eyeburn", "bg": "#000000", "card": "#111113", "text": "#ffffff", "accent": "#666666", "border": "#000000", "side": "#111113" }
+};
+
+let texts = {
+  es: {
+    title: "Melon Web Apps 🍈",
+    desc: "Apps y herramientas tranquilas siguiendo los principios del proyecto Melon. Sin dependencias gigantes, sin Node.js, sin excusas baratas. Libres y de código abierto, aprovechando el potencial de tu computadora. Tu RAM lo va a agradecer."
+  },
+  en: {
+    title: "Melon Web Apps 🍈",
+    desc: "Calm web utilities and apps following the Melon project principles. No giant dependencies, no Node.js, no cheap excuses. Free and open source, making optimal use of your computer's potential. Your RAM is gonna thank you."
+  }
+};
+
+function setup() {
+  select.innerHTML = '';
+  Object.keys(themes).forEach(key => {
+    let opt = document.createElement('option');
+    opt.value = key;
+    opt.innerText = themes[key].name;
+    if (key === theme) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+
+function apply(name) {
+  theme = name;
+  let cfg = themes[name] || themes.light;
+  document.documentElement.style.setProperty('--bg', cfg.bg);
+  document.documentElement.style.setProperty('--card', cfg.card);
+  document.documentElement.style.setProperty('--text', cfg.text);
+  document.documentElement.style.setProperty('--accent', cfg.accent);
+  document.documentElement.style.setProperty('--border', cfg.border);
+  document.documentElement.style.setProperty('--side', cfg.side);
+  localStorage.setItem('melon_index_theme', theme);
+}
+
+function pop() {
+  modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+}
+
+function toggleLang() {
+  lang = lang === 'es' ? 'en' : 'es';
+  title.innerText = texts[lang].title;
+  desc.innerText = texts[lang].desc;
+  localStorage.setItem('melon_index_lang', lang);
+}
+
+function init() {
+  let savedTheme = localStorage.getItem('melon_index_theme');
+  let savedLang = localStorage.getItem('melon_index_lang');
+  if (savedTheme && themes[savedTheme]) theme = savedTheme;
+  if (savedLang && texts[savedLang]) lang = savedLang;
+  
+  title.innerText = texts[lang].title;
+  desc.innerText = texts[lang].desc;
+  setup();
+  apply(theme);
+}
+
+init();
+</script>
+</body>
+</html>
