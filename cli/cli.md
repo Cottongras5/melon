@@ -1,4 +1,4 @@
-## Melon CLI Apps for Linux-based Operating Systems (or anything you could compile this to) 🍈
+## Melon CLI Apps for Linux-based Operating Systems (or anything you could possibly compile this to) 🍈
 
 Here are all the terminal apps and command line tools that follow the principles of the Melon project, written in the lightweight and efficient C of Classic.
 
