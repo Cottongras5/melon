@@ -75,29 +75,33 @@ p { font-size: 16px; line-height: 1.6; opacity: 0.85; }
 
 .actions {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 10px;
 }
 
 .action-btn {
-  flex: 1;
-  height: 54px;
+  padding: 10px 18px;
+  height: 42px;
   background: var(--accent);
   color: #ffffff;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: bold;
-  display: flex;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
 }
 
 .action-btn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
   transform: translateY(-2px);
   color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 #modal {
@@ -141,8 +145,9 @@ p { font-size: 16px; line-height: 1.6; opacity: 0.85; }
   <h1 id="title">Melon 🍈</h1>
   <p id="desc">Apps y herramientas tranquilas. Sin dependencias gigantes, sin Node.js, sin excusas baratas, libres y de código abierto, aprovechando todo el poder de tu computadora. Tu RAM lo va a agradecer.</p>
   <div class="actions">
-    <a href="web/Melange.html" class="action-btn" id="btn-es">Melange (ES)</a>
-    <a href="web/Melange-EN.html" class="action-btn" id="btn-en">Melange (EN)</a>
+    <a href="web/Melange.html" class="action-btn" id="btn-es">🖌️ Melange (ES)</a>
+    <a href="web/Melange-EN.html" class="action-btn" id="btn-en">🖌️ Melange (EN)</a>
+    <a href="web/Memory.html" class="action-btn" id="btn-mem">💡 Memory</a>
   </div>
 </div>
 
@@ -151,8 +156,6 @@ let select = document.getElementById('select');
 let modal = document.getElementById('modal');
 let title = document.getElementById('title');
 let desc = document.getElementById('desc');
-let btnEs = document.getElementById('btn-es');
-let btnEn = document.getElementById('btn-en');
 
 let lang = 'es';
 let theme = 'light';
@@ -228,3 +231,4 @@ init();
 </script>
 </body>
 </html>
+
