@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory</title>
+    <style>
+        :root {
+            --bg-top: #0d0e12;
+            --bg-bottom: #14161c;
+            --card: rgba(33, 37, 43, 0.75);
+            --text: #abb2bf;
+            --accent: #00aaee;
+            --border: rgba(59, 64, 72, 0.4);
+            --sidebar: rgba(20, 22, 28, 0.85);
+            --glass-blur: blur(12px);
+        }
+
+        body.light {
+            --bg-top: #b8d4ff;
+            --bg-bottom: #daeaff;
+            --card: rgba(255, 255, 255, 0.7);
+            --text: #1c2038;
+            --accent: #00aaee;
+            --border: rgba(255, 255, 255, 0.6);
+            --sidebar: rgba(218, 234, 255, 0.85);
+        }
+
+        body.dark {
+            --bg-top: #0d0e12;
+            --bg-bottom: #14161c;
+            --card: rgba(33, 37, 43, 0.75);
+            --text: #abb2bf;
+            --accent: #00aaee;
+            --border: rgba(59, 64, 72, 0.4);
+            --sidebar: rgba(20, 22, 28, 0.85);
+        }
+
+        body.melonlight {
+            --bg-top: #7deaf6;
+            --bg-bottom: #9ef5ff;
+            --card: rgba(227, 251, 255, 0.75);
+            --text: #224248;
+            --accent: #ff9a00;
+            --border: rgba(255, 255, 255, 0.6);
+            --sidebar: rgba(158, 245, 255, 0.85);
+        }
+
+        body.melon {
+            --bg-top: #152b2e;
+            --bg-bottom: #204044;
+            --card: rgba(50, 94, 106, 0.75);
+            --text: #e3fbff;
+            --accent: #ff9a00;
+            --border: rgba(47, 74, 79, 0.5);
+            --sidebar: rgba(32, 64, 68, 0.85);
+        }
+
+        body.redspace {
+            --bg-top: #050102;
+            --bg-bottom: #0d0204;
+            --card: rgba(26, 5, 10, 0.75);
+            --text: #f0cfd5;
+            --accent: #ff2a55;
+            --border: rgba(94, 15, 29, 0.5);
+            --sidebar: rgba(13, 2, 4, 0.85);
+        }
+
+        body.purplespace {
+            --bg-top: #04010a;
+            --bg-bottom: #090312;
+            --card: rgba(19, 8, 38, 0.75);
+            --text: #dcd0f5;
+            --accent: #a855f7;
+            --border: rgba(76, 29, 149, 0.5);
+            --sidebar: rgba(9, 3, 18, 0.85);
+        }
+
+        body.eyeburn {
+            --bg-top: #000000;
+            --bg-bottom: #000000;
+            --card: rgba(17, 17, 19, 0.85);
+            --text: #ffffff;
+            --accent: #666666;
+            --border: rgba(255, 255, 255, 0.1);
+            --sidebar: rgba(0, 0, 0, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.5rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s, background 0.2s;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.92);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            max-width: 650px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .input-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 1.5rem;
+            border-radius: 24px;
+            font-size: 1.25rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        textarea.glow {
+            border-color: var(--accent);
+            box-shadow: 0 0 25px var(--accent);
+        }
+
+        .submit-btn {
+            width: 144px;
+            height: 144px;
+            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 72px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
+            border-radius: 36px 36px 0 0;
+            pointer-events: none;
+        }
+
+        .submit-btn svg {
+            width: 64px;
+            height: 64px;
+            fill: currentColor;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .submit-btn:active {
+            transform: scale(0.92);
+        }
+
+        .fullscreen-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--sidebar);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 100;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 3rem;
+        }
+
+        .fullscreen-menu.open {
+            transform: translateY(0);
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .menu-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .thoughts-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding-bottom: 2rem;
+        }
+
+        .thought-card {
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .thought-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .thought-title {
+            font-weight: 600;
+            font-size: calc(1.15rem + 2px);
+            color: var(--text);
+        }
+
+        .thought-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .thought-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .thought-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s, background 0.2s;
+        }
+
+        .action-btn svg {
+            width: 25px;
+            height: 25px;
+            fill: currentColor;
+        }
+
+        .action-btn:active {
+            transform: scale(0.92);
+        }
+
+        .action-btn.delete {
+            color: #ff4757;
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .action-btn.save {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .settings-content {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .setting-group label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        select, input {
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            outline: none;
+        }
+
+        .editor-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .editor-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .editor-box {
+            background: var(--sidebar);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 650px;
+            height: 80vh;
+            border-radius: 24px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .editor-overlay.open .editor-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .editor-textarea {
+            flex: 1;
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 1.5rem;
+            border-radius: 16px;
+            font-size: 1.15rem;
+            resize: none;
+            outline: none;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="dark">
+
+    <header id="main-header">
+        <div class="top-actions" id="btn-group-left">
+            <button class="icon-btn" id="menu-btn" title="Thoughts">☰</button>
+            <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
+        </div>
+        <div class="top-actions" id="btn-group-right" style="display: none;"></div>
+    </header>
+
+    <main>
+        <div class="input-container">
+            <textarea id="thought-input" placeholder="What's on your mind?"></textarea>
+            <button class="submit-btn" id="submit-btn" title="Save Thought">
+                <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
+            </button>
+        </div>
+    </main>
+
+    <div class="fullscreen-menu" id="thoughts-menu">
+        <div class="menu-header">
+            <span class="menu-title">Thoughts</span>
+            <button class="icon-btn" id="close-thoughts">✕</button>
+        </div>
+        <div class="thoughts-list" id="thoughts-list">
+        </div>
+    </div>
+
+    <div class="fullscreen-menu" id="settings-menu">
+        <div class="menu-header">
+            <span class="menu-title">Settings</span>
+            <button class="icon-btn" id="close-settings">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="setting-group">
+                <label for="theme-select">Themes</label>
+                <select id="theme-select">
+                    <option value="light">Light</option>
+                    <option value="dark" selected>Dark</option>
+                    <option value="melonlight">Melon Light</option>
+                    <option value="melon">Melon Dark</option>
+                    <option value="redspace">Crimson</option>
+                    <option value="purplespace">Nebula</option>
+                    <option value="eyeburn">Eyeburn</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="input-mode">Aura Farming</label>
+                <select id="input-mode">
+                    <option value="keyboard">Disabled</option>
+                    <option value="speech">Enabled</option>
+                    <option value="both">Sigma</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="menu-position">Menu & Settings Position</label>
+                <select id="menu-position">
+                    <option value="top-left">Top Left</option>
+                    <option value="top-right">Top Right</option>
+                    <option value="bottom-left">Bottom Left</option>
+                    <option value="bottom-right">Bottom Right</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="editor-overlay" id="editor-overlay">
+        <div class="editor-box">
+            <div class="menu-header" style="margin-bottom:0;">
+                <span class="menu-title">Edit Thought</span>
+                <button class="icon-btn" id="editor-cancel">✕</button>
+            </div>
+            <textarea class="editor-textarea" id="editor-textarea"></textarea>
+            <div class="editor-footer">
+                <button class="action-btn" id="editor-cancel-btn" title="Cancel">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+                </button>
+                <button class="action-btn save" id="editor-save-btn" title="Save">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="currentColor"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let thoughts = JSON.parse(localStorage.getItem('melon_memories') || '[]');
+        let settings = JSON.parse(localStorage.getItem('melon_mem_settings') || JSON.stringify({
+            theme: 'dark',
+            inputMode: 'keyboard',
+            menuPosition: 'top-left'
+        }));
+
+        let editingIndex = null;
+
+        const body = document.body;
+        const textarea = document.getElementById('thought-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const thoughtsMenu = document.getElementById('thoughts-menu');
+        const settingsMenu = document.getElementById('settings-menu');
+        const editorOverlay = document.getElementById('editor-overlay');
+        const editorTextarea = document.getElementById('editor-textarea');
+        const thoughtsList = document.getElementById('thoughts-list');
+        const themeSelect = document.getElementById('theme-select');
+        const inputModeSelect = document.getElementById('input-mode');
+        const menuPosSelect = document.getElementById('menu-position');
+        const btnGroupLeft = document.getElementById('btn-group-left');
+        const btnGroupRight = document.getElementById('btn-group-right');
+
+        function applySettings() {
+            body.className = settings.theme;
+            themeSelect.value = settings.theme;
+            inputModeSelect.value = settings.inputMode;
+            menuPosSelect.value = settings.menuPosition;
+
+            btnGroupLeft.innerHTML = '';
+            btnGroupRight.innerHTML = '';
+            btnGroupLeft.style.display = 'none';
+            btnGroupRight.style.display = 'none';
+
+            const buttonsHtml = `
+                <button class="icon-btn" id="menu-btn" title="Thoughts">☰</button>
+                <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
+            `;
+
+            if (settings.menuPosition.includes('left')) {
+                btnGroupLeft.style.display = 'flex';
+                btnGroupLeft.innerHTML = buttonsHtml;
+            } else {
+                btnGroupRight.style.display = 'flex';
+                btnGroupRight.innerHTML = buttonsHtml;
+            }
+
+            document.getElementById('menu-btn').onclick = () => { thoughtsMenu.classList.add('open'); renderThoughts(); };
+            document.getElementById('settings-btn').onclick = () => settingsMenu.classList.add('open');
+        }
+
+        function saveSettings() {
+            settings.theme = themeSelect.value;
+            settings.inputMode = inputModeSelect.value;
+            settings.menuPosition = menuPosSelect.value;
+            localStorage.setItem('melon_mem_settings', JSON.stringify(settings));
+            applySettings();
+        }
+
+        function renderThoughts() {
+            thoughtsList.innerHTML = '';
+            if (thoughts.length === 0) {
+                thoughtsList.innerHTML = `<div style="text-align:center; opacity:0.5; margin-top:3rem; font-size: 1.1rem;">No thoughts recorded yet...</div>`;
+                return;
+            }
+
+            thoughts.forEach((thought, index) => {
+                const words = thought.text.trim().split(/\s+/);
+                const title = words.length > 0 ? (words.slice(0, 3).join(' ') + (words.length > 3 ? '...' : '')) : 'Empty thought...';
+                
+                const card = document.createElement('div');
+                card.className = 'thought-card';
+                card.innerHTML = `
+                    <div class="thought-header-row">
+                        <span class="thought-title">${escapeHtml(title)}</span>
+                    </div>
+                    <div class="thought-footer-row">
+                        <span class="thought-date">${thought.date}</span>
+                        <div class="thought-actions">
+                            <button class="action-btn" onclick="openEditor(${index})" title="Edit">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteThought(${index})" title="Delete">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                thoughtsList.appendChild(card);
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function addThought() {
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            thoughts.unshift({ text, date: dateStr });
+            localStorage.setItem('melon_memories', JSON.stringify(thoughts));
+
+            textarea.value = '';
+            textarea.classList.add('glow');
+            submitBtn.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                textarea.classList.remove('glow');
+                submitBtn.style.transform = 'scale(1)';
+            }, 300);
+
+            renderThoughts();
+        }
+
+        window.deleteThought = function(index) {
+            thoughts.splice(index, 1);
+            localStorage.setItem('melon_memories', JSON.stringify(thoughts));
+            renderThoughts();
+        }
+
+        window.openEditor = function(index) {
+            editingIndex = index;
+            editorTextarea.value = thoughts[index].text;
+            editorOverlay.classList.add('open');
+        }
+
+        function closeEditor() {
+            editorOverlay.classList.remove('open');
+            editingIndex = null;
+        }
+
+        function saveEditedThought() {
+            if (editingIndex !== null) {
+                thoughts[editingIndex].text = editorTextarea.value.trim();
+                localStorage.setItem('melon_memories', JSON.stringify(thoughts));
+                renderThoughts();
+                closeEditor();
+            }
+        }
+
+        submitBtn.onclick = addThought;
+        
+        document.getElementById('close-thoughts').onclick = () => thoughtsMenu.classList.remove('open');
+        document.getElementById('close-settings').onclick = () => settingsMenu.classList.remove('open');
+
+        document.getElementById('editor-cancel').onclick = closeEditor;
+        document.getElementById('editor-cancel-btn').onclick = closeEditor;
+        document.getElementById('editor-save-btn').onclick = saveEditedThought;
+
+        themeSelect.onchange = saveSettings;
+        inputModeSelect.onchange = saveSettings;
+        menuPosSelect.onchange = saveSettings;
+
+        applySettings();
+    </script>
+</body>
+</html>
