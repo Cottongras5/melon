@@ -103,18 +103,32 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
         .top-actions {
+            position: fixed;
             display: flex;
             gap: 1rem;
+            z-index: 50;
+            transition: all 0.2s ease;
+        }
+
+        .top-actions.top-left {
+            top: 1.5rem;
+            left: 2rem;
+        }
+
+        .top-actions.top-right {
+            top: 1.5rem;
+            right: 2rem;
+        }
+
+        .top-actions.bottom-left {
+            bottom: 1.5rem;
+            left: 2rem;
+        }
+
+        .top-actions.bottom-right {
+            bottom: 1.5rem;
+            right: 2rem;
         }
 
         .icon-btn {
@@ -453,13 +467,10 @@
 </head>
 <body class="dark">
 
-    <header id="main-header">
-        <div class="top-actions" id="btn-group-left">
-            <button class="icon-btn" id="menu-btn" title="Thoughts">☰</button>
-            <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
-        </div>
-        <div class="top-actions" id="btn-group-right" style="display: none;"></div>
-    </header>
+    <div class="top-actions top-left" id="action-buttons">
+        <button class="icon-btn" id="menu-btn" title="Thoughts">☰</button>
+        <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
+    </div>
 
     <main>
         <div class="input-container">
@@ -556,8 +567,7 @@
         const themeSelect = document.getElementById('theme-select');
         const inputModeSelect = document.getElementById('input-mode');
         const menuPosSelect = document.getElementById('menu-position');
-        const btnGroupLeft = document.getElementById('btn-group-left');
-        const btnGroupRight = document.getElementById('btn-group-right');
+        const actionButtons = document.getElementById('action-buttons');
 
         function applySettings() {
             body.className = settings.theme;
@@ -565,26 +575,7 @@
             inputModeSelect.value = settings.inputMode;
             menuPosSelect.value = settings.menuPosition;
 
-            btnGroupLeft.innerHTML = '';
-            btnGroupRight.innerHTML = '';
-            btnGroupLeft.style.display = 'none';
-            btnGroupRight.style.display = 'none';
-
-            const buttonsHtml = `
-                <button class="icon-btn" id="menu-btn" title="Thoughts">☰</button>
-                <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
-            `;
-
-            if (settings.menuPosition.includes('left')) {
-                btnGroupLeft.style.display = 'flex';
-                btnGroupLeft.innerHTML = buttonsHtml;
-            } else {
-                btnGroupRight.style.display = 'flex';
-                btnGroupRight.innerHTML = buttonsHtml;
-            }
-
-            document.getElementById('menu-btn').onclick = () => { thoughtsMenu.classList.add('open'); renderThoughts(); };
-            document.getElementById('settings-btn').onclick = () => settingsMenu.classList.add('open');
+            actionButtons.className = `top-actions ${settings.menuPosition}`;
         }
 
         function saveSettings() {
@@ -679,6 +670,9 @@
                 closeEditor();
             }
         }
+
+        document.getElementById('menu-btn').onclick = () => { thoughtsMenu.classList.add('open'); renderThoughts(); };
+        document.getElementById('settings-btn').onclick = () => settingsMenu.classList.add('open');
 
         submitBtn.onclick = addThought;
         
