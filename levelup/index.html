@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es" data-th="lvl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LevelUP</title>
+    <style>
+        :root {
+            --bg: #160e29;
+            --card: linear-gradient(180deg, #2d1c4c 0%, #21133b 100%);
+            --chov: linear-gradient(180deg, #38235e 0%, #29174a 100%);
+            --txt: #f3e8ff;
+            --act: #00ff88;
+            --brd: rgba(0, 255, 136, 0.25);
+            --sbar: linear-gradient(180deg, #241440 0%, #190c30 100%);
+            --mtxt: #a88acb;
+            --glow: rgba(0, 255, 136, 0.4);
+            --shd: 0 5px 20px rgba(0, 255, 136, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        [data-th="light"] {
+            --bg: #daeaff;
+            --card: linear-gradient(180deg, #ffffff 0%, #f0f6ff 100%);
+            --chov: linear-gradient(180deg, #ffffff 0%, #e1eeff 100%);
+            --txt: #1c2038;
+            --act: #00aaee;
+            --brd: rgba(0, 170, 238, 0.2);
+            --sbar: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
+            --mtxt: #697896;
+            --glow: rgba(0, 170, 238, 0.3);
+            --shd: 0 5px 18px rgba(0, 100, 200, 0.12), inset 0 1px 0 #ffffff;
+        }
+
+        [data-th="dark"] {
+            --bg: #14161c;
+            --card: linear-gradient(180deg, #252a32 0%, #1d2127 100%);
+            --chov: linear-gradient(180deg, #2d333d 0%, #22272e 100%);
+            --txt: #abb2bf;
+            --act: #00aaee;
+            --brd: rgba(255, 255, 255, 0.08);
+            --sbar: linear-gradient(180deg, #21252b 0%, #191c21 100%);
+            --mtxt: #5c6370;
+            --glow: rgba(0, 170, 238, 0.3);
+            --shd: 0 5px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        [data-th="mllgt"] {
+            --bg: #9ef5ff;
+            --card: linear-gradient(180deg, #ffffff 0%, #e0f9ff 100%);
+            --chov: linear-gradient(180deg, #ffffff 0%, #cdf5ff 100%);
+            --txt: #224248;
+            --act: #ff9a00;
+            --brd: rgba(255, 154, 0, 0.25);
+            --sbar: linear-gradient(180deg, #eafbff 0%, #d8f7ff 100%);
+            --mtxt: #5d838a;
+            --glow: rgba(255, 154, 0, 0.35);
+            --shd: 0 5px 18px rgba(0, 180, 200, 0.18), inset 0 1px 0 #ffffff;
+        }
+
+        [data-th="mldrk"] {
+            --bg: #1a3236;
+            --card: linear-gradient(180deg, #2a4e54 0%, #203f44 100%);
+            --chov: linear-gradient(180deg, #325c63 0%, #264b51 100%);
+            --txt: #e3fbff;
+            --act: #ff9a00;
+            --brd: rgba(255, 255, 255, 0.12);
+            --sbar: linear-gradient(180deg, #24464c 0%, #1c383d 100%);
+            --mtxt: #83a5ac;
+            --glow: rgba(255, 154, 0, 0.35);
+            --shd: 0 5px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        [data-th="crims"] {
+            --bg: #0d0204;
+            --card: linear-gradient(180deg, #24080e 0%, #180408 100%);
+            --chov: linear-gradient(180deg, #300c14 0%, #20060a 100%);
+            --txt: #f0cfd5;
+            --act: #ff2a55;
+            --brd: rgba(255, 42, 85, 0.25);
+            --sbar: linear-gradient(180deg, #1d050a 0%, #120205 100%);
+            --mtxt: #9e6470;
+            --glow: rgba(255, 42, 85, 0.35);
+            --shd: 0 5px 20px rgba(255, 0, 50, 0.15), inset 0 1px 0 rgba(255, 150, 180, 0.2);
+        }
+
+        [data-th="nebul"] {
+            --bg: #090312;
+            --card: linear-gradient(180deg, #1c0e38 0%, #120826 100%);
+            --chov: linear-gradient(180deg, #25134a 0%, #180a33 100%);
+            --txt: #dcd0f5;
+            --act: #a855f7;
+            --brd: rgba(168, 85, 247, 0.25);
+            --sbar: linear-gradient(180deg, #15092b 0%, #0d041c 100%);
+            --mtxt: #816aab;
+            --glow: rgba(168, 85, 247, 0.35);
+            --shd: 0 5px 20px rgba(120, 40, 200, 0.2), inset 0 1px 0 rgba(220, 180, 255, 0.2);
+        }
+
+        [data-th="eybrn"] {
+            --bg: #050505;
+            --card: linear-gradient(180deg, #1a1a1c 0%, #101012 100%);
+            --chov: linear-gradient(180deg, #242426 0%, #161618 100%);
+            --txt: #ffffff;
+            --act: #888888;
+            --brd: rgba(255, 255, 255, 0.15);
+            --sbar: linear-gradient(180deg, #141416 0%, #0a0a0c 100%);
+            --mtxt: #777777;
+            --glow: rgba(255, 255, 255, 0.2);
+            --shd: 0 5px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--txt);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.25s, color 0.25s;
+            overflow-x: hidden;
+            font-size: 115%;
+        }
+
+        .acc {
+            color: var(--act);
+        }
+
+        .btn {
+            background: var(--card);
+            border: 1px solid var(--brd);
+            color: var(--txt);
+            border-radius: 12px;
+            box-shadow: var(--shd);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--chov);
+            border-color: var(--act);
+            box-shadow: var(--shd), 0 0 12px var(--glow);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn.on {
+            border-color: var(--act);
+            box-shadow: var(--shd), 0 0 10px var(--glow);
+            background: var(--chov);
+            color: var(--act);
+        }
+
+        .btn.ico {
+            padding: 0;
+            width: 44px;
+            height: 44px;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        header {
+            height: 72px;
+            padding: 0 28px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            background: var(--sbar);
+            border-bottom: 1px solid var(--brd);
+            box-shadow: var(--shd);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brnd {
+            display: flex;
+            align-items: center;
+            justify-self: start;
+        }
+
+        .titles {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mtitl {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--act);
+            line-height: 1;
+        }
+
+        .stitl {
+            font-size: 0.78rem;
+            color: var(--mtxt);
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            margin-top: 3px;
+        }
+
+        nav.cnav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            justify-self: center;
+        }
+
+        .hact {
+            justify-self: end;
+            display: flex;
+            align-items: center;
+        }
+
+        .nbtn svg, .ico svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .tab {
+            display: none;
+            flex-direction: column;
+            gap: 36px;
+            animation: fIn 0.3s ease;
+        }
+
+        .tab.on {
+            display: flex;
+        }
+
+        @keyframes fIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: var(--card);
+            border: 1px solid var(--brd);
+            border-radius: 18px;
+            padding: 56px 42px;
+            box-shadow: var(--shd);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 350px;
+            height: 350px;
+            background: var(--glow);
+            filter: blur(90px);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hcnt {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: var(--txt);
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--mtxt);
+            max-width: 750px;
+            line-height: 1.55;
+        }
+
+        .limg {
+            max-width: 220px;
+            max-height: 220px;
+            width: 100%;
+            object-fit: contain;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .csec {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .ssec {
+            background: var(--card);
+            border: 1px solid var(--brd);
+            border-radius: 18px;
+            padding: 32px 42px;
+            box-shadow: var(--shd);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sttl {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--act);
+        }
+
+        .vlist {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vlist .btn {
+            justify-content: flex-start;
+            width: 100%;
+        }
+
+        .clist {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .citem {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--sbar);
+            border: 1px solid var(--brd);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: var(--shd);
+        }
+
+        .citem svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--act);
+            flex-shrink: 0;
+        }
+
+        .cdat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .clbl {
+            font-size: 0.75rem;
+            color: var(--mtxt);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .cval {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--txt);
+        }
+
+        .sbtn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .moly {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .moly.on {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mdl {
+            background: var(--sbar);
+            border: 1px solid var(--brd);
+            box-shadow: var(--shd), 0 20px 40px rgba(0,0,0,0.5);
+            border-radius: 16px;
+            width: 360px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mhd {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--act);
+            border-bottom: 1px solid var(--brd);
+            padding-bottom: 12px;
+        }
+
+        .sitm {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slbl {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--mtxt);
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--brd);
+            color: var(--txt);
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        @media (max-aspect-ratio: 1/1), (max-width: 680px) {
+            header nav.cnav .nbtn span {
+                display: none;
+            }
+
+            header nav.cnav .nbtn {
+                padding: 0;
+                width: 44px;
+                height: 44px;
+                aspect-ratio: 1 / 1;
+                border-radius: 12px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 680px) {
+            header {
+                padding: 0 14px;
+                height: 64px;
+            }
+
+            .mtitl {
+                font-size: 1.2rem;
+            }
+
+            .stitl {
+                display: none;
+            }
+
+            nav.cnav {
+                gap: 6px;
+            }
+
+            .btn.ico, header nav.cnav .nbtn {
+                width: 38px;
+                height: 38px;
+            }
+
+            .hero {
+                padding: 32px 22px;
+                flex-direction: column-reverse;
+                align-items: center;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.05rem;
+            }
+
+            .limg {
+                max-width: 160px;
+            }
+
+            .csec {
+                grid-template-columns: 1fr;
+            }
+
+            .ssec {
+                padding: 24px 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brnd">
+            <div class="titles">
+                <span class="mtitl">LevelUP</span>
+                <span class="stitl">Unimar Gaming & E-Sports</span>
+            </div>
+        </div>
+
+        <nav class="cnav">
+            <button class="btn nbtn on" data-tb="init">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Inicio</span>
+            </button>
+            <button class="btn nbtn" data-tb="evnt">
+                <svg viewBox="0 0 24 24"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+                <span>Eventos</span>
+            </button>
+            <button class="btn nbtn" data-tb="info">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                <span>Información</span>
+            </button>
+        </nav>
+
+        <div class="hact">
+            <button class="btn ico" id="oStg">
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section id="vInit" class="tab on">
+            <div class="hero">
+                <div class="hcnt">
+                    <h1><span class="acc">LevelUP</span>: Subiendo de Nivel</h1>
+                    <p>El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja. El pingüino fue al quiosco a comprar un zapato. El viejo señor bajó de la nave y miró fascinado el queso fresco, el whisky y el vodka que le trajeron. Fabrico mi joya con un exquisito plato de kiwi y zafiros. My name is Giovanni Giorgio, but everybody calls me Giorgio</p>
+                </div>
+                <img src="pics/logo.png" alt="Logo" class="limg">
+            </div>
+
+            <div class="csec">
+                <div class="ssec">
+                    <h2 class="sttl">Redes Sociales</h2>
+                    <div class="vlist">
+                        <a href="https://instagram.com" target="_blank" rel="noopener" class="btn sbtn">
+                            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://discord.com" target="_blank" rel="noopener" class="btn sbtn">
+                            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                            <span>Discord</span>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener" class="btn sbtn">
+                            <svg viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.936 9.936 0 0024 4.59z"/></svg>
+                            <span>Twitter</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ssec">
+                    <h2 class="sttl">Contacto</h2>
+                    <div class="clist">
+                        <div class="citem">
+                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            <div class="cdat">
+                                <span class="clbl">Correo</span>
+                                <span class="cval">levelupmgta@tuta.io</span>
+                            </div>
+                        </div>
+                        <div class="citem">
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                            <div class="cdat">
+                                <span class="clbl">Teléfono</span>
+                                <span class="cval">+58 123 456 7890</span>
+                            </div>
+                        </div>
+                        <div class="citem">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <div class="cdat">
+                                <span class="clbl">Ubicación</span>
+                                <span class="cval">Universidad de Margarita, El Valle del Espíritu Santo, Nueva Esparta, Venezuela</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vEvnt" class="tab">
+            <div class="hero">
+                <div class="hcnt">
+                    <h1>Eventos</h1>
+                    <p>El viejo señor bajó de la nave y miró fascinado el queso fresco, el whisky y el vodka que le trajeron. Fabrico mi joya con un exquisito plato de kiwi y zafiros.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="vInfo" class="tab">
+            <div class="hero">
+                <div class="hcnt">
+                    <h1>Información</h1>
+                    <p>Conoce más sobre nuestras iniciativas de E-Sports, reglamentos de torneos e información institucional.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="moly" id="sMod">
+        <div class="mdl">
+            <div class="mhd">
+                <span>Ajustes</span>
+                <button class="btn ico" id="cStg" style="width:32px; height:32px; font-size: 0.9rem;">✕</button>
+            </div>
+            <div class="sitm">
+                <span class="slbl">Temas</span>
+                <select id="thSel">
+                    <option value="lvl" selected>LevelUP</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="mllgt">Melon Light</option>
+                    <option value="mldrk">Melon Dark</option>
+                    <option value="crims">Crimson</option>
+                    <option value="nebul">Nebula</option>
+                    <option value="eybrn">Eyeburn</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sMod = document.getElementById("sMod");
+        const oStg = document.getElementById("oStg");
+        const cStg = document.getElementById("cStg");
+        const thSel = document.getElementById("thSel");
+
+        oStg.addEventListener("click", () => sMod.classList.add("on"));
+        cStg.addEventListener("click", () => sMod.classList.remove("on"));
+        sMod.addEventListener("click", (e) => {
+            if (e.target === sMod) sMod.classList.remove("on");
+        });
+
+        thSel.addEventListener("change", (e) => {
+            document.documentElement.setAttribute("data-th", e.target.value);
+            localStorage.setItem("l_thm", e.target.value);
+        });
+
+        const sThm = localStorage.getItem("l_thm");
+        if (sThm) {
+            document.documentElement.setAttribute("data-th", sThm);
+            thSel.value = sThm;
+        }
+
+        function sTab(tId) {
+            document.querySelectorAll(".tab").forEach(v => v.classList.remove("on"));
+            document.querySelectorAll("nav .nbtn").forEach(b => b.classList.remove("on"));
+
+            const tView = document.getElementById(`v${tId.charAt(0).toUpperCase() + tId.slice(1)}`);
+            const tBtn = document.querySelector(`nav .nbtn[data-tb="${tId}"]`);
+
+            if (tView) tView.classList.add("on");
+            if (tBtn) tBtn.classList.add("on");
+        }
+
+        document.querySelectorAll("nav .nbtn").forEach(b => {
+            b.addEventListener("click", () => {
+                sTab(b.getAttribute("data-tb"));
+            });
+        });
+    </script>
+</body>
+</html>
