@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LevelUP</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg: #160e29;
@@ -466,6 +467,164 @@
             fill: currentColor;
         }
 
+        .elist {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ecard {
+            background: var(--card);
+            border: 1px solid var(--brd);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shd);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #bView {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 100;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fIn 0.2s ease-out;
+        }
+
+        .bhdr {
+            height: 60px;
+            padding: 0 24px;
+            background: var(--sbar);
+            border-bottom: 1px solid var(--brd);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bcnt {
+            flex: 1;
+            display: flex;
+            gap: 0;
+            padding: 40px;
+            overflow-x: auto;
+            overflow-y: auto;
+            align-items: flex-start;
+        }
+
+        .rnd {
+            display: flex;
+            flex-direction: column;
+            min-width: 210px;
+            position: relative;
+        }
+
+        .rtitle {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--act);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 20px;
+            height: 30px;
+        }
+
+        .mch-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .mch {
+            background: var(--card);
+            border: 2px solid var(--brd);
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: var(--shd);
+            width: 100%;
+            z-index: 2;
+        }
+
+        .conn-col {
+            display: flex;
+            flex-direction: column;
+            width: 40px;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        .conn-block {
+            position: relative;
+            width: 100%;
+        }
+
+        .conn-line {
+            position: absolute;
+            left: 0;
+            width: 20px;
+            border-right: 4px solid var(--brd);
+            border-top: 4px solid var(--brd);
+            border-bottom: 4px solid var(--brd);
+        }
+
+        .conn-line.straight {
+            border-top: none;
+            border-bottom: none;
+            border-right: none;
+            background: var(--brd);
+            top: 50% !important;
+            height: 4px !important;
+            width: 40px;
+        }
+
+        .conn-line::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: -24px;
+            width: 20px;
+            height: 4px;
+            background: var(--brd);
+            transform: translateY(-50%);
+        }
+
+        .conn-line.straight::after {
+            display: none;
+        }
+
+        .ply {
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--txt);
+            cursor: default;
+        }
+
+        .ply.win {
+            border: 1px solid var(--act);
+            color: var(--act);
+            font-weight: 800;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .ply.empty {
+            opacity: 0.5;
+        }
+
         footer {
             background: var(--sbar);
             border-top: 1px solid var(--brd);
@@ -507,7 +666,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            z-index: 200;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s;
@@ -641,7 +800,6 @@
                 <span class="stitl">Unimar Gaming & E-Sports</span>
             </div>
         </div>
-
         <nav class="cnav">
             <button class="btn nbtn on" data-tb="init">
                 <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -669,7 +827,7 @@
                     <h1><span class="acc">LevelUP</span>: Subiendo de Nivel</h1>
                     <p>El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el saxofón detrás del palenque de paja. El pingüino fue al quiosco a comprar un zapato. My name is Giovanni Giorgio, but everybody calls me Giorgio</p>
                 </div>
-                <img src="pics/logo.png" alt="Logo" class="limg">
+                <img src="./pics/logo.png" alt="Logo" class="limg">
             </div>
             <div class="csec">
                 <div class="ssec">
@@ -696,14 +854,14 @@
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                             <div class="cdat">
                                 <span class="clbl">Correo</span>
-                                <span class="cval">levelupgamin917@gmail.com</span>
+                                <span class="cval">aca va el correo</span>
                             </div>
                         </div>
                         <div class="citem">
                             <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
                             <div class="cdat">
                                 <span class="clbl">Teléfono</span>
-                                <span class="cval">+58 412 350 4575</span>
+                                <span class="cval">aca va el telefono</span>
                             </div>
                         </div>
                         <div class="citem mcard">
@@ -726,9 +884,10 @@
             <div class="hero">
                 <div class="hcnt">
                     <h1>Eventos</h1>
-                    <p>El viejo señor bajó de la nave y miró fascinado el queso fresco, el whisky y el vodka que le trajeron. Fabrico mi joya con un exquisito plato de kiwi y zafiros.</p>
+                    <p>Mira la lista de eventos activos y explora sus brackets en tiempo real.</p>
                 </div>
             </div>
+            <div class="elist" id="eLst">Cargando...</div>
         </section>
         <section id="vInfo" class="tab">
             <div class="hero">
@@ -739,6 +898,13 @@
             </div>
         </section>
     </main>
+    <div id="bView">
+        <div class="bhdr">
+            <h2 id="bTtl" style="color:var(--act);">Nombre</h2>
+            <button class="btn" id="bClsB">Volver</button>
+        </div>
+        <div class="bcnt" id="bTree"></div>
+    </div>
     <footer>
         <div class="fcontent">
             <span class="fcopy">&copy; 2026 <span class="acc">LevelUP</span>. Todos los derechos reservados.</span>
@@ -749,7 +915,7 @@
         <div class="mdl">
             <div class="mhd">
                 <span>Ajustes</span>
-                <button id="cStg" style="width:32px; height:32px; font-size:0.9rem; background:var(--card); border:1px solid var(--brd); color:var(--txt); border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+                <button id="cStg" style="width:36px; height:36px; font-size:1rem; background:var(--card); border:2px solid var(--brd); color:var(--txt); border-radius:10px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
             </div>
             <div class="sitm">
                 <span class="slbl">Temas</span>
@@ -775,17 +941,31 @@
     </div>
 
     <script>
+        const SB_URL = "https://mbteomzgcinjxuvualte.supabase.co";
+        const SB_KEY = "sb_publishable_FoR1C7KBX980x3TNbblzsw_9hGOLgqB";
+        const sb = supabase.createClient(SB_URL, SB_KEY);
         const sMod = document.getElementById("sMod");
         const oStg = document.getElementById("oStg");
         const cStg = document.getElementById("cStg");
         const thSel = document.getElementById("thSel");
         const auSel = document.getElementById("auSel");
+        const eLst = document.getElementById("eLst");
+        const bView = document.getElementById("bView");
+        const bTtl = document.getElementById("bTtl");
+        const bTree = document.getElementById("bTree");
+        const bClsB = document.getElementById("bClsB");
         let aTid = null;
+        let currEvt = null;
+        let winners = {};
 
         oStg.addEventListener("click", () => sMod.classList.add("on"));
         cStg.addEventListener("click", () => sMod.classList.remove("on"));
         sMod.addEventListener("click", (e) => {
             if (e.target === sMod) sMod.classList.remove("on");
+        });
+
+        bClsB.addEventListener("click", () => {
+            bView.style.display = "none";
         });
 
         thSel.addEventListener("change", (e) => {
@@ -811,6 +991,7 @@
                         const b = btns[Math.floor(Math.random() * btns.length)];
                         const r = b.getBoundingClientRect();
                         if (r.width === 0 || r.top > window.innerHeight || r.bottom < 0) continue;
+                        
                         const p = document.createElement("div");
                         p.className = "prtc";
                         const s = Math.random() * 8 + 4;
@@ -841,10 +1022,14 @@
         function sTab(tId) {
             document.querySelectorAll(".tab").forEach(v => v.classList.remove("on"));
             document.querySelectorAll("nav .nbtn").forEach(b => b.classList.remove("on"));
+
             const tView = document.getElementById(`v${tId.charAt(0).toUpperCase() + tId.slice(1)}`);
             const tBtn = document.querySelector(`nav .nbtn[data-tb="${tId}"]`);
+
             if (tView) tView.classList.add("on");
             if (tBtn) tBtn.classList.add("on");
+
+            if (tId === "evnt") loadEvents();
         }
 
         document.querySelectorAll("nav .nbtn").forEach(b => {
@@ -852,6 +1037,174 @@
                 sTab(b.getAttribute("data-tb"));
             });
         });
+
+        async function loadEvents() {
+            eLst.innerHTML = "Cargando...";
+            const { data, error } = await sb.from("events").select("*").order("created_at", { ascending: false });
+            if (error || !data) {
+                eLst.innerHTML = "La página se bugueó horrible. -200 de Aura";
+                return;
+            }
+            if (data.length === 0) {
+                eLst.innerHTML = "No hay eventos hoy.";
+                return;
+            }
+            eLst.innerHTML = "";
+            data.forEach(evt => {
+                const card = document.createElement("div");
+                card.className = "ecard";
+                card.innerHTML = `
+                    <div>
+                        <h3 style="color:var(--act); font-size:1.3rem;">${evt.title}</h3>
+                        <p style="color:var(--mtxt); font-size:0.95rem; margin-top:4px;">${evt.description || "No hay descripción? Que flojo anda Chris hoy"}</p>
+                        <span style="font-size:0.8rem; color:var(--act); display:inline-block; margin-top:8px;">${evt.max_players} Jugadores</span>
+                    </div>
+                    <button class="btn" onclick='openBracket(${JSON.stringify(evt)})'>Ver Bracket</button>
+                `;
+                eLst.appendChild(card);
+            });
+        }
+
+        window.openBracket = async (evt) => {
+            currEvt = evt;
+            winners = evt.bracket_state || {};
+            bTtl.innerText = evt.title;
+            bView.style.display = "flex";
+            renderTree();
+        };
+
+        async function renderTree() {
+            bTree.innerHTML = "";
+            const { data: players } = await sb.from("participants").select("*").eq("event_id", currEvt.id).order("seed", { ascending: true });
+
+            const N = currEvt.max_players;
+            let targetPower = 2;
+            while (targetPower * 2 <= N) targetPower *= 2;
+            if (targetPower === N) targetPower = N;
+
+            const numPrelimMatches = N - targetPower;
+            const numDirectPlayers = N - (numPrelimMatches * 2);
+
+            let pMap = {};
+            if (players) players.forEach(p => pMap[p.seed] = p.name);
+
+            const mainRoundsCount = Math.log2(targetPower);
+            const totalRounds = numPrelimMatches > 0 ? mainRoundsCount + 1 : mainRoundsCount;
+
+            const MATCH_HEIGHT = 90;
+            const BASE_GAP = 20;
+
+            for (let r = 0; r < totalRounds; r++) {
+                const rDiv = document.createElement("div");
+                rDiv.className = "rnd";
+
+                const isPrelimRound = (numPrelimMatches > 0 && r === 0);
+                const mainRoundIndex = numPrelimMatches > 0 ? r - 1 : r;
+
+                let matchesInRound = isPrelimRound ? numPrelimMatches : targetPower / Math.pow(2, mainRoundIndex + 1);
+
+                let rName = "";
+                if (isPrelimRound) {
+                    rName = `Ronda de ${N}`;
+                } else {
+                    const playersInRound = matchesInRound * 2;
+                    if (playersInRound === 2) rName = "Final";
+                    else if (playersInRound === 4) rName = "Semifinales";
+                    else if (playersInRound === 8) rName = "Cuartos";
+                    else if (playersInRound === 16) rName = "Octavos";
+                    else if (playersInRound === 32) rName = "Ronda de 32";
+                    else if (playersInRound === 64) rName = "Ronda de 64";
+                    else rName = `Ronda de ${playersInRound}`;
+                }
+
+                const rHdr = document.createElement("div");
+                rHdr.className = "rtitle";
+                rHdr.innerText = rName;
+                rDiv.appendChild(rHdr);
+
+                const currentSlotHeight = (MATCH_HEIGHT + BASE_GAP) * Math.pow(2, isPrelimRound ? 0 : mainRoundIndex);
+
+                for (let m = 0; m < matchesInRound; m++) {
+                    const mWrap = document.createElement("div");
+                    mWrap.className = "mch-wrap";
+                    mWrap.style.height = `${currentSlotHeight}px`;
+
+                    const mBox = document.createElement("div");
+                    mBox.className = "mch";
+
+                    let p1 = "", p2 = "";
+
+                    if (isPrelimRound) {
+                        let s1 = numDirectPlayers + (m * 2) + 1;
+                        let s2 = numDirectPlayers + (m * 2) + 2;
+                        p1 = pMap[s1] || `Seed ${s1}`;
+                        p2 = pMap[s2] || `Seed ${s2}`;
+                    } else if (r === (numPrelimMatches > 0 ? 1 : 0)) {
+                        if (numPrelimMatches > 0 && m < numPrelimMatches) {
+                            let s1 = (m * 2) + 1;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = winners[`0_${m}`] || `Ganador Prelim M${m+1}`;
+                        } else {
+                            let s1 = (m * 2) + 1;
+                            let s2 = (m * 2) + 2;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = pMap[s2] || `Seed ${s2}`;
+                        }
+                    } else {
+                        p1 = winners[`${r-1}_${m*2}`] || `Esperando M${m*2+1}`;
+                        p2 = winners[`${r-1}_${m*2+1}`] || `Esperando M${m*2+2}`;
+                    }
+
+                    const mKey = `${r}_${m}`;
+                    const curWin = winners[mKey];
+
+                    let p1Class = `ply ${!p1 || p1.startsWith('Esperando') || p1.startsWith('Ganador') ? 'empty' : ''} ${curWin && curWin === p1 ? 'win' : ''}`;
+                    let p2Class = `ply ${!p2 || p2.startsWith('Esperando') || p2.startsWith('Ganador') ? 'empty' : ''} ${curWin && curWin === p2 ? 'win' : ''}`;
+
+                    mBox.innerHTML = `
+                        <div class="${p1Class}"><span>${p1}</span></div>
+                        <div class="${p2Class}"><span>${p2}</span></div>
+                    `;
+                    mWrap.appendChild(mBox);
+                    rDiv.appendChild(mWrap);
+                }
+                bTree.appendChild(rDiv);
+
+                if (r < totalRounds - 1) {
+                    const cDiv = document.createElement("div");
+                    cDiv.className = "conn-col";
+
+                    if (isPrelimRound) {
+                        for (let c = 0; c < numPrelimMatches; c++) {
+                            const block = document.createElement("div");
+                            block.className = "conn-block";
+                            block.style.height = `${currentSlotHeight}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "conn-line straight";
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    } else {
+                        const nextMatches = matchesInRound / 2;
+                        for (let c = 0; c < nextMatches; c++) {
+                            const block = document.createElement("div");
+                            block.className = "conn-block";
+                            block.style.height = `${currentSlotHeight * 2}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "conn-line";
+                            line.style.top = `${currentSlotHeight / 2}px`;
+                            line.style.height = `${currentSlotHeight}px`;
+
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    }
+                    bTree.appendChild(cDiv);
+                }
+            }
+        }
     </script>
 </body>
 </html>
