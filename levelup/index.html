@@ -8,15 +8,15 @@
     <style>
         :root {
             --bg: #160e29;
-            --card: linear-gradient(180deg, #2d1c4c 0%, #21133b 100%);
-            --chov: linear-gradient(180deg, #38235e 0%, #29174a 100%);
-            --txt: #f3e8ff;
+            --card: linear-gradient(180deg, #2f1f4f 0%, #201030 100%);
+            --chov: linear-gradient(180deg, #38235e 0%, #3f154a 100%);
+            --txt: #f0e0ff;
             --act: #00ff88;
             --brd: rgba(0, 255, 136, 0.25);
             --sbar: linear-gradient(180deg, #241440 0%, #190c30 100%);
             --mtxt: #a88acb;
             --glow: rgba(0, 255, 136, 0.4);
-            --shd: 0 5px 20px rgba(0, 255, 136, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            --shd: 0 5px 20px rgba(156, 0, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         [data-th="light"] {
@@ -124,7 +124,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: background-color 0.25s, color 0.25s;
+            transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
             font-size: 115%;
         }
@@ -147,25 +147,39 @@
             padding: 10px 20px;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.2s;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s, border-color 0.2s, box-shadow 0.2s;
             text-decoration: none;
             position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
         }
 
         .btn:hover {
             background: var(--chov);
             border-color: var(--act);
-            box-shadow: var(--shd), 0 0 12px var(--glow);
-            transform: translateY(-1px);
+            box-shadow: var(--shd), 0 0 16px var(--glow);
+            transform: translateY(-2px);
         }
 
         .btn:active {
-            transform: translateY(1px);
+            transform: translateY(1px) scale(0.98);
         }
 
         .btn.on {
             border-color: var(--act);
-            box-shadow: var(--shd), 0 0 10px var(--glow);
+            box-shadow: var(--shd), 0 0 12px var(--glow);
             background: var(--chov);
             color: var(--act);
         }
@@ -216,6 +230,7 @@
             position: sticky;
             top: 0;
             z-index: 50;
+            backdrop-filter: blur(8px);
         }
 
         .brnd {
@@ -235,6 +250,11 @@
             letter-spacing: 0.5px;
             color: var(--act);
             line-height: 1;
+            transition: text-shadow 0.3s;
+        }
+
+        .mtitl:hover {
+            text-shadow: 0 0 12px var(--glow);
         }
 
         .stitl {
@@ -263,6 +283,11 @@
             width: 22px;
             height: 22px;
             fill: currentColor;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover svg {
+            transform: scale(1.1);
         }
 
         main {
@@ -278,18 +303,26 @@
 
         .tab {
             display: none;
+            opacity: 0;
+            transform: translateY(8px);
             flex-direction: column;
             gap: 36px;
-            animation: fIn 0.3s ease;
         }
 
         .tab.on {
             display: flex;
+            animation: tabFadeIn 0.25s ease forwards;
         }
 
-        @keyframes fIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes tabFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero {
@@ -304,6 +337,11 @@
             align-items: center;
             justify-content: space-between;
             gap: 32px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero:hover {
+            transform: translateY(-2px);
         }
 
         .hero::before {
@@ -317,6 +355,12 @@
             filter: blur(90px);
             border-radius: 50%;
             pointer-events: none;
+            animation: pulseGlow 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
 
         .hcnt {
@@ -348,6 +392,11 @@
             object-fit: contain;
             z-index: 1;
             flex-shrink: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .limg:hover {
+            transform: scale(1.08) rotate(3deg);
         }
 
         .csec {
@@ -365,6 +414,11 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .ssec:hover {
+            transform: translateY(-2px);
         }
 
         .sttl {
@@ -399,6 +453,12 @@
             padding: 14px 16px;
             border-radius: 12px;
             box-shadow: var(--shd);
+            transition: transform 0.2s ease, border-color 0.2s;
+        }
+
+        .citem:hover {
+            transform: translateX(4px);
+            border-color: var(--act);
         }
 
         .citem.mcard {
@@ -453,12 +513,12 @@
             border: 0;
             filter: blur(4px);
             transform: scale(1.05);
-            transition: filter 0.35s ease, transform 0.35s ease;
+            transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .mpbx:hover iframe {
             filter: blur(0);
-            transform: scale(1.2);
+            transform: scale(1.12);
         }
 
         .sbtn svg {
@@ -482,6 +542,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.25s, box-shadow 0.25s;
+            animation: cardSlideUp 0.35s ease backwards;
+        }
+
+        @keyframes cardSlideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ecard:hover {
+            transform: translateY(-3px) scale(1.005);
+            border-color: var(--act);
+            box-shadow: var(--shd), 0 8px 25px var(--glow);
         }
 
         #bView {
@@ -495,7 +568,15 @@
             z-index: 100;
             flex-direction: column;
             overflow: hidden;
-            animation: fIn 0.2s ease-out;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #bView.show {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .bhdr {
@@ -523,6 +604,12 @@
             flex-direction: column;
             min-width: 210px;
             position: relative;
+            animation: fadeInRound 0.4s ease backwards;
+        }
+
+        @keyframes fadeInRound {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .rtitle {
@@ -553,6 +640,13 @@
             box-shadow: var(--shd);
             width: 100%;
             z-index: 2;
+            transition: transform 0.2s ease, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .mch:hover {
+            transform: scale(1.02);
+            border-color: var(--act);
+            box-shadow: 0 5px 20px var(--glow);
         }
 
         .conn-col {
@@ -612,6 +706,12 @@
             align-items: center;
             color: var(--txt);
             cursor: default;
+            transition: background 0.15s, transform 0.15s;
+        }
+
+        .ply:not(.empty):not(.win):hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(2px);
         }
 
         .ply.win {
@@ -662,14 +762,14 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 200;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s;
+            transition: opacity 0.3s ease;
         }
 
         .moly.on {
@@ -687,6 +787,12 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            transform: scale(0.9) translateY(15px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .moly.on .mdl {
+            transform: scale(1) translateY(0);
         }
 
         .mhd {
@@ -723,6 +829,12 @@
             font-weight: 600;
             outline: none;
             cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--act);
+            box-shadow: 0 0 10px var(--glow);
         }
 
         @media (max-aspect-ratio: 1/1), (max-width: 680px) {
@@ -793,6 +905,7 @@
     </style>
 </head>
 <body>
+
     <header>
         <div class="brnd">
             <div class="titles">
@@ -800,6 +913,7 @@
                 <span class="stitl">Unimar Gaming & E-Sports</span>
             </div>
         </div>
+
         <nav class="cnav">
             <button class="btn nbtn on" data-tb="init">
                 <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -814,12 +928,14 @@
                 <span>Relleno</span>
             </button>
         </nav>
+
         <div class="hact">
             <button class="btn ico" id="oStg">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
             </button>
         </div>
     </header>
+
     <main>
         <section id="vInit" class="tab on">
             <div class="hero">
@@ -829,6 +945,7 @@
                 </div>
                 <img src="pics/logo.png" alt="Logo" class="limg">
             </div>
+
             <div class="csec">
                 <div class="ssec">
                     <h2 class="sttl">Redes Sociales</h2>
@@ -847,6 +964,7 @@
                         </a>
                     </div>
                 </div>
+
                 <div class="ssec">
                     <h2 class="sttl">Contacto</h2>
                     <div class="clist">
@@ -880,6 +998,7 @@
                 </div>
             </div>
         </section>
+
         <section id="vEvnt" class="tab">
             <div class="hero">
                 <div class="hcnt">
@@ -887,8 +1006,9 @@
                     <p>Mira la lista de eventos activos y explora sus brackets en tiempo real.</p>
                 </div>
             </div>
-            <div class="elist" id="eLst">Cargando...</div>
+            <div class="elist" id="eLst">Cargando eventos...</div>
         </section>
+
         <section id="vInfo" class="tab">
             <div class="hero">
                 <div class="hcnt">
@@ -898,6 +1018,7 @@
             </div>
         </section>
     </main>
+
     <div id="bView">
         <div class="bhdr">
             <h2 id="bTtl" style="color:var(--act);">Nombre</h2>
@@ -905,17 +1026,19 @@
         </div>
         <div class="bcnt" id="bTree"></div>
     </div>
+
     <footer>
         <div class="fcontent">
             <span class="fcopy">&copy; 2026 <span class="acc">LevelUP</span>. Todos los derechos reservados.</span>
             <p class="fnotice">Proyecto estudiantil independiente. Las marcas, logos y nombres de videojuegos mencionados pertenecen a sus respectivos propietarios. Este sitio no está afiliado ni respaldado oficialmente por la Universidad de Margarita. O bueno, eso creo.</p>
         </div>
     </footer>
+
     <div class="moly" id="sMod">
         <div class="mdl">
             <div class="mhd">
                 <span>Ajustes</span>
-                <button id="cStg" style="width:36px; height:36px; font-size:1rem; background:var(--card); border:2px solid var(--brd); color:var(--txt); border-radius:10px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+                <button id="cStg" style="width:32px; height:32px; font-size:0.9rem; background:var(--card); border:1px solid var(--brd); color:var(--txt); border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
             </div>
             <div class="sitm">
                 <span class="slbl">Temas</span>
@@ -944,6 +1067,7 @@
         const SB_URL = "https://mbteomzgcinjxuvualte.supabase.co";
         const SB_KEY = "sb_publishable_FoR1C7KBX980x3TNbblzsw_9hGOLgqB";
         const sb = supabase.createClient(SB_URL, SB_KEY);
+
         const sMod = document.getElementById("sMod");
         const oStg = document.getElementById("oStg");
         const cStg = document.getElementById("cStg");
@@ -965,7 +1089,7 @@
         });
 
         bClsB.addEventListener("click", () => {
-            bView.style.display = "none";
+            bView.classList.remove("show");
         });
 
         thSel.addEventListener("change", (e) => {
@@ -1040,7 +1164,7 @@
 
         async function loadEvents() {
             eLst.innerHTML = "Cargando...";
-            const { data, error } = await sb.from("events").select("*").order("created_at", { ascending: false });
+            const { data, error } = await sb.from("events").select("id, title, description, max_players").order("created_at", { ascending: false });
             if (error || !data) {
                 eLst.innerHTML = "La página se bugueó horrible. -200 de Aura";
                 return;
@@ -1050,26 +1174,37 @@
                 return;
             }
             eLst.innerHTML = "";
-            data.forEach(evt => {
+            data.forEach((evt, idx) => {
                 const card = document.createElement("div");
                 card.className = "ecard";
+                card.style.animationDelay = `${idx * 0.06}s`;
                 card.innerHTML = `
                     <div>
                         <h3 style="color:var(--act); font-size:1.3rem;">${evt.title}</h3>
                         <p style="color:var(--mtxt); font-size:0.95rem; margin-top:4px;">${evt.description || "No hay descripción? Que flojo anda Chris hoy"}</p>
                         <span style="font-size:0.8rem; color:var(--act); display:inline-block; margin-top:8px;">${evt.max_players} Jugadores</span>
                     </div>
-                    <button class="btn" onclick='openBracket(${JSON.stringify(evt)})'>Ver Bracket</button>
+                    <button class="btn view-btn">Ver Bracket</button>
                 `;
+                card.querySelector(".view-btn").addEventListener("click", () => {
+                    fetchAndOpenBracket(evt.id);
+                });
                 eLst.appendChild(card);
             });
+        }
+
+        async function fetchAndOpenBracket(id) {
+            const { data, error } = await sb.from("events").select("*").eq("id", id).single();
+            if (!error && data) {
+                openBracket(data);
+            }
         }
 
         window.openBracket = async (evt) => {
             currEvt = evt;
             winners = evt.bracket_state || {};
             bTtl.innerText = evt.title;
-            bView.style.display = "flex";
+            bView.classList.add("show");
             renderTree();
         };
 
@@ -1097,6 +1232,7 @@
             for (let r = 0; r < totalRounds; r++) {
                 const rDiv = document.createElement("div");
                 rDiv.className = "rnd";
+                rDiv.style.animationDelay = `${r * 0.08}s`;
 
                 const isPrelimRound = (numPrelimMatches > 0 && r === 0);
                 const mainRoundIndex = numPrelimMatches > 0 ? r - 1 : r;
@@ -1207,4 +1343,6 @@
         }
     </script>
 </body>
+</html>
+
 </html>
