@@ -8,29 +8,25 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --bg: #160e29;
-            --card: linear-gradient(180deg, #2f1f4f 0%, #201030 100%);
+            --bg: #130b26;
+            --card: linear-gradient(180deg, #302050 0%, #1a0a2a 100%);
             --chov: linear-gradient(180deg, #38235e 0%, #3f154a 100%);
             --txt: #f0e0ff;
-            --act: #00ff88;
-            --brd: rgba(0, 255, 136, 0.25);
-            --sbar: linear-gradient(180deg, #241440 0%, #190c30 100%);
-            --mtxt: #a88acb;
-            --glow: rgba(0, 255, 136, 0.4);
+            --act: #11ff99;
+            --brd: rgba(0, 255, 136, 0.2);
+            --mtxt: #a688c9;
             --shd: 0 5px 20px rgba(156, 0, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         [data-th="light"] {
-            --bg: #daeaff;
-            --card: #ffffff;
-            --chov: #f0f6ff;
-            --txt: #1c2038;
-            --act: #00aaee;
-            --brd: #ffffff;
-            --sbar: #ffffff;
-            --mtxt: #697896;
-            --glow: rgba(0, 170, 238, 0.3);
-            --shd: 0 5px 18px rgba(0, 100, 200, 0.12);
+            --bg: #c9e8d5;
+            --card: #f0fffb;
+            --chov: #d6ffed;
+            --txt: #2c3030;
+            --act: #00bd6b;
+            --brd: #1d905e;
+            --mtxt: #798b8a;
+            --shd: 0 5px 20px rgba(0, 133, 88, 0.3);
         }
 
         [data-th="dark"] {
@@ -40,38 +36,20 @@
             --txt: #abb2bf;
             --act: #00ff88;
             --brd: #3b4048;
-            --sbar: #21252b;
             --mtxt: #5c6370;
-            --glow: rgba(0, 170, 238, 0.3);
             --shd: 0 5px 20px rgba(0, 0, 0, 0.4);
         }
 
-        [data-th="mllgt"] {
-            --bg: #9ef5ff;
-            --card: #e3fbff;
-            --chov: #cdf5ff;
-            --txt: #224248;
-            --act: #ff9a00;
-            --brd: #e3fbff;
-            --sbar: #e3fbff;
-            --mtxt: #5d838a;
-            --glow: rgba(255, 154, 0, 0.35);
-            --shd: 0 5px 18px rgba(0, 180, 200, 0.18);
+       [data-th="mllgt"] {
+            --bg: #cac7ff;
+            --card: linear-gradient(180deg, #f8f0ff 0%, #d8d0df 100%);
+            --chov: linear-gradient(180deg, #d6ffe4 0%, #96bfa4 100%);
+            --txt: #1c2038;
+            --act: #10b040;
+            --brd: rgba(0, 130, 70, 0.2);
+            --mtxt: #697896;
+            --shd: 0 5px 20px rgba(85, 14, 255, 0.3);
         }
-
-        [data-th="mldrk"] {
-            --bg: #204044;
-            --card: rgba(50, 94, 106, 0.95);
-            --chov: #325c63;
-            --txt: #e3fbff;
-            --act: #ff9a00;
-            --brd: #2f4a4f;
-            --sbar: rgba(50, 94, 106, 0.95);
-            --mtxt: #83a5ac;
-            --glow: rgba(255, 154, 0, 0.35);
-            --shd: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
         [data-th="crims"] {
             --bg: #0d0204;
             --card: #1a050a;
@@ -79,9 +57,7 @@
             --txt: #f0cfd5;
             --act: #ff2a55;
             --brd: #5e0f1d;
-            --sbar: #1a050a;
             --mtxt: #9e6470;
-            --glow: rgba(255, 42, 85, 0.35);
             --shd: 0 5px 20px rgba(255, 0, 50, 0.15);
         }
 
@@ -92,9 +68,7 @@
             --txt: #dcd0f5;
             --act: #a855f7;
             --brd: #4c1d95;
-            --sbar: #0e051c;
             --mtxt: #816aab;
-            --glow: rgba(168, 85, 247, 0.35);
             --shd: 0 5px 20px rgba(120, 40, 200, 0.2);
         }
 
@@ -105,9 +79,7 @@
             --txt: #ffffff;
             --act: #666666;
             --brd: #000000;
-            --sbar: #111113;
             --mtxt: #777777;
-            --glow: rgba(255, 255, 255, 0.2);
             --shd: 0 5px 20px rgba(0, 0, 0, 0.6);
         }
 
@@ -170,7 +142,7 @@
         .btn:hover {
             background: var(--chov);
             border-color: var(--act);
-            box-shadow: var(--shd), 0 0 16px var(--glow);
+            box-shadow: var(--shd);
             transform: translateY(-2px);
         }
 
@@ -180,7 +152,7 @@
 
         .btn.on {
             border-color: var(--act);
-            box-shadow: var(--shd), 0 0 12px var(--glow);
+            box-shadow: var(--shd), 0 0 12px var(--act);
             background: var(--chov);
             color: var(--act);
         }
@@ -199,8 +171,8 @@
         }
 
         @keyframes aGlow {
-            from { box-shadow: var(--shd), 0 0 6px var(--glow); }
-            to { box-shadow: var(--shd), 0 0 24px var(--glow), 0 0 40px var(--act); }
+            from { box-shadow: var(--shd); }
+            to { box-shadow: var(--shd), 0 0 40px var(--act); }
         }
 
         .prtc {
@@ -208,7 +180,7 @@
             pointer-events: none;
             border-radius: 50%;
             background: var(--act);
-            box-shadow: 0 0 10px var(--act), 0 0 18px var(--glow);
+            box-shadow: 0 0 10px var(--act);
             z-index: 999;
             animation: pFly var(--dur) cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
@@ -225,7 +197,7 @@
             display: grid;
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            background: var(--sbar);
+            background: var(--card);
             border-bottom: 1px solid var(--brd);
             box-shadow: var(--shd);
             position: sticky;
@@ -252,10 +224,6 @@
             color: var(--act);
             line-height: 1;
             transition: text-shadow 0.3s;
-        }
-
-        .mtitl:hover {
-            text-shadow: 0 0 12px var(--glow);
         }
 
         .stitl {
@@ -341,27 +309,28 @@
             transition: transform 0.3s ease;
         }
 
-        .hero:hover {
-            transform: translateY(-2px);
-        }
-
-        .hero::before {
+        #vInit > .hero::before {
             content: "";
             position: absolute;
             top: -50%;
             right: -10%;
             width: 350px;
             height: 350px;
-            background: var(--glow);
+            background: var(--act);
             filter: blur(90px);
+            opacity: 0.22;
             border-radius: 50%;
             pointer-events: none;
             animation: pulseGlow 6s infinite alternate ease-in-out;
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.1); opacity: 1; }
+            0% { transform: scale(0.9); opacity: 0.16; }
+            100% { transform: scale(1.1); opacity: 0.28; }
+        }
+
+        .hero:hover {
+            transform: translateY(-2px);
         }
 
         .hcnt {
@@ -449,7 +418,7 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            background: var(--sbar);
+            background: var(--card);
             border: 1px solid var(--brd);
             padding: 14px 16px;
             border-radius: 12px;
@@ -555,7 +524,7 @@
         .ecard:hover {
             transform: translateY(-3px) scale(1.005);
             border-color: var(--act);
-            box-shadow: var(--shd), 0 8px 25px var(--glow);
+            box-shadow: var(--shd);
         }
 
         #bView {
@@ -583,7 +552,7 @@
         .bhdr {
             height: 60px;
             padding: 0 24px;
-            background: var(--sbar);
+            background: var(--card);
             border-bottom: 1px solid var(--brd);
             display: flex;
             align-items: center;
@@ -678,7 +647,7 @@
         .mch:hover {
             transform: scale(1.02);
             border-color: var(--act);
-            box-shadow: 0 5px 20px var(--glow);
+            box-shadow: var(--shd);
         }
 
         .conn-col {
@@ -758,7 +727,7 @@
         }
 
         footer {
-            background: var(--sbar);
+            background: var(--card);
             border-top: 1px solid var(--brd);
             padding: 24px;
             margin-top: auto;
@@ -810,7 +779,7 @@
         }
 
         .mdl {
-            background: var(--sbar);
+            background: var(--card);
             border: 1px solid var(--brd);
             box-shadow: var(--shd), 0 20px 40px rgba(0,0,0,0.5);
             border-radius: 16px;
@@ -866,7 +835,11 @@
 
         select:focus {
             border-color: var(--act);
-            box-shadow: 0 0 10px var(--glow);
+            box-shadow: 0 0 10px var(--act);
+        }
+
+        nav.cnav .nbtn.on {
+            box-shadow: var(--shd), 0 0 16px var(--act);
         }
 
         @media (max-aspect-ratio: 1/1), (max-width: 680px) {
@@ -1086,11 +1059,10 @@
             <div class="sitm">
                 <span class="slbl">Temas</span>
                 <select id="thSel">
-                    <option value="lvl" selected>LevelUP</option>
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="mllgt">Melon Light</option>
-                    <option value="mldrk">Melon Dark</option>
+                    <option value="light">Claro</option>
+                    <option value="dark">Oscuro</option>
+                    <option value="mllgt">LevelUP Claro</option>
+                    <option value="lvl" selected>LevelUP Oscuro</option>
                     <option value="crims">Crimson</option>
                     <option value="nebul">Nebula</option>
                     <option value="eybrn">Eyeburn</option>
