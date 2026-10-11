@@ -21,11 +21,11 @@ Y no, no voy a usar Electron, descárgate los HTML y ya.
 * *Si tienes un problema con este código o con mi punto de vista sobre la industria del software, no quiero discutir, no soy ese tipo de persona, pero seamos honestos, si entiendes mi punto, tu PC te va a agradecer por no convertirse en un motor de Airbus A380.*
   
 * *Cotton no se hace responsable de toda la huella de carbono y el vandalismo al suministro de agua dulce que puedan ser causados por dejar su software como matica descuidada.*
-
-
-
-
-
+-
+-
+-
+-
+-
 🍈🇺🇸 The Melon Project's goal is basically to bring Low Cortisol software to our starving humankind, because honestly, the dev world is severely *fucked*: Imagine you just want to try out a new sticker creator app your friend xXENode67JsXx made, turns out that, his prefrontal cortex was replaced by yet another python script, and little *bitch* called npm needs to pull out the entire node.js family because it suddenly woke up with a migraine and decided your innocent CPU is the best medicine to it. Guys, what happened to the good old times where programmers actually cared about optimizing their darn software? Why is it that when I wanna check my messaging app's sticker picker the first thing my eyes catch is **pnpm i** and I automatically think:
 
 # *Oh shit not again*
