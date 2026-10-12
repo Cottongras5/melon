@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Themeditor — build and export themes for Melon apps.">
+  <title>Themeditor</title>
+  <style>
+    :root {
+      --bg: #203b40;
+      --surface: rgba(47, 79, 84, .94);
+      --surface-strong: #37636a;
+      --text: #fff8ef;
+      --muted: #d3e1df;
+      --line: rgba(255, 248, 239, .2);
+      --accent: #ff974b;
+      --shadow: 0 24px 80px rgba(7, 22, 25, .42);
+      --radius: 24px;
+    }
+
+    [data-theme="light"] {
+      --bg: #e9eee7; --surface: rgba(255, 255, 255, .9); --surface-strong: #fff;
+      --text: #17231b; --muted: #607064; --line: rgba(23, 35, 27, .15);
+      --accent: #63bd46; --shadow: 0 24px 80px rgba(40, 88, 42, .15);
+    }
+    [data-theme="dark"] {
+      --bg: #111318; --surface: rgba(28, 31, 40, .88); --surface-strong: #202430;
+      --text: #f4f5f7; --muted: #a5aab7; --line: rgba(255, 255, 255, .13);
+      --accent: #62c7b2;
+    }
+    [data-theme="melon-light"] {
+      --bg: #cfe9e5; --surface: rgba(255, 251, 245, .92); --surface-strong: #fff;
+      --text: #3d2920; --muted: #866b5d; --line: rgba(61, 41, 32, .15);
+      --accent: #f28a3d; --shadow: 0 24px 80px rgba(151, 79, 32, .16);
+    }
+    [data-theme="melon-dark"] {
+      --bg: #203b40; --surface: rgba(47, 79, 84, .94); --surface-strong: #37636a;
+      --text: #fff8ef; --muted: #d3e1df; --line: rgba(255, 248, 239, .2);
+      --accent: #ff974b;
+    }
+    [data-theme="crimson"] {
+      --bg: #17090f; --surface: rgba(52, 13, 29, .84); --surface-strong: #671b37;
+      --text: #fff3f6; --muted: #d8a8b8; --line: rgba(255, 105, 145, .32);
+      --accent: #ff4f7b; --shadow: 0 0 55px rgba(255, 23, 79, .22);
+    }
+    [data-theme="nebula"] {
+      --bg: #110d1f; --surface: rgba(38, 22, 65, .84); --surface-strong: #51318a;
+      --text: #f8f2ff; --muted: #c4aedc; --line: rgba(194, 131, 255, .3);
+      --accent: #c783ff; --shadow: 0 0 55px rgba(169, 77, 255, .22);
+    }
+    [data-theme="eyeburn"] {
+      --bg: #000; --surface: #080808; --surface-strong: #111; --text: #fff;
+      --muted: #bcbcbc; --line: #555; --accent: #fff;
+      --shadow: 0 0 30px rgba(255, 255, 255, .1);
+    }
+    [data-theme="plum"] {
+      --bg: #17121d; --surface: rgba(39, 27, 49, .88); --surface-strong: #342443;
+      --text: #f4eafa; --muted: #c1a9cc; --line: rgba(255, 255, 255, .14);
+      --accent: #7affc6;
+    }
+    [data-theme="sand"] {
+      --bg: #171614; --surface: rgba(45, 39, 31, .9); --surface-strong: #514332;
+      --text: #f7eee2; --muted: #c8b7a2; --line: rgba(255, 238, 214, .16);
+      --accent: #ffd166;
+    }
+    [data-theme="aura"] {
+      --bg: #fff; --surface: rgba(255, 255, 255, .94); --surface-strong: #fff;
+      --text: #000; --muted: #888; --line: #000; --accent: #000;
+      --shadow: 0 0 26px rgba(0, 0, 0, .22);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-height: 100%; font-size: 110%; }
+    body {
+      min-height: 100vh; margin: 0; overflow-x: hidden; color: var(--text);
+      background: radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42rem), var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: background .3s ease, color .3s ease;
+    }
+    body::before {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none; content: "";
+      opacity: .23; background-image: linear-gradient(color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px);
+      background-size: 38px 38px; mask-image: linear-gradient(to bottom, #000, transparent 78%);
+    }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    .shell { width: min(1220px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+    .brand { display: inline-flex; align-items: center; gap: .65rem; margin: 0; font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -.02em; }
+    .melon {
+      display: grid; width: 1.1em; height: 1.1em; place-items: center; font-size: .82em;
+      border-radius: 30% 55% 34% 58%; background: var(--accent);
+      box-shadow: 0 0 0 .12em color-mix(in srgb, var(--accent) 20%, transparent);
+      transform: rotate(-10deg);
+    }
+    .button {
+      border: 1px solid var(--line); border-radius: 12px; padding: .7rem 1rem;
+      background: var(--surface); cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .button:hover, .button:focus-visible { border-color: var(--accent); background: var(--surface-strong); outline: none; transform: translateY(-2px); }
+    .layout { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+    .right-column { display: grid; gap: 1.2rem; min-width: 0; }
+    .panel, .preview-card {
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
+      box-shadow: var(--shadow); backdrop-filter: blur(18px);
+    }
+    .panel { padding: 1.25rem; }
+    .panel + .panel { margin-top: 1.2rem; }
+    .right-column .panel { margin-top: 0; }
+    .panel h2 { margin: 0 0 1rem; font-size: 1.05rem; }
+    .panel-heading { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+    .panel-heading small, .hint { color: var(--muted); font-size: .78rem; }
+    .preset-select {
+      width: 100%; padding: .7rem .75rem; color: var(--text); border: 1px solid var(--line);
+      margin-bottom: 1.25rem; border-radius: 10px; background: var(--bg); cursor: pointer;
+    }
+    .palette { display: grid; gap: 1rem; }
+    .color-row { display: grid; grid-template-columns: 1fr 3.3rem; gap: .55rem; align-items: end; }
+    .color-row label { display: grid; gap: .3rem; color: var(--muted); font-size: .75rem; font-weight: 700; }
+    .color-row input[type="text"] {
+      width: 100%; padding: .65rem .7rem; color: var(--text); border: 1px solid var(--line);
+      border-radius: 10px; outline: none; background: var(--bg); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .84rem;
+    }
+    .color-row input[type="text"]:focus { border-color: var(--accent); }
+    .color-row input[type="color"] { width: 3.3rem; height: 2.55rem; padding: .2rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
+    .preview-card { min-height: 610px; padding: clamp(1.25rem, 4vw, 3rem); }
+    .preview-header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+    .preview-header h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); letter-spacing: -.03em; }
+    .preview-header p { margin: .35rem 0 0; color: var(--muted); font-size: .85rem; }
+    .preview-badge { color: var(--accent); border: 1px solid var(--line); border-radius: 99px; padding: .4rem .65rem; font-size: .7rem; white-space: nowrap; }
+    .mock-hero { padding: clamp(1.3rem, 5vw, 3rem); text-align: center; border: 1px solid var(--line); border-radius: 26px; background: var(--surface-strong); }
+    .mock-title { display: inline-flex; align-items: center; gap: .55rem; margin: 0; font-size: clamp(1.6rem, 5vw, 3rem); letter-spacing: -.03em; }
+    .mock-title .melon { font-size: .75em; }
+    .mock-copy { max-width: 570px; margin: 1rem auto 0; color: var(--muted); line-height: 1.6; }
+    .mock-apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
+    .mock-app { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .7rem; padding: 1rem; text-align: left; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
+    .mock-icon { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border-radius: 13px; background: color-mix(in srgb, var(--accent) 15%, transparent); font-size: 1.25rem; }
+    .mock-app h3 { margin: 0 0 .2rem; font-size: .9rem; }
+    .mock-app p { margin: 0; color: var(--muted); font-size: .73rem; line-height: 1.35; }
+    .mock-arrow { color: var(--accent); }
+    .export { margin-top: 1rem; }
+    .export-panel h2 { margin-bottom: .35rem; }
+    .export-panel > .hint { margin-top: 0; }
+    .export textarea {
+      width: 100%; height: 240px; min-height: 240px; resize: vertical; overflow: hidden; padding: .9rem; color: var(--text); border: 1px solid var(--line);
+      border-radius: 14px; background: color-mix(in srgb, var(--bg) 75%, #000 25%); font: .76rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .toast { position: fixed; right: 1rem; bottom: 1rem; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-strong); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    [data-theme="aura"] .panel, [data-theme="aura"] .preview-card, [data-theme="aura"] .mock-hero, [data-theme="aura"] .mock-app { border-color: #000; box-shadow: 0 0 8px rgba(0, 0, 0, .75); text-shadow: 0 0 8px #000; }
+    .no-animations *, .no-animations *::before, .no-animations *::after { animation: none !important; transition: none !important; }
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .preview-card { min-height: auto; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 1rem, 440px); padding-top: 1.5rem; }
+      .topbar { align-items: start; flex-direction: column; }
+      .mock-apps { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <main class="shell">
+    <header class="topbar">
+      <h1 class="brand"><span class="melon" aria-hidden="true">🍈</span><span>Themeditor</span></h1>
+    </header>
+
+    <div class="layout">
+      <aside>
+        <section class="panel export-panel">
+          <div class="panel-heading">
+            <h2>Color palette</h2>
+            <small class="palette-status" id="palette-status">Dark</small>
+          </div>
+          <label class="hint" for="preset-select">Preset</label>
+          <select class="preset-select" id="preset-select"></select>
+          <div class="palette" id="palette"></div>
+        </section>
+
+      </aside>
+
+      <div class="right-column">
+        <section class="preview-card" aria-label="Theme preview">
+          <div class="preview-header">
+            <div>
+              <h2>Preview your flavor of Melon</h2>
+              <p>What you see here is just a download away of being yours, or maybe a pull request.</p>
+            </div>
+          </div>
+          <div class="mock-hero">
+            <h3 class="mock-title"><span class="melon" aria-hidden="true">🍈</span><span>The Melon Project</span></h3>
+            <p class="mock-copy">Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.</p>
+          </div>
+          <div class="mock-apps">
+            <article class="mock-app"><span class="mock-icon">🖼️</span><span><h3>Melange</h3><p>Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.</p></span><span class="mock-arrow">↗</span></article>
+            <article class="mock-app"><span class="mock-icon">💡</span><span><h3>Memory</h3><p>Keep important things somewhere your brain can find them.</p></span><span class="mock-arrow">↗</span></article>
+            <article class="mock-app"><span class="mock-icon">🎨</span><span><h3>Themeditor</h3><p>Basically what you're doing right now.</p></span><span class="mock-arrow">↗</span></article>
+            <article class="mock-app"><span class="mock-icon">🍈</span><span><h3>More</h3><p>You'll never see it coming.</p></span><span class="mock-arrow">→</span></article>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Export</h2>
+          </div>
+          <p class="hint">Paste this into a <code>[data-theme]</code> block and rename it however you want, then adjust the div class options accordingly.</p>
+          <div class="export"><textarea id="output" spellcheck="false" readonly></textarea></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script>
+    const tokens = [
+      ["bg", "Background"], ["surface", "Surface"], ["surface-strong", "Raised surface"],
+      ["text", "Primary text"], ["muted", "Secondary text"], ["line", "Borders"],
+      ["accent", "Accent"]
+    ];
+    const presets = {
+      light: { label: "☀ Light", type: "Light", values: { bg: "#e9eee7", surface: "rgba(255, 255, 255, .9)", "surface-strong": "#ffffff", text: "#17231b", muted: "#607064", line: "rgba(23, 35, 27, .15)", accent: "#63bd46" } },
+      dark: { label: "☾ Dark", type: "Dark", values: { bg: "#111318", surface: "rgba(28, 31, 40, .88)", "surface-strong": "#202430", text: "#f4f5f7", muted: "#a5aab7", line: "rgba(255, 255, 255, .13)", accent: "#62c7b2" } },
+      "melon-light": { label: "☀ Melon Light", type: "Light", values: { bg: "#cfe9e5", surface: "rgba(255, 251, 245, .92)", "surface-strong": "#ffffff", text: "#3d2920", muted: "#866b5d", line: "rgba(61, 41, 32, .15)", accent: "#f28a3d" } },
+      "melon-dark": { label: "☾ Melon Dark", type: "Dark", values: { bg: "#203b40", surface: "rgba(47, 79, 84, .94)", "surface-strong": "#37636a", text: "#fff8ef", muted: "#d3e1df", line: "rgba(255, 248, 239, .2)", accent: "#ff974b" } },
+      crimson: { label: "☾ Crimson", type: "Dark", values: { bg: "#17090f", surface: "rgba(52, 13, 29, .84)", "surface-strong": "#671b37", text: "#fff3f6", muted: "#d8a8b8", line: "rgba(255, 105, 145, .32)", accent: "#ff4f7b" } },
+      nebula: { label: "☾ Nebula", type: "Dark", values: { bg: "#110d1f", surface: "rgba(38, 22, 65, .84)", "surface-strong": "#51318a", text: "#f8f2ff", muted: "#c4aedc", line: "rgba(194, 131, 255, .3)", accent: "#c783ff" } },
+      eyeburn: { label: "☾ Eyeburn", type: "Dark", values: { bg: "#000000", surface: "#080808", "surface-strong": "#111111", text: "#ffffff", muted: "#bcbcbc", line: "#555555", accent: "#ffffff" } },
+      plum: { label: "☾ Plum", type: "Dark", values: { bg: "#17121d", surface: "rgba(39, 27, 49, .88)", "surface-strong": "#342443", text: "#f4eafa", muted: "#c1a9cc", line: "rgba(255, 255, 255, .14)", accent: "#7affc6" } },
+      sand: { label: "☾ Sand", type: "Dark", values: { bg: "#171614", surface: "rgba(45, 39, 31, .9)", "surface-strong": "#514332", text: "#f7eee2", muted: "#c8b7a2", line: "rgba(255, 238, 214, .16)", accent: "#ffd166" } }
+    };
+    const body = document.body;
+    const presetSelect = document.querySelector("#preset-select");
+    const paletteStatus = document.querySelector("#palette-status");
+    const paletteEl = document.querySelector("#palette");
+    const output = document.querySelector("#output");
+    let activePreset = "dark";
+    let custom = { ...presets[activePreset].values };
+
+    function renderPalette() {
+      paletteEl.innerHTML = tokens.map(([key, label]) => `
+        <div class="color-row">
+          <label>${label}<input data-token="${key}" type="text" value="${custom[key]}" spellcheck="false"></label>
+          <input data-color="${key}" type="color" value="${toHex(custom[key])}" aria-label="${label} color picker">
+        </div>
+      `).join("");
+      paletteEl.querySelectorAll("[data-token]").forEach((input) => input.addEventListener("input", () => updateToken(input.dataset.token, input.value, "text")));
+      paletteEl.querySelectorAll("[data-color]").forEach((input) => input.addEventListener("input", () => updateToken(input.dataset.color, input.value, "color")));
+    }
+
+    function toHex(value) {
+      const match = value.match(/^#([0-9a-f]{6})$/i);
+      return match ? value : "#888888";
+    }
+
+    function selectPreset(key) {
+      activePreset = key;
+      custom = { ...presets[key].values };
+      body.dataset.theme = key;
+      tokens.forEach(([token]) => body.style.removeProperty(`--${token}`));
+      presetSelect.value = key;
+      paletteStatus.textContent = presets[key].label.replace(/^[☀☾]\s*/, "");
+      renderPalette();
+      updateOutput();
+      localStorage.setItem("themeditor-preset", key);
+      localStorage.removeItem("themeditor-custom");
+    }
+
+    function applyCustomPalette() {
+      tokens.forEach(([token]) => body.style.setProperty(`--${token}`, custom[token]));
+    }
+
+    function updateToken(key, value, source) {
+      custom[key] = value;
+      body.dataset.theme = "custom";
+      applyCustomPalette();
+      activePreset = "custom";
+      paletteStatus.textContent = "Custom";
+      const counterpart = source === "color"
+        ? paletteEl.querySelector(`[data-token="${key}"]`)
+        : paletteEl.querySelector(`[data-color="${key}"]`);
+      if (counterpart && source === "color") counterpart.value = value;
+      if (counterpart && source === "text" && /^#[0-9a-f]{6}$/i.test(value)) counterpart.value = value;
+      updateOutput();
+      localStorage.setItem("themeditor-custom", JSON.stringify(custom));
+    }
+
+    function updateOutput() {
+      output.value = `[data-theme="custom"] {\n${tokens.map(([key]) => `  --${key}: ${custom[key]};`).join("\n")}\n}`;
+    }
+
+    const savedPreset = localStorage.getItem("themeditor-preset");
+    const savedCustom = JSON.parse(localStorage.getItem("themeditor-custom") || "null");
+    presetSelect.innerHTML = Object.entries(presets)
+      .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
+      .join("");
+    presetSelect.addEventListener("change", () => {
+      if (presets[presetSelect.value]) selectPreset(presetSelect.value);
+    });
+    if (savedCustom) {
+      custom = savedCustom;
+      activePreset = "custom";
+      body.dataset.theme = "custom";
+      applyCustomPalette();
+      paletteStatus.textContent = "Custom";
+    } else {
+      selectPreset(presets[savedPreset] ? savedPreset : "dark");
+    }
+    renderPalette();
+    updateOutput();
+  </script>
+</body>
+</html>
