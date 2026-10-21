@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Melange</title>
+<link rel="icon" href="melange.png">
 <style>
 :root{--bg:#111318;--c1:rgba(28,31,40,.92);--tx:#f4f5f7;--muted:#a5aab7;--ac:#62c7b2;--bd:rgba(255,255,255,.13);--sd:rgba(28,31,40,.92);--surface-strong:#202430}
 *{box-sizing:border-box;margin:0;padding:0;user-select:none}
@@ -132,7 +133,6 @@ mark:hover{background:var(--ac);color:#fff}
   </button>
   <input type="file" id="fl" onchange="read(event)">
 </div>
-
 <div id="mdl">
   <h3>Temas</h3>
   <select id="slc" onchange="apply(this.value)"></select>
@@ -142,7 +142,6 @@ mark:hover{background:var(--ac);color:#fff}
   </label>
   <button onclick="pop()">Cerrar</button>
 </div>
-
 <div id="dmd">
   <div class="ddg ppi">
     <div class="dhd">
@@ -157,10 +156,8 @@ mark:hover{background:var(--ac);color:#fff}
     <textarea id="dtx" class="dby" placeholder="Escribe tus proyectadas en Markdown aquí."></textarea>
   </div>
 </div>
-
 <svg id="svg"></svg>
 <div id="bd"></div>
-
 <script>
 let elB = document.getElementById('bd');
 let elS = document.getElementById('svg');
@@ -171,7 +168,6 @@ let elD = document.getElementById('dmd');
 let elI = document.getElementById('dti');
 let elT = document.getElementById('dtx');
 let elN = document.getElementById('anm');
-
 let aid = null;
 let cds = [];
 let lks = [];
