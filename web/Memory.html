@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory</title>
+    <link rel="icon" href="memory.png">
     <style>
         :root {
             --bg-top: #111318;
@@ -17,7 +18,7 @@
             --glass-blur: blur(18px);
         }
 
-        body.light {
+        body.lgt {
             --bg-top: #e9eee7;
             --bg-bottom: #e9eee7;
             --card: rgba(255, 255, 255, 0.9);
@@ -27,7 +28,7 @@
             --sidebar: rgba(255, 255, 255, 0.95);
         }
 
-        body.dark {
+        body.drk {
             --bg-top: #111318;
             --bg-bottom: #111318;
             --card: rgba(28, 31, 40, 0.92);
@@ -37,7 +38,7 @@
             --sidebar: rgba(28, 31, 40, 0.94);
         }
 
-        body.melonlight {
+        body.mlgt {
             --bg-top: #cfe9e5;
             --bg-bottom: #cfe9e5;
             --card: rgba(255, 251, 245, 0.92);
@@ -47,7 +48,7 @@
             --sidebar: rgba(255, 251, 245, 0.95);
         }
 
-        body.melon {
+        body.mln {
             --bg-top: #203b40;
             --bg-bottom: #203b40;
             --card: rgba(47, 79, 84, 0.94);
@@ -57,7 +58,7 @@
             --sidebar: rgba(47, 79, 84, 0.96);
         }
 
-        body.redspace {
+        body.red {
             --bg-top: #17090f;
             --bg-bottom: #17090f;
             --card: rgba(52, 13, 29, 0.92);
@@ -67,7 +68,7 @@
             --sidebar: rgba(52, 13, 29, 0.96);
         }
 
-        body.purplespace {
+        body.prp {
             --bg-top: #110d1f;
             --bg-bottom: #110d1f;
             --card: rgba(38, 22, 65, 0.92);
@@ -77,7 +78,7 @@
             --sidebar: rgba(38, 22, 65, 0.96);
         }
 
-        body.eyeburn {
+        body.eyb {
             --bg-top: #000000;
             --bg-bottom: #000000;
             --card: rgba(17, 17, 19, 0.85);
@@ -87,7 +88,7 @@
             --sidebar: rgba(0, 0, 0, 0.9);
         }
 
-        body.plum {
+        body.plm {
             --bg-top: #17121d;
             --bg-bottom: #17121d;
             --card: rgba(39, 27, 49, 0.92);
@@ -97,7 +98,7 @@
             --sidebar: rgba(39, 27, 49, 0.96);
         }
 
-        body.sand {
+        body.snd {
             --bg-top: #171614;
             --bg-bottom: #171614;
             --card: rgba(45, 39, 31, 0.92);
@@ -136,7 +137,7 @@
             mask-image: linear-gradient(to bottom, #000, transparent 88%);
         }
 
-        .top-actions {
+        .acts {
             position: fixed;
             display: flex;
             gap: 1rem;
@@ -144,27 +145,27 @@
             transition: all 0.2s ease;
         }
 
-        .top-actions.top-left {
+        .acts.tl {
             top: 1.5rem;
             left: 2rem;
         }
 
-        .top-actions.top-right {
+        .acts.tr {
             top: 1.5rem;
             right: 2rem;
         }
 
-        .top-actions.bottom-left {
+        .acts.bl {
             bottom: 1.5rem;
             left: 2rem;
         }
 
-        .top-actions.bottom-right {
+        .acts.br {
             bottom: 1.5rem;
             right: 2rem;
         }
 
-        .icon-btn {
+        .ibtn {
             background: var(--card);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -182,22 +183,22 @@
             box-shadow: 0 10px 28px rgba(0,0,0,.18);
         }
 
-        .icon-btn:hover, .action-btn:hover {
+        .ibtn:hover, .abtn:hover {
             background: var(--accent);
             border-color: var(--accent);
             color: #fff;
             transform: translateY(-2px);
         }
 
-        .icon-btn:active {
+        .ibtn:active {
             transform: scale(0.92);
         }
 
-        #menu-btn {
+        #mbtn {
             position: relative;
         }
 
-        .thought-count {
+        .tcnt {
             position: absolute;
             top: -6px;
             right: -6px;
@@ -217,7 +218,7 @@
             box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent);
         }
 
-        .thought-count:empty {
+        .tcnt:empty {
             display: none;
         }
 
@@ -233,12 +234,12 @@
             width: 100%;
         }
 
-        .input-container {
+        .icnt {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         textarea {
@@ -268,7 +269,63 @@
             box-shadow: 0 0 25px var(--accent);
         }
 
-        .submit-btn {
+        .suggs {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+            min-height: 38px;
+            flex-wrap: wrap;
+        }
+
+        .sbtn {
+            background: var(--card);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sbtn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .sbtn:active {
+            transform: scale(0.95);
+        }
+
+        .sbtn:empty {
+            display: none;
+        }
+
+        .sbtn {
+            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 48px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
+            box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        .subtn {
             width: 144px;
             height: 144px;
             background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
@@ -285,7 +342,7 @@
             box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 2px 6px rgba(255, 255, 255, 0.4);
         }
 
-        .submit-btn::after {
+        .subtn::after {
             content: '';
             position: absolute;
             top: 0;
@@ -297,18 +354,18 @@
             pointer-events: none;
         }
 
-        .submit-btn svg {
+        .subtn svg {
             width: 64px;
             height: 64px;
             fill: currentColor;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .submit-btn:active {
+        .subtn:active {
             transform: scale(0.92);
         }
 
-        .fullscreen-menu {
+        .fmenu {
             position: fixed;
             top: 0;
             left: 0;
@@ -325,11 +382,11 @@
             padding: 3rem;
         }
 
-        .fullscreen-menu.open {
+        .fmenu.open {
             transform: translateY(0);
         }
 
-        .menu-header {
+        .mhead {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -340,12 +397,12 @@
             margin-right: auto;
         }
 
-        .menu-title {
+        .mtitl {
             font-size: 1.75rem;
             font-weight: 700;
         }
 
-        .thoughts-list {
+        .tlst {
             flex: 1;
             overflow-y: auto;
             display: flex;
@@ -357,7 +414,7 @@
             padding-bottom: 2rem;
         }
 
-        .thought-card {
+        .tcard {
             background: var(--card);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -371,26 +428,26 @@
             transition: border-color .2s, transform .2s, box-shadow .2s;
         }
 
-        .thought-card:hover {
+        .tcard:hover {
             border-color: var(--accent);
             transform: translateY(-2px);
             box-shadow: 0 16px 34px rgba(0,0,0,.2);
         }
 
-        .search-wrap {
+        .swrap {
             max-width: 800px;
             width: 100%;
             margin: 0 auto 2.25rem;
             position: relative;
         }
 
-        .search-wrap input {
+        .swrap input {
             width: 100%;
             padding: .9rem 1rem .9rem 3rem;
             border-radius: 14px;
         }
 
-        .search-wrap::before {
+        .swrap::before {
             content: '⌕';
             position: absolute;
             left: 1rem;
@@ -402,36 +459,36 @@
             pointer-events: none;
         }
 
-        .thought-header-row {
+        .trow1 {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .thought-title {
+        .ttitl {
             font-weight: 600;
             font-size: calc(1.15rem + 2px);
             color: var(--text);
         }
 
-        .thought-footer-row {
+        .trow2 {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 0.5rem;
         }
 
-        .thought-date {
+        .tdate {
             font-size: 0.9rem;
             opacity: 0.7;
         }
 
-        .thought-actions {
+        .tacts {
             display: flex;
             gap: 0.75rem;
         }
 
-        .thought-color-menu {
+        .cmenu {
             position: fixed;
             display: flex;
             flex-wrap: wrap;
@@ -447,7 +504,7 @@
             z-index: 250;
         }
 
-        .thought-color-option {
+        .copt {
             width: 23px;
             height: 23px;
             padding: 0;
@@ -457,17 +514,17 @@
             transition: transform .15s, border-color .15s;
         }
 
-        .thought-color-option:hover {
+        .copt:hover {
             border-color: var(--text);
             transform: scale(1.14);
         }
 
-        .thought-color-option.none {
+        .copt.none {
             background: var(--card);
             position: relative;
         }
 
-        .thought-color-option.none::after {
+        .copt.none::after {
             content: '';
             position: absolute;
             left: 2px;
@@ -478,11 +535,11 @@
             transform: rotate(-45deg);
         }
 
-        .action-btn.color {
+        .abtn.color {
             color: var(--accent);
         }
 
-        .action-btn {
+        .abtn {
             background: var(--card);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -498,28 +555,28 @@
             transition: transform 0.2s, border-color 0.2s, background 0.2s, color 0.2s;
         }
 
-        .action-btn svg {
+        .abtn svg {
             width: 25px;
             height: 25px;
             fill: currentColor;
         }
 
-        .action-btn:active {
+        .abtn:active {
             transform: scale(0.92);
         }
 
-        .action-btn.delete {
+        .abtn.del {
             color: #ff4757;
             border-color: rgba(255, 71, 87, 0.3);
         }
 
-        .action-btn.save {
+        .abtn.save {
             background: var(--accent);
             color: #fff;
             border-color: var(--accent);
         }
 
-        .settings-content {
+        .sctnt {
             max-width: 600px;
             width: 100%;
             margin: 0 auto;
@@ -529,13 +586,13 @@
             flex: 1;
         }
 
-        .setting-group {
+        .sgrp {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
         }
 
-        .setting-group label {
+        .sgrp label {
             font-size: 1rem;
             opacity: 0.9;
             font-weight: 500;
@@ -557,7 +614,7 @@
             border-color: var(--accent);
         }
 
-        .editor-overlay {
+        .edovr {
             position: fixed;
             top: 0;
             left: 0;
@@ -576,12 +633,12 @@
             transition: opacity 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
-        .editor-overlay.open {
+        .edovr.open {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .editor-box {
+        .edbox {
             background: var(--sidebar);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -599,11 +656,11 @@
             transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
-        .editor-overlay.open .editor-box {
+        .edovr.open .edbox {
             transform: scale(1) translateY(0);
         }
 
-        .editor-textarea {
+        .edtxt {
             flex: 1;
             background: var(--card);
             backdrop-filter: var(--glass-blur);
@@ -617,13 +674,13 @@
             outline: none;
         }
 
-        .editor-footer {
+        .edftr {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
         }
 
-        .save-toast {
+        .toast {
             position: fixed;
             left: 50%;
             bottom: 2rem;
@@ -642,206 +699,273 @@
             transition: opacity .2s, transform .2s;
         }
 
-        .save-toast.show {
+        .toast.show {
             opacity: 1;
             transform: translate(-50%, 0);
         }
     </style>
 </head>
-<body class="dark">
-
-    <div class="top-actions top-left" id="action-buttons">
-        <button class="icon-btn" id="menu-btn" title="Thoughts">
+<body class="drk">
+    <div class="acts tl" id="abox">
+        <button class="ibtn" id="mbtn" title="Thoughts">
             ☰
-            <span class="thought-count" id="thought-count" aria-label="Saved thoughts"></span>
+            <span class="tcnt" id="tcnt" aria-label="Saved thoughts"></span>
         </button>
-        <button class="icon-btn" id="settings-btn" title="Settings">⚙</button>
+        <button class="ibtn" id="sbtn" title="Settings">⚙</button>
     </div>
 
     <main>
-        <div class="input-container">
-            <textarea id="thought-input" placeholder="What's on your mind?"></textarea>
-            <button class="submit-btn" id="submit-btn" title="Save Thought">
+        <div class="icnt">
+            <textarea id="tinput" placeholder="What's on your mind?"></textarea>
+            <div class="suggs" id="suggs"></div>
+            <button class="subtn" id="subtn" title="Save Thought">
                 <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
             </button>
         </div>
     </main>
-
-    <div class="fullscreen-menu" id="thoughts-menu">
-        <div class="menu-header">
-            <span class="menu-title">Thoughts</span>
-            <button class="icon-btn" id="close-thoughts">✕</button>
+    <div class="fmenu" id="tmenu">
+        <div class="mhead">
+            <span class="mtitl">Thoughts</span>
+            <button class="ibtn" id="clstm">✕</button>
         </div>
-        <div class="search-wrap">
-            <input type="search" id="thought-search" placeholder="Search your thoughts..." autocomplete="off">
+        <div class="swrap">
+            <input type="search" id="tsrch" placeholder="Search your thoughts..." autocomplete="off">
         </div>
-        <div class="thoughts-list" id="thoughts-list">
+        <div class="tlst" id="tlst">
         </div>
     </div>
-
-    <div class="fullscreen-menu" id="settings-menu">
-        <div class="menu-header">
-            <span class="menu-title">Settings</span>
-            <button class="icon-btn" id="close-settings">✕</button>
+    <div class="fmenu" id="smenu">
+        <div class="mhead">
+            <span class="mtitl">Settings</span>
+            <button class="ibtn" id="clssm">✕</button>
         </div>
-        <div class="settings-content">
-            <div class="setting-group">
-                <label for="theme-select">Themes</label>
-                <select id="theme-select">
-                    <option value="light">☀ Light</option>
-                    <option value="dark" selected>☾ Dark</option>
-                    <option value="melonlight">☀ Melon Light</option>
-                    <option value="melon">☾ Melon Dark</option>
-                    <option value="redspace">☾ Crimson</option>
-                    <option value="purplespace">☾ Nebula</option>
-                    <option value="eyeburn">☾ Eyeburn</option>
-                    <option value="plum">☾ Plum</option>
-                    <option value="sand">☾ Sand</option>
+        <div class="sctnt">
+            <div class="sgrp">
+                <label for="tsel">Themes</label>
+                <select id="tsel">
+                    <option value="lgt">☀ Light</option>
+                    <option value="drk" selected>☾ Dark</option>
+                    <option value="mlgt">☀ Melon Light</option>
+                    <option value="mln">☾ Melon Dark</option>
+                    <option value="red">☾ Crimson</option>
+                    <option value="prp">☾ Nebula</option>
+                    <option value="eyb">☾ Eyeburn</option>
+                    <option value="plm">☾ Plum</option>
+                    <option value="snd">☾ Sand</option>
                 </select>
             </div>
-            <div class="setting-group">
-                <label for="input-mode">Aura Farming</label>
-                <select id="input-mode">
-                    <option value="keyboard">Disabled</option>
-                    <option value="speech">Enabled</option>
+            <div class="sgrp">
+                <label for="imode">Aura Farming</label>
+                <select id="imode">
+                    <option value="kbd">Disabled</option>
+                    <option value="spc">Enabled</option>
                     <option value="both">Sigma</option>
                 </select>
             </div>
-            <div class="setting-group">
-                <label for="menu-position">Menu & Settings Position</label>
-                <select id="menu-position">
-                    <option value="top-left">Top Left</option>
-                    <option value="top-right">Top Right</option>
-                    <option value="bottom-left">Bottom Left</option>
-                    <option value="bottom-right">Bottom Right</option>
+            <div class="sgrp">
+                <label for="mpos">Menu & Settings Position</label>
+                <select id="mpos">
+                    <option value="tl">Top Left</option>
+                    <option value="tr">Top Right</option>
+                    <option value="bl">Bottom Left</option>
+                    <option value="br">Bottom Right</option>
                 </select>
             </div>
         </div>
     </div>
-
-    <div class="editor-overlay" id="editor-overlay">
-        <div class="editor-box">
-            <div class="menu-header" style="margin-bottom:0;">
-                <span class="menu-title">Edit Thought</span>
-                <button class="icon-btn" id="editor-cancel">✕</button>
+    <div class="edovr" id="edovr">
+        <div class="edbox">
+            <div class="mhead" style="margin-bottom:0;">
+                <span class="mtitl">Edit Thought</span>
+                <button class="ibtn" id="edcan">✕</button>
             </div>
-
-            <div class="save-toast" id="save-toast" role="status" aria-live="polite">Thought saved to Thoughts</div>
-            <textarea class="editor-textarea" id="editor-textarea"></textarea>
-            <div class="editor-footer">
-                <button class="action-btn" id="editor-cancel-btn" title="Cancel">
+            <div class="toast" id="toast" role="status" aria-live="polite">Thought saved to Thoughts</div>
+            <textarea class="edtxt" id="edtxt"></textarea>
+            <div class="edftr">
+                <button class="abtn" id="edcbt" title="Cancel">
                     <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
                 </button>
-                <button class="action-btn save" id="editor-save-btn" title="Save">
+                <button class="abtn save" id="edsbt" title="Save">
                     <svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="currentColor"/></svg>
                 </button>
             </div>
         </div>
     </div>
-
     <script>
-        let thoughts = JSON.parse(localStorage.getItem('melon_memories') || '[]');
-        let settings = JSON.parse(localStorage.getItem('melon_mem_settings') || JSON.stringify({
-            theme: 'dark',
-            inputMode: 'keyboard',
-            menuPosition: 'top-left'
+        let thts = JSON.parse(localStorage.getItem('m_mem') || '[]');
+        let stgs = JSON.parse(localStorage.getItem('m_set') || JSON.stringify({
+            thm: 'drk',
+            inp: 'kbd',
+            pos: 'tl'
         }));
+        let dict = JSON.parse(localStorage.getItem('m_ac') || '{}');
 
-        let editingIndex = null;
+        let edidx = null;
 
         const body = document.body;
-        const textarea = document.getElementById('thought-input');
-        const submitBtn = document.getElementById('submit-btn');
-        const thoughtsMenu = document.getElementById('thoughts-menu');
-        const settingsMenu = document.getElementById('settings-menu');
-        const editorOverlay = document.getElementById('editor-overlay');
-        const editorTextarea = document.getElementById('editor-textarea');
-        const thoughtsList = document.getElementById('thoughts-list');
-        const thoughtSearch = document.getElementById('thought-search');
-        const thoughtCount = document.getElementById('thought-count');
-        const saveToast = document.getElementById('save-toast');
-        const themeSelect = document.getElementById('theme-select');
-        const inputModeSelect = document.getElementById('input-mode');
-        const menuPosSelect = document.getElementById('menu-position');
-        const actionButtons = document.getElementById('action-buttons');
-        let toastTimer = null;
+        const txta = document.getElementById('tinput');
+        const subtn = document.getElementById('subtn');
+        const tmenu = document.getElementById('tmenu');
+        const smenu = document.getElementById('smenu');
+        const edovr = document.getElementById('edovr');
+        const edtxt = document.getElementById('edtxt');
+        const tlst = document.getElementById('tlst');
+        const tsrch = document.getElementById('tsrch');
+        const tcnt = document.getElementById('tcnt');
+        const toast = document.getElementById('toast');
+        const tsel = document.getElementById('tsel');
+        const imode = document.getElementById('imode');
+        const mpos = document.getElementById('mpos');
+        const abox = document.getElementById('abox');
+        const suggs = document.getElementById('suggs');
+        let tmr = null;
 
-        function updateThoughtCount() {
-            thoughtCount.textContent = thoughts.length ? thoughts.length : '';
-            thoughtCount.setAttribute('aria-label', `${thoughts.length} saved thought${thoughts.length === 1 ? '' : 's'}`);
+        const pairs = {'(':')', '[':']', '{':'}', '"':'"', "'":"'"};
+
+        function addACl(w) {
+            w = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (!w || w.length < 2) return;
+            dict[w] = (dict[w] || 0) + 1;
+            saveAC();
         }
 
-        function showSaveToast() {
-            clearTimeout(toastTimer);
-            saveToast.classList.add('show');
-            toastTimer = setTimeout(() => saveToast.classList.remove('show'), 2200);
+        function saveAC() {
+            let str = JSON.stringify(dict);
+            while (str.length > 1000000) {
+                let keys = Object.keys(dict).sort((a,b) => dict[a] - dict[b]);
+                if (keys.length) delete dict[keys[0]];
+                else break;
+                str = JSON.stringify(dict);
+            }
+            localStorage.setItem('m_ac', str);
         }
 
-        function applySettings() {
-            body.className = settings.theme;
-            themeSelect.value = settings.theme;
-            inputModeSelect.value = settings.inputMode;
-            menuPosSelect.value = settings.menuPosition;
-
-            actionButtons.className = `top-actions ${settings.menuPosition}`;
+        function getAC(prefix) {
+            prefix = prefix.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (!prefix) return [];
+            return Object.keys(dict)
+                .filter(k => k.startsWith(prefix) && k !== prefix)
+                .sort((a,b) => dict[b] - dict[a])
+                .slice(0, 3);
         }
 
-        function saveSettings() {
-            settings.theme = themeSelect.value;
-            settings.inputMode = inputModeSelect.value;
-            settings.menuPosition = menuPosSelect.value;
-            localStorage.setItem('melon_mem_settings', JSON.stringify(settings));
-            applySettings();
+        function renAC() {
+            suggs.innerHTML = '';
+            const val = txta.value;
+            const pos = txta.selectionStart;
+            const sub = val.slice(0, pos);
+            const m = sub.match(/([a-zA-Z0-9]+)$/);
+            if (!m) return;
+            const pref = m[1];
+            const matches = getAC(pref);
+            matches.forEach(m => {
+                const b = document.createElement('button');
+                b.className = 'sbtn';
+                b.textContent = m;
+                b.type = 'button';
+                b.onmousedown = (e) => {
+                    e.preventDefault();
+                    const nval = val.slice(0, pos - pref.length) + m + ' ' + val.slice(pos);
+                    txta.value = nval;
+                    txta.selectionStart = txta.selectionEnd = pos - pref.length + m.length + 1;
+                    renAC();
+                };
+                suggs.appendChild(b);
+            });
         }
 
-        function renderThoughts() {
-            thoughtsList.innerHTML = '';
-            const query = thoughtSearch.value.trim().toLowerCase();
-            const visibleThoughts = thoughts
+        function handleAutoClose(e) {
+            if (pairs[e.key]) {
+                e.preventDefault();
+                const start = txta.selectionStart;
+                const end = txta.selectionEnd;
+                const val = txta.value;
+                txta.value = val.substring(0, start) + e.key + pairs[e.key] + val.substring(end);
+                txta.selectionStart = txta.selectionEnd = start + 1;
+                renAC();
+            }
+        }
+
+        txta.addEventListener('keydown', handleAutoClose);
+        txta.addEventListener('input', renAC);
+        txta.addEventListener('click', renAC);
+
+        function upCnt() {
+            tcnt.textContent = thts.length ? thts.length : '';
+            tcnt.setAttribute('aria-label', `${thts.length} saved thought${thts.length === 1 ? '' : 's'}`);
+        }
+
+        function shTst() {
+            clearTimeout(tmr);
+            toast.classList.add('show');
+            tmr = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function apStg() {
+            body.className = stgs.thm;
+            tsel.value = stgs.thm;
+            imode.value = stgs.inp;
+            mpos.value = stgs.pos;
+
+            abox.className = `acts ${stgs.pos}`;
+        }
+
+        function svStg() {
+            stgs.thm = tsel.value;
+            stgs.inp = imode.value;
+            stgs.pos = mpos.value;
+            localStorage.setItem('m_set', JSON.stringify(stgs));
+            apStg();
+        }
+
+        function renTh() {
+            tlst.innerHTML = '';
+            const q = tsrch.value.trim().toLowerCase();
+            const vis = thts
                 .map((thought, index) => ({ thought, index }))
-                .filter(({ thought }) => !query || `${thought.text} ${thought.date}`.toLowerCase().includes(query));
+                .filter(({ thought }) => !q || `${thought.text} ${thought.date}`.toLowerCase().includes(q));
 
-            if (visibleThoughts.length === 0) {
-                const message = thoughts.length === 0 ? 'No thoughts recorded yet...' : 'No thoughts match that search...';
-                thoughtsList.innerHTML = `<div style="text-align:center; opacity:0.5; margin-top:3rem; font-size: 1.1rem;">${message}</div>`;
+            if (vis.length === 0) {
+                const msg = thts.length === 0 ? 'No thoughts recorded yet...' : 'No thoughts match that search...';
+                tlst.innerHTML = `<div style="text-align:center; opacity:0.5; margin-top:3rem; font-size: 1.1rem;">${msg}</div>`;
                 return;
             }
 
-            visibleThoughts.forEach(({ thought, index }) => {
-                const words = thought.text.trim().split(/\s+/);
-                const title = words.length > 0 ? (words.slice(0, 3).join(' ') + (words.length > 3 ? '...' : '')) : 'Empty thought...';
+            vis.forEach(({ thought, index }) => {
+                const w = thought.text.trim().split(/\s+/);
+                const tit = w.length > 0 ? (w.slice(0, 3).join(' ') + (w.length > 3 ? '...' : '')) : 'Empty thought...';
                 
-                const card = document.createElement('div');
-                card.className = 'thought-card';
-                applyThoughtColor(card, thought.color);
-                card.innerHTML = `
-                    <div class="thought-header-row">
-                        <span class="thought-title">${escapeHtml(title)}</span>
+                const c = document.createElement('div');
+                c.className = 'tcard';
+                apClr(c, thought.color);
+                c.innerHTML = `
+                    <div class="trow1">
+                        <span class="ttitl">${escH(tit)}</span>
                     </div>
-                    <div class="thought-footer-row">
-                        <span class="thought-date">${thought.date}</span>
-                        <div class="thought-actions">
-                            <button class="action-btn" onclick="openEditor(${index})" title="Edit">
+                    <div class="trow2">
+                        <span class="tdate">${thought.date}</span>
+                        <div class="tacts">
+                            <button class="abtn" onclick="opEd(${index})" title="Edit">
                                 <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
                             </button>
-                            <button class="action-btn color" onclick="openColorMenu(${index}, event)" title="Color code">
+                            <button class="abtn color" onclick="opClr(${index}, event)" title="Color code">
                                 <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-4a2 2 0 0 1-2-2V8a5 5 0 0 0-5-5z" fill="currentColor"/><circle cx="7.5" cy="12" r="1" fill="var(--card)"/><circle cx="10" cy="7.5" r="1" fill="var(--card)"/><circle cx="15" cy="7.5" r="1" fill="var(--card)"/></svg>
                             </button>
-                            <button class="action-btn delete" onclick="deleteThought(${index})" title="Delete">
+                            <button class="abtn del" onclick="delTh(${index})" title="Delete">
                                 <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg>
                             </button>
                         </div>
                     </div>
                 `;
-                thoughtsList.appendChild(card);
+                tlst.appendChild(c);
             });
         }
 
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        function escH(t) {
+            return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
-        const thoughtColors = {
+        const clrs = {
             none: null,
             red: '#d03040',
             orange: '#f07000',
@@ -854,33 +978,33 @@
             pink: '#e02090'
         };
 
-        function applyThoughtColor(card, color) {
-            const hex = thoughtColors[color];
+        function apClr(card, color) {
+            const hex = clrs[color];
             if (!hex) return;
             card.style.background = `color-mix(in srgb, ${hex} 12%, var(--card))`;
             card.style.borderColor = `color-mix(in srgb, ${hex} 32%, var(--border))`;
         }
 
-        window.openColorMenu = function(index, event) {
-            const old = document.querySelector('.thought-color-menu');
+        window.opClr = function(index, event) {
+            const old = document.querySelector('.cmenu');
             if (old) old.remove();
 
             const menu = document.createElement('div');
-            menu.className = 'thought-color-menu';
-            const colors = Object.entries(thoughtColors);
-            colors.forEach(([name, hex]) => {
-                const option = document.createElement('button');
-                option.className = `thought-color-option${name === 'none' ? ' none' : ''}`;
-                option.type = 'button';
-                option.title = name === 'none' ? 'No color' : name;
-                if (hex) option.style.background = `color-mix(in srgb, ${hex} 70%, var(--card))`;
-                option.onclick = () => {
-                    thoughts[index].color = name;
-                    localStorage.setItem('melon_memories', JSON.stringify(thoughts));
+            menu.className = 'cmenu';
+            const arr = Object.entries(clrs);
+            arr.forEach(([name, hex]) => {
+                const opt = document.createElement('button');
+                opt.className = `copt${name === 'none' ? ' none' : ''}`;
+                opt.type = 'button';
+                opt.title = name === 'none' ? 'No color' : name;
+                if (hex) opt.style.background = `color-mix(in srgb, ${hex} 70%, var(--card))`;
+                opt.onclick = () => {
+                    thts[index].color = name;
+                    localStorage.setItem('m_mem', JSON.stringify(thts));
                     menu.remove();
-                    renderThoughts();
+                    renTh();
                 };
-                menu.appendChild(option);
+                menu.appendChild(opt);
             });
 
             const rect = event.currentTarget.getBoundingClientRect();
@@ -888,8 +1012,8 @@
             menu.style.top = `${Math.min(rect.bottom + 8, innerHeight - 120)}px`;
             document.body.appendChild(menu);
             setTimeout(() => {
-                const close = (outsideEvent) => {
-                    if (!menu.contains(outsideEvent.target) && outsideEvent.target !== event.currentTarget) {
+                const close = (e) => {
+                    if (!menu.contains(e.target) && e.target !== event.currentTarget) {
                         menu.remove();
                         window.removeEventListener('click', close);
                     }
@@ -898,76 +1022,76 @@
             }, 0);
         };
 
-        function addThought() {
-            const text = textarea.value.trim();
-            if (!text) return;
+        function addTh() {
+            const txt = txta.value.trim();
+            if (!txt) return;
+
+            txt.split(/\s+/).forEach(addACl);
 
             const now = new Date();
-            const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dstr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            thoughts.unshift({ text, date: dateStr, color: 'none' });
-            localStorage.setItem('melon_memories', JSON.stringify(thoughts));
-            updateThoughtCount();
-            showSaveToast();
+            thts.unshift({ text: txt, date: dstr, color: 'none' });
+            localStorage.setItem('m_mem', JSON.stringify(thts));
+            upCnt();
+            shTst();
 
-            textarea.value = '';
-            textarea.classList.add('glow');
-            submitBtn.style.transform = 'scale(0.9)';
+            txta.value = '';
+            txta.classList.add('glow');
+            subtn.style.transform = 'scale(0.9)';
+            renAC();
             
             setTimeout(() => {
-                textarea.classList.remove('glow');
-                submitBtn.style.transform = 'scale(1)';
+                txta.classList.remove('glow');
+                subtn.style.transform = 'scale(1)';
             }, 300);
 
-            renderThoughts();
+            renTh();
         }
 
-        window.deleteThought = function(index) {
-            thoughts.splice(index, 1);
-            localStorage.setItem('melon_memories', JSON.stringify(thoughts));
-            updateThoughtCount();
-            renderThoughts();
+        window.delTh = function(index) {
+            thts.splice(index, 1);
+            localStorage.setItem('m_mem', JSON.stringify(thts));
+            upCnt();
+            renTh();
         }
 
-        window.openEditor = function(index) {
-            editingIndex = index;
-            editorTextarea.value = thoughts[index].text;
-            editorOverlay.classList.add('open');
+        window.opEd = function(index) {
+            edidx = index;
+            edtxt.value = thts[index].text;
+            edovr.classList.add('open');
         }
 
-        function closeEditor() {
-            editorOverlay.classList.remove('open');
-            editingIndex = null;
+        function clEd() {
+            edovr.classList.remove('open');
+            edidx = null;
         }
 
-        function saveEditedThought() {
-            if (editingIndex !== null) {
-                thoughts[editingIndex].text = editorTextarea.value.trim();
-                localStorage.setItem('melon_memories', JSON.stringify(thoughts));
-                renderThoughts();
-                closeEditor();
+        function svEd() {
+            if (edidx !== null) {
+                const txt = edtxt.value.trim();
+                txt.split(/\s+/).forEach(addACl);
+                thts[edidx].text = txt;
+                localStorage.setItem('m_mem', JSON.stringify(thts));
+                renTh();
+                clEd();
             }
         }
 
-        document.getElementById('menu-btn').onclick = () => { thoughtsMenu.classList.add('open'); renderThoughts(); };
-        document.getElementById('settings-btn').onclick = () => settingsMenu.classList.add('open');
-
-        submitBtn.onclick = addThought;
-        
-        document.getElementById('close-thoughts').onclick = () => thoughtsMenu.classList.remove('open');
-        document.getElementById('close-settings').onclick = () => settingsMenu.classList.remove('open');
-
-        document.getElementById('editor-cancel').onclick = closeEditor;
-        document.getElementById('editor-cancel-btn').onclick = closeEditor;
-        document.getElementById('editor-save-btn').onclick = saveEditedThought;
-
-        themeSelect.onchange = saveSettings;
-        inputModeSelect.onchange = saveSettings;
-        menuPosSelect.onchange = saveSettings;
-        thoughtSearch.oninput = renderThoughts;
-
-        updateThoughtCount();
-        applySettings();
+        document.getElementById('mbtn').onclick = () => { tmenu.classList.add('open'); renTh(); };
+        document.getElementById('sbtn').onclick = () => smenu.classList.add('open');
+        subtn.onclick = addTh; 
+        document.getElementById('clstm').onclick = () => tmenu.classList.remove('open');
+        document.getElementById('clssm').onclick = () => smenu.classList.remove('open');
+        document.getElementById('edcan').onclick = clEd;
+        document.getElementById('edcbt').onclick = clEd;
+        document.getElementById('edsbt').onclick = svEd;
+        tsel.onchange = svStg;
+        imode.onchange = svStg;
+        mpos.onchange = svStg;
+        tsrch.oninput = renTh;
+        upCnt();
+        apStg();
     </script>
 </body>
 </html>
