@@ -3,313 +3,433 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Themeditor — build and export themes for Melon apps.">
   <title>Themeditor</title>
-  <link rel="icon" href="themeditor.png">
   <style>
     :root {
       --bg: #203b40;
-      --surface: rgba(47, 79, 84, .94);
-      --surface-strong: #37636a;
-      --text: #fff8ef;
-      --muted: #d3e1df;
-      --line: rgba(255, 248, 239, .2);
-      --accent: #ff974b;
-      --shadow: 0 24px 80px rgba(7, 22, 25, .42);
-      --radius: 24px;
+      --src: #2f4e53;
+      --str: #37636a;
+      --txt: #fff8ef;
+      --mut: #d3e1df;
+      --line: #50605f;
+      --acc: #ff974b;
+      --shd: 10px 20px 60px #0716194d;
+      --rad: 24px;
     }
 
-    [data-theme="light"] {
-      --bg: #e9eee7; --surface: rgba(255, 255, 255, .9); --surface-strong: #fff;
-      --text: #17231b; --muted: #607064; --line: rgba(23, 35, 27, .15);
-      --accent: #63bd46; --shadow: 0 24px 80px rgba(40, 88, 42, .15);
+    [data-t="light"] {
+      --bg: #e9eee7; --src: #f5f8f3; --str: #fff;
+      --txt: #17231b; --mut: #607064; --line: #c7d0c8;
+      --acc: #63bd46; --shd: 10px 20px 60px #28582a4d;
     }
-    [data-theme="dark"] {
-      --bg: #111318; --surface: rgba(28, 31, 40, .88); --surface-strong: #202430;
-      --text: #f4f5f7; --muted: #a5aab7; --line: rgba(255, 255, 255, .13);
-      --accent: #62c7b2;
+    [data-t="dark"] {
+      --bg: #111318; --src: #1c1f28; --str: #202430;
+      --txt: #f4f5f7; --mut: #a5aab7; --line: #3f424b;
+      --acc: #62c7b2;
     }
-    [data-theme="melon-light"] {
-      --bg: #cfe9e5; --surface: rgba(255, 251, 245, .92); --surface-strong: #fff;
-      --text: #3d2920; --muted: #866b5d; --line: rgba(61, 41, 32, .15);
-      --accent: #f28a3d; --shadow: 0 24px 80px rgba(151, 79, 32, .16);
+    [data-t="mlt"] {
+      --bg: #cfe9e5; --src: #fff8ee; --str: #fff;
+      --txt: #3d2920; --mut: #866b5d; --line: #cdbeb5;
+      --acc: #f28a3d; --shd: 10px 20px 60px #974f204d;
     }
-    [data-theme="melon-dark"] {
-      --bg: #203b40; --surface: rgba(47, 79, 84, .94); --surface-strong: #37636a;
-      --text: #fff8ef; --muted: #d3e1df; --line: rgba(255, 248, 239, .2);
-      --accent: #ff974b;
+    [data-t="mdk"] {
+      --bg: #203b40; --src: #2f4e53; --str: #37636a;
+      --txt: #fff8ef; --mut: #d3e1df; --line: #50605f;
+      --acc: #ff974b;
     }
-    [data-theme="crimson"] {
-      --bg: #17090f; --surface: rgba(52, 13, 29, .84); --surface-strong: #671b37;
-      --text: #fff3f6; --muted: #d8a8b8; --line: rgba(255, 105, 145, .32);
-      --accent: #ff4f7b; --shadow: 0 0 55px rgba(255, 23, 79, .22);
+    [data-t="crim"] {
+      --bg: #17090f; --src: #340d1d; --str: #671b37;
+      --txt: #fff3f6; --mut: #d8a8b8; --line: #7f334d;
+      --acc: #ff4f7b; --shd: 10px 20px 60px #ff174f4d;
     }
-    [data-theme="nebula"] {
-      --bg: #110d1f; --surface: rgba(38, 22, 65, .84); --surface-strong: #51318a;
-      --text: #f8f2ff; --muted: #c4aedc; --line: rgba(194, 131, 255, .3);
-      --accent: #c783ff; --shadow: 0 0 55px rgba(169, 77, 255, .22);
+    [data-t="nebu"] {
+      --bg: #110d1f; --src: #261641; --str: #51318a;
+      --txt: #f8f2ff; --mut: #c4aedc; --line: #765b99;
+      --acc: #c783ff; --shd: 10px 20px 60px #a94dff4d;
     }
-    [data-theme="eyeburn"] {
-      --bg: #000; --surface: #080808; --surface-strong: #111; --text: #fff;
-      --muted: #bcbcbc; --line: #555; --accent: #fff;
-      --shadow: 0 0 30px rgba(255, 255, 255, .1);
+    [data-t="burn"] {
+      --bg: #000; --src: #080808; --str: #111; --txt: #fff;
+      --mut: #bcbcbc; --line: #aaaaaa; --acc: #fff;
+      --shd: 10px 20px 60px #3333334d;
     }
-    [data-theme="plum"] {
-      --bg: #17121d; --surface: rgba(39, 27, 49, .88); --surface-strong: #342443;
-      --text: #f4eafa; --muted: #c1a9cc; --line: rgba(255, 255, 255, .14);
-      --accent: #7affc6;
-    }
-    [data-theme="sand"] {
-      --bg: #171614; --surface: rgba(45, 39, 31, .9); --surface-strong: #514332;
-      --text: #f7eee2; --muted: #c8b7a2; --line: rgba(255, 238, 214, .16);
-      --accent: #ffd166;
-    }
-    [data-theme="aura"] {
-      --bg: #fff; --surface: rgba(255, 255, 255, .94); --surface-strong: #fff;
-      --text: #000; --muted: #888; --line: #000; --accent: #000;
-      --shadow: 0 0 26px rgba(0, 0, 0, .22);
+    [data-t="aura"] {
+      --bg: #fff; --src: #f0f0f0; --str: #fff;
+      --txt: #000; --mut: #888; --line: #000; --acc: #000;
+      --shd: 10px 20px 60px #0000004d;
     }
 
     * { box-sizing: border-box; }
     html { min-height: 100%; font-size: 110%; }
     body {
-      min-height: 100vh; margin: 0; overflow-x: hidden; color: var(--text);
-      background: radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42rem), var(--bg);
+      position: relative; min-height: 100vh; margin: 0; overflow-x: hidden; color: var(--txt);
+      background: var(--bg);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       transition: background .3s ease, color .3s ease;
     }
-    body::before {
-      position: fixed; inset: 0; z-index: -1; pointer-events: none; content: "";
-      opacity: .23; background-image: linear-gradient(color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px),
-        linear-gradient(90deg, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px);
-      background-size: 38px 38px; mask-image: linear-gradient(to bottom, #000, transparent 78%);
+    body::after {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; content: "";
+      background: radial-gradient(circle at 50% -10%, var(--acc) 0, var(--bg) 60rem);
+      opacity: .25;
     }
     button, input, select { font: inherit; }
     button { color: inherit; }
-    .shell { width: min(1220px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
-    .brand { display: inline-flex; align-items: center; gap: .65rem; margin: 0; font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -.02em; }
-    .melon {
+    .shll {
+      position: relative; z-index: 2; width: min(1220px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0;
+    }
+    .shll > * { position: relative; z-index: 1; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+    .brnd { display: inline-flex; align-items: center; gap: .65rem; margin: 0; font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -.02em; }
+    .mln {
       display: grid; width: 1.1em; height: 1.1em; place-items: center; font-size: .82em;
-      border-radius: 30% 55% 34% 58%; background: var(--accent);
-      box-shadow: 0 0 0 .12em color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: 30% 55% 34% 58%; background: var(--acc);
+      box-shadow: 0 0 0 .12em var(--acc);
       transform: rotate(-10deg);
     }
-    .button {
+    .btn {
       border: 1px solid var(--line); border-radius: 12px; padding: .7rem 1rem;
-      background: var(--surface); cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease;
+      background: var(--src); cursor: pointer; transition: transform .2s ease, border-color .2s ease, background .2s ease;
     }
-    .button:hover, .button:focus-visible { border-color: var(--accent); background: var(--surface-strong); outline: none; transform: translateY(-2px); }
-    .layout { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
-    .right-column { display: grid; gap: 1.2rem; min-width: 0; }
-    .panel, .preview-card {
-      border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
-      box-shadow: var(--shadow); backdrop-filter: blur(18px);
+    .btn:hover, .btn:focus-visible { border-color: var(--acc); background: var(--str); outline: none; transform: translateY(-2px); }
+    .acts { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .del { padding: .35rem .55rem; border: 1px solid var(--line); border-radius: 8px; color: var(--mut); background: transparent; cursor: pointer; }
+    .del:hover, .del:focus-visible { color: var(--txt); border-color: var(--acc); outline: none; }
+    .grid { display: grid; grid-template-columns: minmax(280px, 380px) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+    .col2 { display: grid; gap: 1.2rem; min-width: 0; }
+    .pnl, .card {
+      border: 1px solid var(--line); border-radius: var(--rad); background: var(--src);
+      box-shadow: var(--shd); backdrop-filter: blur(18px);
     }
-    .panel { padding: 1.25rem; }
-    .panel + .panel { margin-top: 1.2rem; }
-    .right-column .panel { margin-top: 0; }
-    .panel h2 { margin: 0 0 1rem; font-size: 1.05rem; }
-    .panel-heading { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
-    .panel-heading small, .hint { color: var(--muted); font-size: .78rem; }
-    .preset-select {
-      width: 100%; padding: .7rem .75rem; color: var(--text); border: 1px solid var(--line);
+    .pnl { padding: 1.25rem; }
+    .pnl + .pnl { margin-top: 1.2rem; }
+    .col2 .pnl { margin-top: 0; }
+    .pnl h2 { margin: 0 0 1rem; font-size: 1.05rem; }
+    .hdg { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+    .hdg small, .hint { color: var(--mut); font-size: .78rem; }
+    .sel {
+      width: 100%; padding: .7rem .75rem; color: var(--txt); border: 1px solid var(--line);
       margin-bottom: 1.25rem; border-radius: 10px; background: var(--bg); cursor: pointer;
     }
-    .palette { display: grid; gap: 1rem; }
-    .color-row { display: grid; grid-template-columns: 1fr 3.3rem; gap: .55rem; align-items: end; }
-    .color-row label { display: grid; gap: .3rem; color: var(--muted); font-size: .75rem; font-weight: 700; }
-    .color-row input[type="text"] {
-      width: 100%; padding: .65rem .7rem; color: var(--text); border: 1px solid var(--line);
+    .pal { display: grid; gap: 1rem; }
+    .row { display: grid; grid-template-columns: 1fr 3.3rem; gap: .55rem; align-items: end; }
+    .row label { display: grid; gap: .3rem; color: var(--mut); font-size: .75rem; font-weight: 700; }
+    .row input[type="text"] {
+      width: 100%; padding: .65rem .7rem; color: var(--txt); border: 1px solid var(--line);
       border-radius: 10px; outline: none; background: var(--bg); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .84rem;
     }
-    .color-row input[type="text"]:focus { border-color: var(--accent); }
-    .color-row input[type="color"] { width: 3.3rem; height: 2.55rem; padding: .2rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; }
-    .preview-card { min-height: 610px; padding: clamp(1.25rem, 4vw, 3rem); }
-    .preview-header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
-    .preview-header h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); letter-spacing: -.03em; }
-    .preview-header p { margin: .35rem 0 0; color: var(--muted); font-size: .85rem; }
-    .preview-badge { color: var(--accent); border: 1px solid var(--line); border-radius: 99px; padding: .4rem .65rem; font-size: .7rem; white-space: nowrap; }
-    .mock-hero { padding: clamp(1.3rem, 5vw, 3rem); text-align: center; border: 1px solid var(--line); border-radius: 26px; background: var(--surface-strong); }
-    .mock-title { display: inline-flex; align-items: center; gap: .55rem; margin: 0; font-size: clamp(1.6rem, 5vw, 3rem); letter-spacing: -.03em; }
-    .mock-title .melon { font-size: .75em; }
-    .mock-copy { max-width: 570px; margin: 1rem auto 0; color: var(--muted); line-height: 1.6; }
-    .mock-apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
-    .mock-app { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .7rem; padding: 1rem; text-align: left; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
-    .mock-icon { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border-radius: 13px; background: color-mix(in srgb, var(--accent) 15%, transparent); font-size: 1.25rem; }
-    .mock-app h3 { margin: 0 0 .2rem; font-size: .9rem; }
-    .mock-app p { margin: 0; color: var(--muted); font-size: .73rem; line-height: 1.35; }
-    .mock-arrow { color: var(--accent); }
-    .export { margin-top: 1rem; }
-    .export-panel h2 { margin-bottom: .35rem; }
-    .export-panel > .hint { margin-top: 0; }
-    .export textarea {
-      width: 100%; height: 240px; min-height: 240px; resize: vertical; overflow: hidden; padding: .9rem; color: var(--text); border: 1px solid var(--line);
-      border-radius: 14px; background: color-mix(in srgb, var(--bg) 75%, #000 25%); font: .76rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
-    }
-    .toast { position: fixed; right: 1rem; bottom: 1rem; padding: .75rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-strong); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    [data-theme="aura"] .panel, [data-theme="aura"] .preview-card, [data-theme="aura"] .mock-hero, [data-theme="aura"] .mock-app { border-color: #000; box-shadow: 0 0 8px rgba(0, 0, 0, .75); text-shadow: 0 0 8px #000; }
-    .no-animations *, .no-animations *::before, .no-animations *::after { animation: none !important; transition: none !important; }
+    .row input[type="text"]:focus { border-color: var(--acc); }
+    .row input[type="color"] { width: 3.3rem; height: 2.55rem; padding: .2rem; border: 1px solid var(--line); border-radius: 10px; background: var(--src); cursor: pointer; }
+    .shad { margin-top: 1.3rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+    .shad h3 { margin: 0 0 .35rem; font-size: .9rem; }
+    .sgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .55rem; }
+    .sgrid label { display: grid; gap: .3rem; color: var(--mut); font-size: .75rem; font-weight: 700; }
+    .sgrid input { width: 100%; padding: .55rem; color: var(--txt); border: 1px solid var(--line); border-radius: 9px; background: var(--bg); }
+    .scol { grid-column: 1 / -1; }
+    .card { min-height: 610px; padding: clamp(1.25rem, 4vw, 3rem); }
+    .phd { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+    .phd h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); letter-spacing: -.03em; }
+    .phd p { margin: .35rem 0 0; color: var(--mut); font-size: .85rem; }
+    .mhero { padding: clamp(1.3rem, 5vw, 3rem); text-align: center; border: 1px solid var(--line); border-radius: 26px; background: var(--str); }
+    .mtit { display: inline-flex; align-items: center; gap: .55rem; margin: 0; font-size: clamp(1.6rem, 5vw, 3rem); letter-spacing: -.03em; }
+    .mtit .mln { font-size: .75em; }
+    .mcopy { max-width: 570px; margin: 1rem auto 0; color: var(--mut); line-height: 1.6; }
+    .mapps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1rem; }
+    .mapp { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .7rem; padding: 1rem; text-align: left; border: 1px solid var(--line); border-radius: 17px; background: var(--src); }
+    .micn { display: grid; width: 2.6rem; height: 2.6rem; place-items: center; border-radius: 13px; background: var(--acc); font-size: 1.25rem; }
+    .mapp h3 { margin: 0 0 .2rem; font-size: .9rem; }
+    .mapp p { margin: 0; color: var(--mut); font-size: .73rem; line-height: 1.35; }
+    .marw { color: var(--acc); }
+    [data-t="aura"] .pnl, [data-t="aura"] .card, [data-t="aura"] .mhero, [data-t="aura"] .mapp { border-color: #000; box-shadow: 0 0 8px #000; text-shadow: 0 0 8px #000; }
+    .noa *, .noa *::before, .noa *::after { animation: none !important; transition: none !important; }
     @media (max-width: 820px) {
-      .layout { grid-template-columns: 1fr; }
-      .preview-card { min-height: auto; }
+      .grid { grid-template-columns: 1fr; }
+      .card { min-height: auto; }
     }
     @media (max-width: 560px) {
-      .shell { width: min(100% - 1rem, 440px); padding-top: 1.5rem; }
-      .topbar { align-items: start; flex-direction: column; }
-      .mock-apps { grid-template-columns: 1fr; }
+      .shll { width: min(100% - 1rem, 440px); padding-top: 1.5rem; }
+      .top { align-items: start; flex-direction: column; }
+      .mapps { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
-<body data-theme="dark">
-  <main class="shell">
-    <header class="topbar">
-      <h1 class="brand"><span class="melon" aria-hidden="true">🍈</span><span>Themeditor</span></h1>
+<body data-t="dark">
+  <main class="shll">
+    <header class="top">
+      <h1 class="brnd"><span class="mln" aria-hidden="true">🍈</span><span>Themeditor</span></h1>
     </header>
 
-    <div class="layout">
+    <div class="grid">
       <aside>
-        <section class="panel export-panel">
-          <div class="panel-heading">
+        <section class="pnl">
+          <div class="hdg">
             <h2>Color palette</h2>
-            <small class="palette-status" id="palette-status">Dark</small>
+            <small id="stat">Dark</small>
           </div>
-          <label class="hint" for="preset-select">Preset</label>
-          <select class="preset-select" id="preset-select"></select>
-          <div class="palette" id="palette"></div>
+          <div class="acts">
+            <button class="btn" id="load" type="button">Load theme</button>
+            <button class="btn" id="save" type="button">Save theme</button>
+            <input id="file" type="file" accept=".melon,text/plain" hidden>
+          </div>
+          <label class="hint" for="sel">Preset</label>
+          <div class="hdg">
+            <select class="sel" id="sel"></select>
+            <button class="del" id="drop" type="button" aria-label="Delete custom theme" hidden>×</button>
+          </div>
+          <div class="pal" id="pal"></div>
+          <div class="shad">
+            <h3>Shadow</h3>
+            <p class="hint">X and Y move the shadow. Blur controls softness.</p>
+            <div class="sgrid">
+              <label>X<input id="sx" type="number" min="-100" max="100" step="1"></label>
+              <label>Y<input id="sy" type="number" min="-100" max="100" step="1"></label>
+              <label>Blur<input id="sb" type="number" min="0" max="200" step="1"></label>
+              <div class="row scol">
+                <label>Color<input id="sc" type="text" maxlength="7" spellcheck="false"></label>
+                <input id="scc" type="color" value="#000000" aria-label="Shadow color picker">
+              </div>
+            </div>
+          </div>
         </section>
-
       </aside>
 
-      <div class="right-column">
-        <section class="preview-card" aria-label="Theme preview">
-          <div class="preview-header">
+      <div class="col2">
+        <section class="card" aria-label="Theme preview">
+          <div class="phd">
             <div>
               <h2>Preview your flavor of Melon</h2>
               <p>What you see here is just a download away of being yours, or maybe a pull request.</p>
             </div>
           </div>
-          <div class="mock-hero">
-            <h3 class="mock-title"><span class="melon" aria-hidden="true">🍈</span><span>The Melon Project</span></h3>
-            <p class="mock-copy">Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.</p>
+          <div class="mhero">
+            <h3 class="mtit"><span class="mln" aria-hidden="true">🍈</span><span>The Melon Project</span></h3>
+            <p class="mcopy">Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.</p>
           </div>
-          <div class="mock-apps">
-            <article class="mock-app"><span class="mock-icon">🖼️</span><span><h3>Melange</h3><p>Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.</p></span><span class="mock-arrow">↗</span></article>
-            <article class="mock-app"><span class="mock-icon">💡</span><span><h3>Memory</h3><p>Keep important things somewhere your brain can find them.</p></span><span class="mock-arrow">↗</span></article>
-            <article class="mock-app"><span class="mock-icon">🎨</span><span><h3>Themeditor</h3><p>Basically what you're doing right now.</p></span><span class="mock-arrow">↗</span></article>
-            <article class="mock-app"><span class="mock-icon">🍈</span><span><h3>More</h3><p>You'll never see it coming.</p></span><span class="mock-arrow">→</span></article>
+          <div class="mapps">
+            <article class="mapp"><span class="micn">🖼️</span><span><h3>Melange</h3><p>Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">💡</span><span><h3>Memory</h3><p>Keep important things somewhere your brain can find them.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">🎨</span><span><h3>Themeditor</h3><p>Basically what you're doing right now.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">🍈</span><span><h3>More</h3><p>You'll never see it coming.</p></span><span class="marw">→</span></article>
           </div>
-        </section>
-        <section class="panel">
-          <div class="panel-heading">
-            <h2>Export</h2>
-          </div>
-          <p class="hint">Paste this into a <code>[data-theme]</code> block and rename it however you want, then adjust the div class options accordingly.</p>
-          <div class="export"><textarea id="output" spellcheck="false" readonly></textarea></div>
         </section>
       </div>
     </div>
   </main>
   <script>
-    const tokens = [
-      ["bg", "Background"], ["surface", "Surface"], ["surface-strong", "Raised surface"],
-      ["text", "Primary text"], ["muted", "Secondary text"], ["line", "Borders"],
-      ["accent", "Accent"]
+    const tok = [
+      ["bg", "Background"], ["src", "Surface"], ["str", "Raised surface"],
+      ["txt", "Primary text"], ["mut", "Secondary text"], ["line", "Borders"],
+      ["acc", "Accent"]
     ];
-    const presets = {
-      light: { label: "☀ Light", type: "Light", values: { bg: "#e9eee7", surface: "rgba(255, 255, 255, .9)", "surface-strong": "#ffffff", text: "#17231b", muted: "#607064", line: "rgba(23, 35, 27, .15)", accent: "#63bd46" } },
-      dark: { label: "☾ Dark", type: "Dark", values: { bg: "#111318", surface: "rgba(28, 31, 40, .88)", "surface-strong": "#202430", text: "#f4f5f7", muted: "#a5aab7", line: "rgba(255, 255, 255, .13)", accent: "#62c7b2" } },
-      "melon-light": { label: "☀ Melon Light", type: "Light", values: { bg: "#cfe9e5", surface: "rgba(255, 251, 245, .92)", "surface-strong": "#ffffff", text: "#3d2920", muted: "#866b5d", line: "rgba(61, 41, 32, .15)", accent: "#f28a3d" } },
-      "melon-dark": { label: "☾ Melon Dark", type: "Dark", values: { bg: "#203b40", surface: "rgba(47, 79, 84, .94)", "surface-strong": "#37636a", text: "#fff8ef", muted: "#d3e1df", line: "rgba(255, 248, 239, .2)", accent: "#ff974b" } },
-      crimson: { label: "☾ Crimson", type: "Dark", values: { bg: "#17090f", surface: "rgba(52, 13, 29, .84)", "surface-strong": "#671b37", text: "#fff3f6", muted: "#d8a8b8", line: "rgba(255, 105, 145, .32)", accent: "#ff4f7b" } },
-      nebula: { label: "☾ Nebula", type: "Dark", values: { bg: "#110d1f", surface: "rgba(38, 22, 65, .84)", "surface-strong": "#51318a", text: "#f8f2ff", muted: "#c4aedc", line: "rgba(194, 131, 255, .3)", accent: "#c783ff" } },
-      eyeburn: { label: "☾ Eyeburn", type: "Dark", values: { bg: "#000000", surface: "#080808", "surface-strong": "#111111", text: "#ffffff", muted: "#bcbcbc", line: "#555555", accent: "#ffffff" } },
-      plum: { label: "☾ Plum", type: "Dark", values: { bg: "#17121d", surface: "rgba(39, 27, 49, .88)", "surface-strong": "#342443", text: "#f4eafa", muted: "#c1a9cc", line: "rgba(255, 255, 255, .14)", accent: "#7affc6" } },
-      sand: { label: "☾ Sand", type: "Dark", values: { bg: "#171614", surface: "rgba(45, 39, 31, .9)", "surface-strong": "#514332", text: "#f7eee2", muted: "#c8b7a2", line: "rgba(255, 238, 214, .16)", accent: "#ffd166" } }
+    const pre = {
+      light: { label: "Light", type: "Light", values: { bg: "#e9eee7", src: "#f5f8f3", str: "#ffffff", txt: "#17231b", mut: "#607064", line: "#c7d0c8", acc: "#63bd46", shd: "10 20 60 #28582a4d" } },
+      dark: { label: "Dark", type: "Dark", values: { bg: "#111318", src: "#1c1f28", str: "#202430", txt: "#f4f5f7", mut: "#a5aab7", line: "#3f424b", acc: "#62c7b2", shd: "10 20 60 #1113184d" } },
+      mlt: { label: "Melon Light", type: "Light", values: { bg: "#cfe9e5", src: "#fff8ee", str: "#ffffff", txt: "#3d2920", mut: "#866b5d", line: "#cdbeb5", acc: "#f28a3d", shd: "10 20 60 #974f204d" } },
+      mdk: { label: "Melon Dark", type: "Dark", values: { bg: "#203b40", src: "#2f4e53", str: "#37636a", txt: "#fff8ef", mut: "#d3e1df", line: "#50605f", acc: "#ff974b", shd: "10 20 60 #0716194d" } },
+      crim: { label: "Crimson", type: "Dark", values: { bg: "#17090f", src: "#340d1d", str: "#671b37", txt: "#fff3f6", mut: "#d8a8b8", line: "#7f334d", acc: "#ff4f7b", shd: "10 20 60 #ff174f4d" } },
+      nebu: { label: "Nebula", type: "Dark", values: { bg: "#110d1f", src: "#261641", str: "#51318a", txt: "#f8f2ff", mut: "#c4aedc", line: "#765b99", acc: "#c783ff", shd: "10 20 60 #a94dff4d" } },
+      burn: { label: "Eyeburn", type: "Dark", values: { bg: "#000000", src: "#080808", str: "#111111", txt: "#ffffff", mut: "#bcbcbc", line: "#aaaaaa", acc: "#ffffff", shd: "10 20 60 #3333334d" } }
     };
-    const body = document.body;
-    const presetSelect = document.querySelector("#preset-select");
-    const paletteStatus = document.querySelector("#palette-status");
-    const paletteEl = document.querySelector("#palette");
-    const output = document.querySelector("#output");
-    let activePreset = "dark";
-    let custom = { ...presets[activePreset].values };
+    const b = document.body;
+    const sel = document.querySelector("#sel");
+    const stat = document.querySelector("#stat");
+    const pal = document.querySelector("#pal");
+    const load = document.querySelector("#load");
+    const save = document.querySelector("#save");
+    const file = document.querySelector("#file");
+    const drop = document.querySelector("#drop");
+    const sx = document.querySelector("#sx");
+    const sy = document.querySelector("#sy");
+    const sb = document.querySelector("#sb");
+    const sc = document.querySelector("#sc");
+    const scc = document.querySelector("#scc");
+    let act = "dark";
+    let cst = { ...pre[act].values };
+    let ths = JSON.parse(localStorage.getItem("themeditor-themes") || "{}");
 
-    function renderPalette() {
-      paletteEl.innerHTML = tokens.map(([key, label]) => `
-        <div class="color-row">
-          <label>${label}<input data-token="${key}" type="text" value="${custom[key]}" spellcheck="false"></label>
-          <input data-color="${key}" type="color" value="${toHex(custom[key])}" aria-label="${label} color picker">
-        </div>
-      `).join("");
-      paletteEl.querySelectorAll("[data-token]").forEach((input) => input.addEventListener("input", () => updateToken(input.dataset.token, input.value, "text")));
-      paletteEl.querySelectorAll("[data-color]").forEach((input) => input.addEventListener("input", () => updateToken(input.dataset.color, input.value, "color")));
+    function dump() {
+      const out = tok.map(([key]) => (cst[key] || "#000000").slice(1));
+      const s = cst.shd || cst.shadow;
+      if (s) out.push(s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#([0-9a-f]{8})$/i, "$1 $2 $3 $4"));
+      return `${out.join("\n")}\n`;
     }
 
-    function toHex(value) {
+    function parse(data) {
+      const vals = data.split(/\r?\n/).map((v) => v.trim()).filter(Boolean);
+      if (vals.length < 7 || vals.length > 8) throw new Error("A .melon file must contain 7 or 8 values.");
+      const got = {};
+      tok.forEach(([key], idx) => {
+        if (!/^[0-9a-f]{6}$/i.test(vals[idx])) throw new Error("Theme colors must be six-digit HEX values.");
+        got[key] = `#${vals[idx]}`;
+      });
+      if (vals[7] && /^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(vals[7])) got.shd = vals[7].replace(/(#[0-9a-f]+|[0-9a-f]{8})$/i, "#$1");
+      else if (vals[7]) throw new Error("Shadow must be: X Y Blur RRGGBBAA HEX.");
+      return got;
+    }
+
+    function shad() {
+      const s = cst.shd || cst.shadow || "10 20 60 #0000004d";
+      const mat = s.match(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i);
+      if (!mat) return;
+      [sx.value, sy.value, sb.value] = mat.slice(1, 4);
+      sc.value = mat[4].slice(0, 7);
+      scc.value = sc.value;
+    }
+
+    function put(name, vals) {
+      const key = name.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "theme";
+      ths[key] = { name: name.trim() || "Theme", values: vals };
+      localStorage.setItem("themeditor-themes", JSON.stringify(ths));
+      return key;
+    }
+
+    function opts() {
+      const base = Object.entries(pre).map(([key, preset]) => `<option value="${key}">${preset.label}</option>`);
+      const own = Object.entries(ths).map(([key, val]) => `<option value="own:${key}">${val.name}</option>`);
+      sel.innerHTML = base.concat(own).join("");
+    }
+
+    function draw() {
+      const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent" };
+      pal.innerHTML = tok.map(([key, label]) => {
+        const val = cst[key] || cst[map[key]] || "#000000";
+        return `
+        <div class="row">
+          <label>${label}<input data-tok="${key}" type="text" value="${val}" spellcheck="false"></label>
+          <input data-col="${key}" type="color" value="${hex(val)}" aria-label="${label} color picker">
+        </div>
+      `;
+      }).join("");
+      pal.querySelectorAll("[data-tok]").forEach((input) => input.addEventListener("input", () => upd(input.dataset.tok, input.value, "text")));
+      pal.querySelectorAll("[data-col]").forEach((input) => input.addEventListener("input", () => upd(input.dataset.col, input.value, "color")));
+    }
+
+    function hex(value) {
       const match = value.match(/^#([0-9a-f]{6})$/i);
       return match ? value : "#888888";
     }
 
-    function selectPreset(key) {
-      activePreset = key;
-      custom = { ...presets[key].values };
-      body.dataset.theme = key;
-      tokens.forEach(([token]) => body.style.removeProperty(`--${token}`));
-      presetSelect.value = key;
-      paletteStatus.textContent = presets[key].label.replace(/^[☀☾]\s*/, "");
-      renderPalette();
-      updateOutput();
-      localStorage.setItem("themeditor-preset", key);
+    function pick(key) {
+      act = key;
+      const mapT = {"melon-light":"mlt", "melon-dark":"mdk", "crimson":"crim", "nebula":"nebu", "eyeburn":"burn"};
+      const realK = mapT[key] || key;
+      const src = realK.startsWith("own:") ? ths[realK.slice(4)] : pre[realK];
+      if (!src) return;
+      cst = { ...src.values };
+      b.style.removeProperty("--shd");
+      b.dataset.t = realK;
+      tok.forEach(([k]) => b.style.removeProperty(`--${k}`));
+      apply();
+      sel.value = realK;
+      stat.textContent = src.name || src.label;
+      drop.hidden = !realK.startsWith("own:");
+      draw();
+      shad();
+      localStorage.setItem("themeditor-preset", realK);
       localStorage.removeItem("themeditor-custom");
     }
 
-    function applyCustomPalette() {
-      tokens.forEach(([token]) => body.style.setProperty(`--${token}`, custom[token]));
+    function apply() {
+      const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent", shd:"shadow" };
+      tok.forEach(([k]) => {
+        const v = cst[k] || cst[map[k]];
+        if (v) b.style.setProperty(`--${k}`, v);
+      });
+      const s = cst.shd || cst.shadow;
+      if (s) b.style.setProperty("--shd", s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4"));
     }
 
-    function updateToken(key, value, source) {
-      custom[key] = value;
-      body.dataset.theme = "custom";
-      applyCustomPalette();
-      activePreset = "custom";
-      paletteStatus.textContent = "Custom";
-      const counterpart = source === "color"
-        ? paletteEl.querySelector(`[data-token="${key}"]`)
-        : paletteEl.querySelector(`[data-color="${key}"]`);
-      if (counterpart && source === "color") counterpart.value = value;
-      if (counterpart && source === "text" && /^#[0-9a-f]{6}$/i.test(value)) counterpart.value = value;
-      updateOutput();
-      localStorage.setItem("themeditor-custom", JSON.stringify(custom));
+    function upd(key, value, source) {
+      cst[key] = value;
+      b.dataset.t = "custom";
+      apply();
+      act = "custom";
+      stat.textContent = "Custom";
+      drop.hidden = true;
+      const cp = source === "color"
+        ? pal.querySelector(`[data-tok="${key}"]`)
+        : pal.querySelector(`[data-col="${key}"]`);
+      if (cp && source === "color") cp.value = value;
+      if (cp && source === "text" && /^#[0-9a-f]{6}$/i.test(value)) cp.value = value;
+      localStorage.setItem("themeditor-custom", JSON.stringify(cst));
     }
 
-    function updateOutput() {
-      output.value = `[data-theme="custom"] {\n${tokens.map(([key]) => `  --${key}: ${custom[key]};`).join("\n")}\n}`;
+    function uShad() {
+      const col = /^#[0-9a-f]{6}$/i.test(sc.value) ? sc.value : "#000000";
+      cst.shd = `${Number(sx.value) || 0} ${Number(sy.value) || 0} ${Math.max(0, Number(sb.value) || 0)} ${col}4d`;
+      sc.value = col;
+      scc.value = col;
+      b.style.setProperty("--shd", cst.shd.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4"));
+      localStorage.setItem("themeditor-custom", JSON.stringify(cst));
     }
 
-    const savedPreset = localStorage.getItem("themeditor-preset");
-    const savedCustom = JSON.parse(localStorage.getItem("themeditor-custom") || "null");
-    presetSelect.innerHTML = Object.entries(presets)
-      .map(([key, preset]) => `<option value="${key}">${preset.label}</option>`)
-      .join("");
-    presetSelect.addEventListener("change", () => {
-      if (presets[presetSelect.value]) selectPreset(presetSelect.value);
+    const sPre = localStorage.getItem("themeditor-preset");
+    const sCst = JSON.parse(localStorage.getItem("themeditor-custom") || "null");
+    opts();
+    sel.addEventListener("change", () => {
+      if (pre[sel.value] || sel.value.startsWith("own:")) pick(sel.value);
     });
-    if (savedCustom) {
-      custom = savedCustom;
-      activePreset = "custom";
-      body.dataset.theme = "custom";
-      applyCustomPalette();
-      paletteStatus.textContent = "Custom";
+    if (sCst) {
+      cst = sCst;
+      act = "custom";
+      b.dataset.t = "custom";
+      apply();
+      stat.textContent = "Custom";
+      drop.hidden = true;
     } else {
-      selectPreset(presets[savedPreset] ? savedPreset : "dark");
+      const mapT = {"melon-light":"mlt", "melon-dark":"mdk", "crimson":"crim", "nebula":"nebu", "eyeburn":"burn"};
+      const rPre = mapT[sPre] || sPre;
+      const old = rPre && (pre[rPre] || (rPre.startsWith("own:") && ths[rPre.slice(4)]));
+      pick(old ? rPre : "dark");
     }
-    renderPalette();
-    updateOutput();
+    load.addEventListener("click", () => file.click());
+    file.addEventListener("change", () => {
+      const item = file.files[0];
+      if (!item) return;
+      const read = new FileReader();
+      read.onload = () => {
+        try {
+          const vals = parse(read.result);
+          const key = put(item.name.replace(/\.melon$/i, ""), vals);
+          opts();
+          pick(`own:${key}`);
+          alert("Theme loaded.");
+        } catch (err) {
+          alert(err.message);
+        }
+        file.value = "";
+      };
+      read.readAsText(item);
+    });
+    save.addEventListener("click", () => {
+      const name = prompt("Name this theme:", act.startsWith("own:") ? ths[act.slice(4)].name : "My theme");
+      if (name === null) return;
+      const key = put(name, { ...cst });
+      opts();
+      pick(`own:${key}`);
+      const blob = new Blob([dump()], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${key}.melon`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+    drop.addEventListener("click", () => {
+      if (!act.startsWith("own:")) return;
+      const key = act.slice(4);
+      if (!confirm(`Delete "${ths[key].name}"?`)) return;
+      delete ths[key];
+      localStorage.setItem("themeditor-themes", JSON.stringify(ths));
+      opts();
+      pick("dark");
+    });
+    [sx, sy, sb, sc].forEach((el) => el.addEventListener("input", uShad));
+    scc.addEventListener("input", () => {
+      sc.value = scc.value;
+      uShad();
+    });
+    draw();
   </script>
 </body>
 </html>
