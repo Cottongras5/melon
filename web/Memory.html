@@ -7,122 +7,90 @@
     <link rel="icon" href="memory.png">
     <style>
         :root {
-            --bg-top: #111318;
-            --bg-bottom: #111318;
-            --card: rgba(28, 31, 40, 0.92);
-            --text: #f4f5f7;
-            --muted: #a5aab7;
-            --accent: #62c7b2;
-            --border: rgba(255, 255, 255, 0.13);
-            --sidebar: rgba(28, 31, 40, 0.94);
-            --glass-blur: blur(18px);
+            --bg: #111318;
+            --src: #1c1f28;
+            --str: #202430;
+            --txt: #f4f5f7;
+            --mut: #a5aab7;
+            --line: #3f424b;
+            --acc: #62c7b2;
+            --shd: 10px 20px 60px #1113184d;
         }
 
-        body.lgt {
-            --bg-top: #e9eee7;
-            --bg-bottom: #e9eee7;
-            --card: rgba(255, 255, 255, 0.9);
-            --text: #17231b;
-            --accent: #63bd46;
-            --border: rgba(23, 35, 27, 0.15);
-            --sidebar: rgba(255, 255, 255, 0.95);
+        [data-t="light"] {
+            --bg: #e9eee7; --src: #f5f8f3; --str: #fff;
+            --txt: #17231b; --mut: #607064; --line: #c7d0c8;
+            --acc: #63bd46; --shd: 10px 20px 60px #28582a4d;
         }
 
-        body.drk {
-            --bg-top: #111318;
-            --bg-bottom: #111318;
-            --card: rgba(28, 31, 40, 0.92);
-            --text: #f4f5f7;
-            --accent: #62c7b2;
-            --border: rgba(255, 255, 255, 0.13);
-            --sidebar: rgba(28, 31, 40, 0.94);
+        [data-t="dark"] {
+            --bg: #111318; --src: #1c1f28; --str: #202430;
+            --txt: #f4f5f7; --mut: #a5aab7; --line: #3f424b;
+            --acc: #62c7b2;
         }
 
-        body.mlgt {
-            --bg-top: #cfe9e5;
-            --bg-bottom: #cfe9e5;
-            --card: rgba(255, 251, 245, 0.92);
-            --text: #3d2920;
-            --accent: #f28a3d;
-            --border: rgba(61, 41, 32, 0.15);
-            --sidebar: rgba(255, 251, 245, 0.95);
+        [data-t="mlt"] {
+            --bg: #cfe9e5; --src: #fff8ee; --str: #fff;
+            --txt: #3d2920; --mut: #866b5d; --line: #cdbeb5;
+            --acc: #f28a3d; --shd: 10px 20px 60px #974f204d;
         }
 
-        body.mln {
-            --bg-top: #203b40;
-            --bg-bottom: #203b40;
-            --card: rgba(47, 79, 84, 0.94);
-            --text: #fff8ef;
-            --accent: #ff974b;
-            --border: rgba(255, 248, 239, 0.2);
-            --sidebar: rgba(47, 79, 84, 0.96);
+        [data-t="mdk"] {
+            --bg: #203b40; --src: #2f4e53; --str: #37636a;
+            --txt: #fff8ef; --mut: #d3e1df; --line: #50605f;
+            --acc: #ff974b; --shd: 10px 20px 60px #0716194d;
         }
 
-        body.red {
-            --bg-top: #17090f;
-            --bg-bottom: #17090f;
-            --card: rgba(52, 13, 29, 0.92);
-            --text: #fff3f6;
-            --accent: #ff4f7b;
-            --border: rgba(255, 105, 145, 0.32);
-            --sidebar: rgba(52, 13, 29, 0.96);
+        [data-t="crim"] {
+            --bg: #17090f; --src: #340d1d; --str: #671b37;
+            --txt: #fff3f6; --mut: #d8a8b8; --line: #7f334d;
+            --acc: #ff4f7b; --shd: 10px 20px 60px #ff174f4d;
         }
 
-        body.prp {
-            --bg-top: #110d1f;
-            --bg-bottom: #110d1f;
-            --card: rgba(38, 22, 65, 0.92);
-            --text: #f8f2ff;
-            --accent: #c783ff;
-            --border: rgba(194, 131, 255, 0.3);
-            --sidebar: rgba(38, 22, 65, 0.96);
+        [data-t="nebu"] {
+            --bg: #110d1f; --src: #261641; --str: #51318a;
+            --txt: #f8f2ff; --mut: #c4aedc; --line: #765b99;
+            --acc: #c783ff; --shd: 10px 20px 60px #a94dff4d;
         }
 
-        body.eyb {
-            --bg-top: #000000;
-            --bg-bottom: #000000;
-            --card: rgba(17, 17, 19, 0.85);
-            --text: #ffffff;
-            --accent: #ffffff;
-            --border: #555555;
-            --sidebar: rgba(0, 0, 0, 0.9);
+        [data-t="burn"] {
+            --bg: #000; --src: #080808; --str: #111;
+            --txt: #fff; --mut: #bcbcbc; --line: #aaaaaa;
+            --acc: #fff; --shd: 10px 20px 60px #3333334d;
         }
 
-        body.plm {
-            --bg-top: #17121d;
-            --bg-bottom: #17121d;
-            --card: rgba(39, 27, 49, 0.92);
-            --text: #f4eafa;
-            --accent: #7affc6;
-            --border: rgba(255, 255, 255, 0.14);
-            --sidebar: rgba(39, 27, 49, 0.96);
-        }
-
-        body.snd {
-            --bg-top: #171614;
-            --bg-bottom: #171614;
-            --card: rgba(45, 39, 31, 0.92);
-            --text: #f7eee2;
-            --accent: #ffd166;
-            --border: rgba(255, 238, 214, 0.16);
-            --sidebar: rgba(45, 39, 31, 0.96);
+        [data-t="aura"] {
+            --bg: #fff; --src: #f0f0f0; --str: #fff;
+            --txt: #000; --mut: #888; --line: #000;
+            --acc: #000; --shd: 10px 20px 60px #0000004d;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
         body {
-            background: radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42rem), var(--bg-top);
-            color: var(--text);
+            position: relative;
+            background: var(--bg);
+            color: var(--txt);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            transition: background 0.3s, color 0.3s;
+            transition: background .3s ease, color .3s ease;
+        }
+
+        body::after {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            content: "";
+            background: radial-gradient(circle at 50% -10%, var(--acc) 0, var(--bg) 60rem);
+            opacity: .25;
         }
 
         body::before {
@@ -131,8 +99,8 @@
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.2;
-            background-image: linear-gradient(color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--text) 8%, transparent) 1px, transparent 1px);
+            opacity: .2;
+            background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
             background-size: 36px 36px;
             mask-image: linear-gradient(to bottom, #000, transparent 88%);
         }
@@ -142,35 +110,19 @@
             display: flex;
             gap: 1rem;
             z-index: 50;
-            transition: all 0.2s ease;
+            transition: all .2s ease;
         }
 
-        .acts.tl {
-            top: 1.5rem;
-            left: 2rem;
-        }
-
-        .acts.tr {
-            top: 1.5rem;
-            right: 2rem;
-        }
-
-        .acts.bl {
-            bottom: 1.5rem;
-            left: 2rem;
-        }
-
-        .acts.br {
-            bottom: 1.5rem;
-            right: 2rem;
-        }
+        .acts.tl { top: 1.5rem; left: 2rem; }
+        .acts.tr { top: 1.5rem; right: 2rem; }
+        .acts.bl { bottom: 1.5rem; left: 2rem; }
+        .acts.br { bottom: 1.5rem; right: 2rem; }
 
         .ibtn {
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
             font-size: 1.5rem;
             width: 56px;
             height: 56px;
@@ -179,48 +131,42 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, background 0.2s, color 0.2s;
-            box-shadow: 0 10px 28px rgba(0,0,0,.18);
+            transition: transform .2s, border-color .2s, background .2s, color .2s;
+            box-shadow: var(--shd);
         }
 
-        .ibtn:hover, .abtn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
+        .ibtn:hover, .btn:hover {
+            background: var(--acc);
+            border-color: var(--acc);
+            color: var(--bg);
             transform: translateY(-2px);
         }
 
-        .ibtn:active {
-            transform: scale(0.92);
-        }
+        .ibtn:active { transform: scale(.92); }
 
-        #mbtn {
-            position: relative;
-        }
+        #mbtn { position: relative; }
 
-        .tcnt {
+        .cnt {
             position: absolute;
             top: -6px;
             right: -6px;
             min-width: 23px;
             height: 23px;
             padding: 0 6px;
-            border: 2px solid var(--card);
+            border: 2px solid var(--src);
             border-radius: 999px;
-            background: var(--accent);
-            color: #fff;
+            background: var(--acc);
+            color: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: .72rem;
             font-weight: 800;
             line-height: 1;
-            box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent);
+            box-shadow: 0 4px 12px #00000033;
         }
 
-        .tcnt:empty {
-            display: none;
-        }
+        .cnt:empty { display: none; }
 
         main {
             flex: 1;
@@ -245,33 +191,32 @@
         textarea {
             width: 100%;
             min-height: 200px;
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
             padding: 1.5rem;
             border-radius: 20px;
             font-size: 1.25rem;
             resize: none;
             outline: none;
-            box-shadow: 0 14px 34px rgba(0,0,0,.18);
-            transition: border-color 0.2s, box-shadow 0.2s, transform .2s;
+            box-shadow: var(--shd);
+            transition: border-color .2s, box-shadow .2s, transform .2s;
         }
 
         textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent), 0 16px 36px rgba(0,0,0,.2);
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px var(--line), var(--shd);
         }
 
         textarea.glow {
-            border-color: var(--accent);
-            box-shadow: 0 0 25px var(--accent);
+            border-color: var(--acc);
+            box-shadow: 0 0 25px var(--acc);
         }
 
-        .suggs {
+        .sug {
             display: flex;
-            gap: 0.5rem;
+            gap: .5rem;
             width: 100%;
             justify-content: center;
             min-height: 38px;
@@ -279,16 +224,15 @@
         }
 
         .sbtn {
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.5rem 1rem;
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
+            padding: .5rem 1rem;
             border-radius: 12px;
-            font-size: 0.95rem;
+            font-size: .95rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all .2s;
             max-width: 200px;
             white-space: nowrap;
             overflow: hidden;
@@ -296,97 +240,71 @@
         }
 
         .sbtn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
+            background: var(--acc);
+            border-color: var(--acc);
+            color: var(--bg);
             transform: translateY(-2px);
         }
 
-        .sbtn:active {
-            transform: scale(0.95);
-        }
+        .sbtn:active { transform: scale(.95); }
+        .sbtn:empty { display: none; }
 
-        .sbtn:empty {
-            display: none;
-        }
-
-        .sbtn {
-            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 48px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
-            box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 2px 6px rgba(255, 255, 255, 0.4);
-        }
-
-        .subtn {
+        .sub {
             width: 144px;
             height: 144px;
-            background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000));
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--acc);
+            border: 1px solid var(--line);
             border-radius: 48px;
-            color: #fff;
+            color: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
-            box-shadow: 0 14px 34px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 2px 6px rgba(255, 255, 255, 0.4);
+            transition: transform .1s, filter .2s, box-shadow .2s;
+            box-shadow: var(--shd);
         }
 
-        .subtn::after {
+        .sub::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 50%;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
+            background: linear-gradient(to bottom, #ffffff40, #ffffff00);
             border-radius: 36px 36px 0 0;
             pointer-events: none;
         }
 
-        .subtn svg {
+        .sub svg {
             width: 64px;
             height: 64px;
             fill: currentColor;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .subtn:active {
-            transform: scale(0.92);
-        }
+        .sub:active { transform: scale(.92); }
 
-        .fmenu {
+        .menu {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--sidebar);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: var(--src);
+            backdrop-filter: blur(18px);
             z-index: 100;
             transform: translateY(100%);
-            transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transition: transform .35s cubic-bezier(.1, .9, .2, 1);
             display: flex;
             flex-direction: column;
             padding: 3rem;
         }
 
-        .fmenu.open {
-            transform: translateY(0);
-        }
+        .menu.open { transform: translateY(0); }
 
-        .mhead {
+        .hdg {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -397,12 +315,12 @@
             margin-right: auto;
         }
 
-        .mtitl {
+        .tit {
             font-size: 1.75rem;
             font-weight: 700;
         }
 
-        .tlst {
+        .lst {
             flex: 1;
             overflow-y: auto;
             display: flex;
@@ -414,78 +332,76 @@
             padding-bottom: 2rem;
         }
 
-        .tcard {
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
+        .card {
+            background: var(--str);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
             padding: 1.25rem;
             border-radius: 16px;
             display: flex;
             flex-direction: column;
             gap: 1rem;
-            box-shadow: 0 12px 28px rgba(0,0,0,.14);
+            box-shadow: var(--shd);
             transition: border-color .2s, transform .2s, box-shadow .2s;
         }
 
-        .tcard:hover {
-            border-color: var(--accent);
+        .card:hover {
+            border-color: var(--acc);
             transform: translateY(-2px);
-            box-shadow: 0 16px 34px rgba(0,0,0,.2);
         }
 
-        .swrap {
+        .wrap {
             max-width: 800px;
             width: 100%;
             margin: 0 auto 2.25rem;
             position: relative;
         }
 
-        .swrap input {
+        .wrap input {
             width: 100%;
             padding: .9rem 1rem .9rem 3rem;
             border-radius: 14px;
         }
 
-        .swrap::before {
+        .wrap::before {
             content: '⌕';
             position: absolute;
             left: 1rem;
             top: 50%;
             transform: translateY(-52%);
-            color: var(--accent);
+            color: var(--acc);
             font-size: 1.5rem;
             z-index: 1;
             pointer-events: none;
         }
 
-        .trow1 {
+        .row1 {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .ttitl {
+        .ctit {
             font-weight: 600;
             font-size: calc(1.15rem + 2px);
-            color: var(--text);
+            color: var(--txt);
         }
 
-        .trow2 {
+        .row2 {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 0.5rem;
+            margin-top: .5rem;
         }
 
-        .tdate {
-            font-size: 0.9rem;
-            opacity: 0.7;
+        .date {
+            font-size: .9rem;
+            color: var(--mut);
         }
 
-        .tacts {
+        .btns {
             display: flex;
-            gap: 0.75rem;
+            gap: .75rem;
         }
 
         .cmenu {
@@ -495,36 +411,35 @@
             gap: 7px;
             width: 154px;
             padding: 9px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
             border-radius: 13px;
-            background: var(--sidebar);
-            box-shadow: 0 12px 30px rgba(0,0,0,.28);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: var(--src);
+            box-shadow: var(--shd);
+            backdrop-filter: blur(18px);
             z-index: 250;
         }
 
-        .copt {
+        .opt {
             width: 23px;
             height: 23px;
             padding: 0;
-            border: 2px solid color-mix(in srgb, var(--text) 18%, transparent);
+            border: 2px solid var(--line);
             border-radius: 50%;
             cursor: pointer;
             transition: transform .15s, border-color .15s;
         }
 
-        .copt:hover {
-            border-color: var(--text);
+        .opt:hover {
+            border-color: var(--txt);
             transform: scale(1.14);
         }
 
-        .copt.none {
-            background: var(--card);
+        .opt.none {
+            background: var(--src);
             position: relative;
         }
 
-        .copt.none::after {
+        .opt.none::after {
             content: '';
             position: absolute;
             left: 2px;
@@ -535,16 +450,13 @@
             transform: rotate(-45deg);
         }
 
-        .abtn.color {
-            color: var(--accent);
-        }
+        .btn.col { color: var(--acc); }
 
-        .abtn {
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
+        .btn {
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
             width: 55px;
             height: 55px;
             border-radius: 16px;
@@ -552,31 +464,29 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, background 0.2s, color 0.2s;
+            transition: transform .2s, border-color .2s, background .2s, color .2s;
         }
 
-        .abtn svg {
+        .btn svg {
             width: 25px;
             height: 25px;
             fill: currentColor;
         }
 
-        .abtn:active {
-            transform: scale(0.92);
-        }
+        .btn:active { transform: scale(.92); }
 
-        .abtn.del {
+        .btn.del {
             color: #ff4757;
-            border-color: rgba(255, 71, 87, 0.3);
+            border-color: #ff47574d;
         }
 
-        .abtn.save {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
+        .btn.save {
+            background: var(--acc);
+            color: var(--bg);
+            border-color: var(--acc);
         }
 
-        .sctnt {
+        .box {
             max-width: 600px;
             width: 100%;
             margin: 0 auto;
@@ -586,43 +496,39 @@
             flex: 1;
         }
 
-        .sgrp {
+        .grp {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: .75rem;
         }
 
-        .sgrp label {
+        .grp label {
             font-size: 1rem;
-            opacity: 0.9;
+            color: var(--mut);
             font-weight: 500;
         }
 
         select, input {
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
             padding: 1rem;
             border-radius: 12px;
             font-size: 1.05rem;
             outline: none;
         }
 
-        select:focus, input:focus {
-            border-color: var(--accent);
-        }
+        select:focus, input:focus { border-color: var(--acc); }
 
-        .edovr {
+        .ovr {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: #00000099;
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -630,19 +536,18 @@
             padding: 1.5rem;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transition: opacity .3s cubic-bezier(.1, .9, .2, 1);
         }
 
-        .edovr.open {
+        .ovr.open {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .edbox {
-            background: var(--sidebar);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
+        .ebox {
+            background: var(--src);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
             width: 100%;
             max-width: 650px;
             height: 80vh;
@@ -651,22 +556,19 @@
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            transform: scale(0.92) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            box-shadow: var(--shd);
+            transform: scale(.92) translateY(20px);
+            transition: transform .3s cubic-bezier(.1, .9, .2, 1);
         }
 
-        .edovr.open .edbox {
-            transform: scale(1) translateY(0);
-        }
+        .ovr.open .ebox { transform: scale(1) translateY(0); }
 
-        .edtxt {
+        .etxt {
             flex: 1;
-            background: var(--card);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: var(--bg);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--line);
+            color: var(--txt);
             padding: 1.5rem;
             border-radius: 16px;
             font-size: 1.15rem;
@@ -674,96 +576,97 @@
             outline: none;
         }
 
-        .edftr {
+        .ftr {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
         }
 
-        .toast {
+        .tst {
             position: fixed;
             left: 50%;
             bottom: 2rem;
             z-index: 300;
             padding: .8rem 1.1rem;
-            border: 1px solid var(--border);
+            border: 1px solid var(--line);
             border-radius: 12px;
-            background: var(--card);
-            color: var(--text);
-            box-shadow: 0 12px 30px rgba(0,0,0,.24);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
+            background: var(--src);
+            color: var(--txt);
+            box-shadow: var(--shd);
+            backdrop-filter: blur(18px);
             opacity: 0;
             pointer-events: none;
             transform: translate(-50%, 12px);
             transition: opacity .2s, transform .2s;
         }
 
-        .toast.show {
+        .tst.show {
             opacity: 1;
             transform: translate(-50%, 0);
         }
+
+        [data-t="aura"] body, [data-t="aura"] .card, [data-t="aura"] .ibtn, [data-t="aura"] .btn, [data-t="aura"] .sub {
+            border-color: #000;
+            box-shadow: 0 0 8px #000;
+            text-shadow: 0 0 8px #000;
+        }
+
+        .noa *, .noa *::before, .noa *::after {
+            animation: none !important;
+            transition: none !important;
+        }
     </style>
 </head>
-<body class="drk">
-    <div class="acts tl" id="abox">
+<body data-t="dark">
+    <div class="acts tl" id="acts">
         <button class="ibtn" id="mbtn" title="Thoughts">
             ☰
-            <span class="tcnt" id="tcnt" aria-label="Saved thoughts"></span>
+            <span class="cnt" id="cnt" aria-label="Saved thoughts"></span>
         </button>
         <button class="ibtn" id="sbtn" title="Settings">⚙</button>
     </div>
 
     <main>
         <div class="icnt">
-            <textarea id="tinput" placeholder="What's on your mind?"></textarea>
-            <div class="suggs" id="suggs"></div>
-            <button class="subtn" id="subtn" title="Save Thought">
+            <textarea id="txta" placeholder="What's on your mind?"></textarea>
+            <div class="sug" id="sug"></div>
+            <button class="sub" id="sub" title="Save Thought">
                 <svg viewBox="0 0 24 24"><path d="M12 4l-8 8h6v8h4v-8h6z"/></svg>
             </button>
         </div>
     </main>
-    <div class="fmenu" id="tmenu">
-        <div class="mhead">
-            <span class="mtitl">Thoughts</span>
-            <button class="ibtn" id="clstm">✕</button>
+
+    <div class="menu" id="tmn">
+        <div class="hdg">
+            <span class="tit">Thoughts</span>
+            <button class="ibtn" id="cmn">✕</button>
         </div>
-        <div class="swrap">
-            <input type="search" id="tsrch" placeholder="Search your thoughts..." autocomplete="off">
+        <div class="wrap">
+            <input type="search" id="srch" placeholder="Search your thoughts..." autocomplete="off">
         </div>
-        <div class="tlst" id="tlst">
-        </div>
+        <div class="lst" id="lst"></div>
     </div>
-    <div class="fmenu" id="smenu">
-        <div class="mhead">
-            <span class="mtitl">Settings</span>
-            <button class="ibtn" id="clssm">✕</button>
+
+    <div class="menu" id="smn">
+        <div class="hdg">
+            <span class="tit">Settings</span>
+            <button class="ibtn" id="csmn">✕</button>
         </div>
-        <div class="sctnt">
-            <div class="sgrp">
-                <label for="tsel">Themes</label>
+        <div class="box">
+            <div class="grp">
+                <label for="tsel">Theme</label>
                 <select id="tsel">
-                    <option value="lgt">☀ Light</option>
-                    <option value="drk" selected>☾ Dark</option>
-                    <option value="mlgt">☀ Melon Light</option>
-                    <option value="mln">☾ Melon Dark</option>
-                    <option value="red">☾ Crimson</option>
-                    <option value="prp">☾ Nebula</option>
-                    <option value="eyb">☾ Eyeburn</option>
-                    <option value="plm">☾ Plum</option>
-                    <option value="snd">☾ Sand</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="mlt">Melon Light</option>
+                    <option value="mdk">Melon Dark</option>
+                    <option value="crim">Crimson</option>
+                    <option value="nebu">Nebula</option>
+                    <option value="burn">Eyeburn</option>
                 </select>
             </div>
-            <div class="sgrp">
-                <label for="imode">Aura Farming</label>
-                <select id="imode">
-                    <option value="kbd">Disabled</option>
-                    <option value="spc">Enabled</option>
-                    <option value="both">Sigma</option>
-                </select>
-            </div>
-            <div class="sgrp">
-                <label for="mpos">Menu & Settings Position</label>
+            <div class="grp">
+                <label for="mpos">Menu Position</label>
                 <select id="mpos">
                     <option value="tl">Top Left</option>
                     <option value="tr">Top Right</option>
@@ -773,197 +676,63 @@
             </div>
         </div>
     </div>
-    <div class="edovr" id="edovr">
-        <div class="edbox">
-            <div class="mhead" style="margin-bottom:0;">
-                <span class="mtitl">Edit Thought</span>
-                <button class="ibtn" id="edcan">✕</button>
+
+    <div class="ovr" id="ovr">
+        <div class="ebox">
+            <div class="hdg" style="margin-bottom:0;">
+                <span class="tit">Edit Thought</span>
+                <button class="ibtn" id="covr">✕</button>
             </div>
-            <div class="toast" id="toast" role="status" aria-live="polite">Thought saved to Thoughts</div>
-            <textarea class="edtxt" id="edtxt"></textarea>
-            <div class="edftr">
-                <button class="abtn" id="edcbt" title="Cancel">
+            <div class="tst" id="tst" role="status" aria-live="polite">Thought saved to Thoughts</div>
+            <textarea class="etxt" id="etxt"></textarea>
+            <div class="ftr">
+                <button class="btn" id="cbt" title="Cancel">
                     <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
                 </button>
-                <button class="abtn save" id="edsbt" title="Save">
+                <button class="btn save" id="sbt" title="Save">
                     <svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="currentColor"/></svg>
                 </button>
             </div>
         </div>
     </div>
+
     <script>
         let thts = JSON.parse(localStorage.getItem('m_mem') || '[]');
         let stgs = JSON.parse(localStorage.getItem('m_set') || JSON.stringify({
-            thm: 'drk',
-            inp: 'kbd',
+            thm: 'dark',
             pos: 'tl'
         }));
         let dict = JSON.parse(localStorage.getItem('m_ac') || '{}');
+        let eidx = null;
 
-        let edidx = null;
-
-        const body = document.body;
-        const txta = document.getElementById('tinput');
-        const subtn = document.getElementById('subtn');
-        const tmenu = document.getElementById('tmenu');
-        const smenu = document.getElementById('smenu');
-        const edovr = document.getElementById('edovr');
-        const edtxt = document.getElementById('edtxt');
-        const tlst = document.getElementById('tlst');
-        const tsrch = document.getElementById('tsrch');
-        const tcnt = document.getElementById('tcnt');
-        const toast = document.getElementById('toast');
+        const b = document.body;
+        const txta = document.getElementById('txta');
+        const sub = document.getElementById('sub');
+        const tmn = document.getElementById('tmn');
+        const smn = document.getElementById('smn');
+        const ovr = document.getElementById('ovr');
+        const etxt = document.getElementById('etxt');
+        const lst = document.getElementById('lst');
+        const srch = document.getElementById('srch');
+        const cnt = document.getElementById('cnt');
+        const tst = document.getElementById('tst');
         const tsel = document.getElementById('tsel');
-        const imode = document.getElementById('imode');
         const mpos = document.getElementById('mpos');
-        const abox = document.getElementById('abox');
-        const suggs = document.getElementById('suggs');
+        const acts = document.getElementById('acts');
+        const sug = document.getElementById('sug');
         let tmr = null;
 
-        const pairs = {'(':')', '[':']', '{':'}', '"':'"', "'":"'"};
+        const pair = {'(':')', '[':']', '{':'}', '"':'"', "'":"'"};
 
-        function addACl(w) {
-            w = w.toLowerCase().replace(/[^a-z0-9]/g, '');
-            if (!w || w.length < 2) return;
-            dict[w] = (dict[w] || 0) + 1;
-            saveAC();
-        }
-
-        function saveAC() {
-            let str = JSON.stringify(dict);
-            while (str.length > 1000000) {
-                let keys = Object.keys(dict).sort((a,b) => dict[a] - dict[b]);
-                if (keys.length) delete dict[keys[0]];
-                else break;
-                str = JSON.stringify(dict);
-            }
-            localStorage.setItem('m_ac', str);
-        }
-
-        function getAC(prefix) {
-            prefix = prefix.toLowerCase().replace(/[^a-z0-9]/g, '');
-            if (!prefix) return [];
-            return Object.keys(dict)
-                .filter(k => k.startsWith(prefix) && k !== prefix)
-                .sort((a,b) => dict[b] - dict[a])
-                .slice(0, 3);
-        }
-
-        function renAC() {
-            suggs.innerHTML = '';
-            const val = txta.value;
-            const pos = txta.selectionStart;
-            const sub = val.slice(0, pos);
-            const m = sub.match(/([a-zA-Z0-9]+)$/);
-            if (!m) return;
-            const pref = m[1];
-            const matches = getAC(pref);
-            matches.forEach(m => {
-                const b = document.createElement('button');
-                b.className = 'sbtn';
-                b.textContent = m;
-                b.type = 'button';
-                b.onmousedown = (e) => {
-                    e.preventDefault();
-                    const nval = val.slice(0, pos - pref.length) + m + ' ' + val.slice(pos);
-                    txta.value = nval;
-                    txta.selectionStart = txta.selectionEnd = pos - pref.length + m.length + 1;
-                    renAC();
-                };
-                suggs.appendChild(b);
-            });
-        }
-
-        function handleAutoClose(e) {
-            if (pairs[e.key]) {
-                e.preventDefault();
-                const start = txta.selectionStart;
-                const end = txta.selectionEnd;
-                const val = txta.value;
-                txta.value = val.substring(0, start) + e.key + pairs[e.key] + val.substring(end);
-                txta.selectionStart = txta.selectionEnd = start + 1;
-                renAC();
-            }
-        }
-
-        txta.addEventListener('keydown', handleAutoClose);
-        txta.addEventListener('input', renAC);
-        txta.addEventListener('click', renAC);
-
-        function upCnt() {
-            tcnt.textContent = thts.length ? thts.length : '';
-            tcnt.setAttribute('aria-label', `${thts.length} saved thought${thts.length === 1 ? '' : 's'}`);
-        }
-
-        function shTst() {
-            clearTimeout(tmr);
-            toast.classList.add('show');
-            tmr = setTimeout(() => toast.classList.remove('show'), 2200);
-        }
-
-        function apStg() {
-            body.className = stgs.thm;
-            tsel.value = stgs.thm;
-            imode.value = stgs.inp;
-            mpos.value = stgs.pos;
-
-            abox.className = `acts ${stgs.pos}`;
-        }
-
-        function svStg() {
-            stgs.thm = tsel.value;
-            stgs.inp = imode.value;
-            stgs.pos = mpos.value;
-            localStorage.setItem('m_set', JSON.stringify(stgs));
-            apStg();
-        }
-
-        function renTh() {
-            tlst.innerHTML = '';
-            const q = tsrch.value.trim().toLowerCase();
-            const vis = thts
-                .map((thought, index) => ({ thought, index }))
-                .filter(({ thought }) => !q || `${thought.text} ${thought.date}`.toLowerCase().includes(q));
-
-            if (vis.length === 0) {
-                const msg = thts.length === 0 ? 'No thoughts recorded yet...' : 'No thoughts match that search...';
-                tlst.innerHTML = `<div style="text-align:center; opacity:0.5; margin-top:3rem; font-size: 1.1rem;">${msg}</div>`;
-                return;
-            }
-
-            vis.forEach(({ thought, index }) => {
-                const w = thought.text.trim().split(/\s+/);
-                const tit = w.length > 0 ? (w.slice(0, 3).join(' ') + (w.length > 3 ? '...' : '')) : 'Empty thought...';
-                
-                const c = document.createElement('div');
-                c.className = 'tcard';
-                apClr(c, thought.color);
-                c.innerHTML = `
-                    <div class="trow1">
-                        <span class="ttitl">${escH(tit)}</span>
-                    </div>
-                    <div class="trow2">
-                        <span class="tdate">${thought.date}</span>
-                        <div class="tacts">
-                            <button class="abtn" onclick="opEd(${index})" title="Edit">
-                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
-                            </button>
-                            <button class="abtn color" onclick="opClr(${index}, event)" title="Color code">
-                                <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-4a2 2 0 0 1-2-2V8a5 5 0 0 0-5-5z" fill="currentColor"/><circle cx="7.5" cy="12" r="1" fill="var(--card)"/><circle cx="10" cy="7.5" r="1" fill="var(--card)"/><circle cx="15" cy="7.5" r="1" fill="var(--card)"/></svg>
-                            </button>
-                            <button class="abtn del" onclick="delTh(${index})" title="Delete">
-                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                tlst.appendChild(c);
-            });
-        }
-
-        function escH(t) {
-            return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+        const pre = {
+            light: { name: "Light", bg: "#e9eee7", src: "#f5f8f3", str: "#ffffff", txt: "#17231b", mut: "#607064", line: "#c7d0c8", acc: "#63bd46", shd: "10px 20px 60px #28582a4d" },
+            dark: { name: "Dark", bg: "#111318", src: "#1c1f28", str: "#202430", txt: "#f4f5f7", mut: "#a5aab7", line: "#3f424b", acc: "#62c7b2", shd: "10px 20px 60px #1113184d" },
+            mlt: { name: "Melon Light", bg: "#cfe9e5", src: "#fff8ee", str: "#ffffff", txt: "#3d2920", mut: "#866b5d", line: "#cdbeb5", acc: "#f28a3d", shd: "10px 20px 60px #974f204d" },
+            mdk: { name: "Melon Dark", bg: "#203b40", src: "#2f4e53", str: "#37636a", txt: "#fff8ef", mut: "#d3e1df", line: "#50605f", acc: "#ff974b", shd: "10px 20px 60px #0716194d" },
+            crim: { name: "Crimson", bg: "#17090f", src: "#340d1d", str: "#671b37", txt: "#fff3f6", mut: "#d8a8b8", line: "#7f334d", acc: "#ff4f7b", shd: "10px 20px 60px #ff174f4d" },
+            nebu: { name: "Nebula", bg: "#110d1f", src: "#261641", str: "#51318a", txt: "#f8f2ff", mut: "#c4aedc", line: "#765b99", acc: "#c783ff", shd: "10px 20px 60px #a94dff4d" },
+            burn: { name: "Eyeburn", bg: "#000000", src: "#080808", str: "#111111", txt: "#ffffff", mut: "#bcbcbc", line: "#aaaaaa", acc: "#ffffff", shd: "10px 20px 60px #3333334d" }
+        };
 
         const clrs = {
             none: null,
@@ -978,14 +747,182 @@
             pink: '#e02090'
         };
 
-        function apClr(card, color) {
-            const hex = clrs[color];
-            if (!hex) return;
-            card.style.background = `color-mix(in srgb, ${hex} 12%, var(--card))`;
-            card.style.borderColor = `color-mix(in srgb, ${hex} 32%, var(--border))`;
+        function acAdd(w) {
+            w = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (!w || w.length < 2) return;
+            dict[w] = (dict[w] || 0) + 1;
+            acSv();
         }
 
-        window.opClr = function(index, event) {
+        function acSv() {
+            let str = JSON.stringify(dict);
+            while (str.length > 1000000) {
+                let k = Object.keys(dict).sort((x, y) => dict[x] - dict[y]);
+                if (k.length) delete dict[k[0]];
+                else break;
+                str = JSON.stringify(dict);
+            }
+            localStorage.setItem('m_ac', str);
+        }
+
+        function acGet(p) {
+            p = p.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (!p) return [];
+            return Object.keys(dict)
+                .filter(k => k.startsWith(p) && k !== p)
+                .sort((x, y) => dict[y] - dict[x])
+                .slice(0, 3);
+        }
+
+        function acDrw() {
+            sug.innerHTML = '';
+            const val = txta.value;
+            const pos = txta.selectionStart;
+            const subS = val.slice(0, pos);
+            const m = subS.match(/([a-zA-Z0-9]+)$/);
+            if (!m) return;
+            const pref = m[1];
+            const list = acGet(pref);
+            list.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'sbtn';
+                btn.textContent = item;
+                btn.type = 'button';
+                btn.onmousedown = (e) => {
+                    e.preventDefault();
+                    const nval = val.slice(0, pos - pref.length) + item + ' ' + val.slice(pos);
+                    txta.value = nval;
+                    txta.selectionStart = txta.selectionEnd = pos - pref.length + item.length + 1;
+                    acDrw();
+                };
+                sug.appendChild(btn);
+            });
+        }
+
+        function autoC(e) {
+            if (pair[e.key]) {
+                e.preventDefault();
+                const start = txta.selectionStart;
+                const end = txta.selectionEnd;
+                const val = txta.value;
+                txta.value = val.substring(0, start) + e.key + pair[e.key] + val.substring(end);
+                txta.selectionStart = txta.selectionEnd = start + 1;
+                acDrw();
+            }
+        }
+
+        txta.addEventListener('keydown', autoC);
+        txta.addEventListener('input', acDrw);
+        txta.addEventListener('click', acDrw);
+
+        function upCnt() {
+            cnt.textContent = thts.length ? thts.length : '';
+            cnt.setAttribute('aria-label', `${thts.length} saved thought${thts.length === 1 ? '' : 's'}`);
+        }
+
+        function shTst() {
+            clearTimeout(tmr);
+            tst.classList.add('show');
+            tmr = setTimeout(() => tst.classList.remove('show'), 2200);
+        }
+
+        function opts() {
+            const base = Object.entries(pre).map(([k, p]) => `<option value="${k}">${p.name}</option>`);
+            const cst = JSON.parse(localStorage.getItem('themeditor-themes') || '{}');
+            const own = Object.entries(cst).map(([k, v]) => `<option value="own:${k}">${v.name}</option>`);
+            tsel.innerHTML = base.concat(own).join('');
+        }
+
+        function setT(v) {
+            const mapT = {lgt:"light", drk:"dark", mlgt:"mlt", mln:"mdk", red:"crim", prp:"nebu", eyb:"burn", "melon-light":"mlt", "melon-dark":"mdk", crimson:"crim", nebula:"nebu", eyeburn:"burn"};
+            const rKey = mapT[v] || v;
+            const cst = JSON.parse(localStorage.getItem("themeditor-themes") || "{}");
+            const own = rKey.startsWith("own:") ? cst[rKey.slice(4)] : null;
+            const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent", shd:"shadow" };
+            const cur = own ? own.values : (pre[rKey] || pre.dark);
+            if (!cur) return;
+
+            b.dataset.t = own ? "custom" : rKey;
+            ["bg", "src", "str", "txt", "mut", "line", "acc", "shd"].forEach((k) => {
+                b.style.removeProperty(`--${k}`);
+                const val = cur[k] || cur[map[k]];
+                if (val) b.style.setProperty(`--${k}`, k === "shd"
+                    ? val.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4")
+                    : val);
+            });
+            stgs.thm = rKey;
+            tsel.value = rKey;
+            localStorage.setItem('m_set', JSON.stringify(stgs));
+        }
+
+        function setS() {
+            setT(stgs.thm || 'dark');
+            mpos.value = stgs.pos || 'tl';
+            acts.className = `acts ${stgs.pos || 'tl'}`;
+        }
+
+        function saveS() {
+            stgs.thm = tsel.value;
+            stgs.pos = mpos.value;
+            localStorage.setItem('m_set', JSON.stringify(stgs));
+            setS();
+        }
+
+        function draw() {
+            lst.innerHTML = '';
+            const q = srch.value.trim().toLowerCase();
+            const vis = thts
+                .map((thought, index) => ({ thought, index }))
+                .filter(({ thought }) => !q || `${thought.text} ${thought.date}`.toLowerCase().includes(q));
+
+            if (vis.length === 0) {
+                const msg = thts.length === 0 ? 'No thoughts recorded yet...' : 'No thoughts match that search...';
+                lst.innerHTML = `<div style="text-align:center; opacity:0.5; margin-top:3rem; font-size: 1.1rem;">${msg}</div>`;
+                return;
+            }
+
+            vis.forEach(({ thought, index }) => {
+                const w = thought.text.trim().split(/\s+/);
+                const tit = w.length > 0 ? (w.slice(0, 3).join(' ') + (w.length > 3 ? '...' : '')) : 'Empty thought...';
+                
+                const c = document.createElement('div');
+                c.className = 'card';
+                setC(c, thought.color);
+                c.innerHTML = `
+                    <div class="row1">
+                        <span class="ctit">${esc(tit)}</span>
+                    </div>
+                    <div class="row2">
+                        <span class="date">${thought.date}</span>
+                        <div class="btns">
+                            <button class="btn" onclick="edit(${index})" title="Edit">
+                                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+                            </button>
+                            <button class="btn col" onclick="popC(${index}, event)" title="Color code">
+                                <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9h-4a2 2 0 0 1-2-2V8a5 5 0 0 0-5-5z" fill="currentColor"/><circle cx="7.5" cy="12" r="1" fill="var(--src)"/><circle cx="10" cy="7.5" r="1" fill="var(--src)"/><circle cx="15" cy="7.5" r="1" fill="var(--src)"/></svg>
+                            </button>
+                            <button class="btn del" onclick="del(${index})" title="Delete">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                lst.appendChild(c);
+            });
+        }
+
+        function esc(t) {
+            return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function setC(card, color) {
+            const hex = clrs[color];
+            if (!hex) return;
+            card.style.background = `color-mix(in srgb, ${hex} 12%, var(--src))`;
+            card.style.borderColor = `color-mix(in srgb, ${hex} 32%, var(--line))`;
+        }
+
+        window.popC = function(index, event) {
             const old = document.querySelector('.cmenu');
             if (old) old.remove();
 
@@ -994,15 +931,15 @@
             const arr = Object.entries(clrs);
             arr.forEach(([name, hex]) => {
                 const opt = document.createElement('button');
-                opt.className = `copt${name === 'none' ? ' none' : ''}`;
+                opt.className = `opt${name === 'none' ? ' none' : ''}`;
                 opt.type = 'button';
                 opt.title = name === 'none' ? 'No color' : name;
-                if (hex) opt.style.background = `color-mix(in srgb, ${hex} 70%, var(--card))`;
+                if (hex) opt.style.background = `color-mix(in srgb, ${hex} 70%, var(--src))`;
                 opt.onclick = () => {
                     thts[index].color = name;
                     localStorage.setItem('m_mem', JSON.stringify(thts));
                     menu.remove();
-                    renTh();
+                    draw();
                 };
                 menu.appendChild(opt);
             });
@@ -1022,11 +959,11 @@
             }, 0);
         };
 
-        function addTh() {
+        function add() {
             const txt = txta.value.trim();
             if (!txt) return;
 
-            txt.split(/\s+/).forEach(addACl);
+            txt.split(/\s+/).forEach(acAdd);
 
             const now = new Date();
             const dstr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -1038,60 +975,61 @@
 
             txta.value = '';
             txta.classList.add('glow');
-            subtn.style.transform = 'scale(0.9)';
-            renAC();
+            sub.style.transform = 'scale(0.9)';
+            acDrw();
             
             setTimeout(() => {
                 txta.classList.remove('glow');
-                subtn.style.transform = 'scale(1)';
+                sub.style.transform = 'scale(1)';
             }, 300);
 
-            renTh();
+            draw();
         }
 
-        window.delTh = function(index) {
+        window.del = function(index) {
             thts.splice(index, 1);
             localStorage.setItem('m_mem', JSON.stringify(thts));
             upCnt();
-            renTh();
+            draw();
         }
 
-        window.opEd = function(index) {
-            edidx = index;
-            edtxt.value = thts[index].text;
-            edovr.classList.add('open');
+        window.edit = function(index) {
+            eidx = index;
+            etxt.value = thts[index].text;
+            ovr.classList.add('open');
         }
 
-        function clEd() {
-            edovr.classList.remove('open');
-            edidx = null;
+        function clsE() {
+            ovr.classList.remove('open');
+            eidx = null;
         }
 
-        function svEd() {
-            if (edidx !== null) {
-                const txt = edtxt.value.trim();
-                txt.split(/\s+/).forEach(addACl);
-                thts[edidx].text = txt;
+        function saveE() {
+            if (eidx !== null) {
+                const txt = etxt.value.trim();
+                txt.split(/\s+/).forEach(acAdd);
+                thts[eidx].text = txt;
                 localStorage.setItem('m_mem', JSON.stringify(thts));
-                renTh();
-                clEd();
+                draw();
+                clsE();
             }
         }
 
-        document.getElementById('mbtn').onclick = () => { tmenu.classList.add('open'); renTh(); };
-        document.getElementById('sbtn').onclick = () => smenu.classList.add('open');
-        subtn.onclick = addTh; 
-        document.getElementById('clstm').onclick = () => tmenu.classList.remove('open');
-        document.getElementById('clssm').onclick = () => smenu.classList.remove('open');
-        document.getElementById('edcan').onclick = clEd;
-        document.getElementById('edcbt').onclick = clEd;
-        document.getElementById('edsbt').onclick = svEd;
-        tsel.onchange = svStg;
-        imode.onchange = svStg;
-        mpos.onchange = svStg;
-        tsrch.oninput = renTh;
+        document.getElementById('mbtn').onclick = () => { tmn.classList.add('open'); draw(); };
+        document.getElementById('sbtn').onclick = () => smn.classList.add('open');
+        sub.onclick = add; 
+        document.getElementById('cmn').onclick = () => tmn.classList.remove('open');
+        document.getElementById('csmn').onclick = () => smn.classList.remove('open');
+        document.getElementById('covr').onclick = clsE;
+        document.getElementById('cbt').onclick = clsE;
+        document.getElementById('sbt').onclick = saveE;
+        tsel.onchange = saveS;
+        mpos.onchange = saveS;
+        srch.oninput = draw;
+
+        opts();
         upCnt();
-        apStg();
+        setS();
     </script>
 </body>
 </html>
