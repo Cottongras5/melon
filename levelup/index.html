@@ -12,20 +12,20 @@
             --str: #37246b;
             --txt: #f0f0f4;
             --mut: #938fd6;
-            --line: #392f6f;
+            --lin: #392f6f;
             --acc: #1eff00;
             --shd: 0 0 20px #0000004d;
             --rad: 20px;
             --glw: #1eff0066;
         }
 
-        [data-t="pLgt"] { --bg: #d6c7ff; --src: #f4ebff; --str: #ebe0ff; --txt: #271b50; --mut: #7f6fa5; --line: #e1d6ff; --acc: #5ac47d; --shd: 0 0 20px #7820974d; --glw: #5ac47d66; }
-        [data-t="pDrk"] { --bg: #110a1e; --src: #22183f; --str: #37246b; --txt: #f0f0f4; --mut: #938fd6; --line: #392f6f; --acc: #1eff00; --shd: 0 0 20px #0000004d; --glw: #1eff0066; }
-        [data-t="light"] { --bg: #e9eee7; --src: #f5f8f3; --str: #ffffff; --txt: #17231b; --mut: #607064; --line: #c7d0c8; --acc: #63bd46; --glw: #63bd464d; }
-        [data-t="dark"]  { --bg: #111318; --src: #1c1f28; --str: #202430; --txt: #f4f5f7; --mut: #a5aab7; --line: #3f424b; --acc: #62c7b2; --glw: #62c7b24d; }
-        [data-t="crim"]  { --bg: #17090f; --src: #340d1d; --str: #671b37; --txt: #fff3f6; --mut: #d8a8b8; --line: #7f334d; --acc: #ff4f7b; --glw: #ff4f7b66; }
-        [data-t="nebu"]  { --bg: #110d1f; --src: #261641; --str: #51318a; --txt: #f8f2ff; --mut: #c4aedc; --line: #765b99; --acc: #c783ff; --glw: #c783ff66; }
-        [data-t="eybrn"] { --bg: #000000; --src: #111113; --str: #242426; --txt: #ffffff; --mut: #777777; --line: #444444; --acc: #888888; --glw: #ffffff33; }
+        [data-t="pLgt"] { --bg: #d6c7ff; --src: #f4ebff; --str: #ebe0ff; --txt: #271b30; --mut: #7f6fa5; --lin: #e1d6ff; --acc: #5ac47d; --shd: 0 0 20px #7820974d; --glw: #5ac47d66; }
+        [data-t="pDrk"] { --bg: #110a1e; --src: #22183f; --str: #37246b; --txt: #f0f0f4; --mut: #938fd6; --lin: #392f6f; --acc: #1eff00; --shd: 0 0 20px #0000004d; --glw: #1eff0066; }
+        [data-t="light"] { --bg: #eeefee; --src: #f5f8f3; --str: #ffffff; --txt: #222222; --mut: #606864; --lin: #c6cac7; --acc: #73ad66; --glw: #83ad864d; }
+        [data-t="dark"]  { --bg: #010308; --src: #1c1f28; --str: #202430; --txt: #f4f5f7; --mut: #a5aab7; --lin: #3f424b; --acc: #b262c7; --glw: #62c7b24d; }
+        [data-t="crim"]  { --bg: #17090f; --src: #340d1d; --str: #671b37; --txt: #fff3f6; --mut: #d8a8b8; --lin: #7f334d; --acc: #ff4f7b; --glw: #ff4f7b66; }
+        [data-t="nebu"]  { --bg: #110d1f; --src: #261641; --str: #51318a; --txt: #f8f2ff; --mut: #c4aedc; --lin: #765b99; --acc: #c783ff; --glw: #c783ff66; }
+        [data-t="eybrn"] { --bg: #000000; --src: #111113; --str: #242426; --txt: #ffffff; --mut: #777777; --lin: #444444; --acc: #888888; --glw: #ffffff33; }
 
         * {
             box-sizing: border-box;
@@ -59,7 +59,7 @@
             transition: background 0.4s ease;
         }
 
-        body.no-anim *, body.no-anim *::before, body.no-anim *::after {
+        body.noani *, body.noani *::before, body.noani *::after {
             animation: none !important;
             transition: none !important;
         }
@@ -68,7 +68,7 @@
 
         .btn {
             background: var(--str);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             color: var(--txt);
             padding: 12px 20px;
             border-radius: 12px;
@@ -90,7 +90,7 @@
             height: 22px;
             fill: currentColor;
             flex-shrink: 0;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, fill 0.2s ease;
         }
 
         .btn:hover {
@@ -121,7 +121,17 @@
             box-shadow: 0 0 16px var(--glw);
         }
 
-        body[data-aura="1"] .btn {
+        @keyframes iSpn {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ispn {
+            animation: iSpn 1s cubic-bezier(0.25, 1, 0.5, 1) !important;
+            display: inline-block;
+        }
+
+        body[data-aur="1"] .btn {
             animation: aGlow 1.2s infinite alternate ease-in-out;
         }
 
@@ -146,6 +156,27 @@
             100% { opacity: 0; transform: translate(var(--mx), var(--my)) scale(0.1); }
         }
 
+        .bbl {
+            position: fixed;
+            bottom: -40px;
+            left: var(--bx);
+            width: var(--bs);
+            height: var(--bs);
+            background: var(--acc);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 8px var(--glw);
+            animation: bUp var(--bd) linear forwards;
+        }
+
+        @keyframes bUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.45; }
+            80% { opacity: 0.45; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
+        }
+
         header {
             height: 74px;
             padding: 0 28px;
@@ -153,7 +184,7 @@
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
             background: var(--src);
-            border-bottom: 2px solid var(--line);
+            border-bottom: 2px solid var(--lin);
             box-shadow: var(--shd);
             position: sticky;
             top: 0;
@@ -162,7 +193,7 @@
         }
 
         .brnd { display: flex; align-items: center; justify-self: start; }
-        .titles { display: flex; flex-direction: column; }
+        .titls { display: flex; flex-direction: column; }
 
         .mtitl {
             font-size: 1.5rem;
@@ -190,33 +221,6 @@
 
         .hact { justify-self: end; display: flex; align-items: center; }
 
-        .sbtn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: var(--src);
-            border: 2px solid var(--line);
-            color: var(--txt);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shd);
-            z-index: 90;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, color 0.2s;
-        }
-
-        .sbtn:hover {
-            transform: rotate(90deg) scale(1.1);
-            border-color: var(--acc);
-            color: var(--acc);
-        }
-
-        .sbtn svg { width: 26px; height: 26px; fill: currentColor; }
-
         main {
             flex: 1;
             width: 100%;
@@ -240,17 +244,17 @@
 
         .tab.on {
             display: flex;
-            animation: tabFadeIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: tbIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes tabFadeIn {
+        @keyframes tbIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .hero {
             background: var(--src);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             border-radius: var(--rad);
             padding: 56px 42px;
             box-shadow: var(--shd);
@@ -275,10 +279,10 @@
             opacity: 0.22;
             border-radius: 50%;
             pointer-events: none;
-            animation: pulseGlow 6s infinite alternate ease-in-out;
+            animation: pGlow 6s infinite alternate ease-in-out;
         }
 
-        @keyframes pulseGlow {
+        @keyframes pGlow {
             0% { transform: scale(0.9); opacity: 0.16; }
             100% { transform: scale(1.1); opacity: 0.28; }
         }
@@ -296,16 +300,18 @@
             object-fit: contain;
             z-index: 1;
             flex-shrink: 0;
+            cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .limg:hover { transform: scale(1.08) rotate(3deg); }
+        .limg:not(.spn):hover { transform: scale(1.08) rotate(3deg); }
+        .limg.spn { transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1); }
 
         .csec { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
         .ssec {
             background: var(--src);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             border-radius: var(--rad);
             padding: 32px 42px;
             box-shadow: var(--shd);
@@ -321,6 +327,54 @@
         .vlist { display: flex; flex-direction: column; gap: 12px; }
         .vlist .btn { justify-content: flex-start; width: 100%; }
 
+        .vlist a[href*="instagram.com"] svg { fill: #e1306c; }
+        .vlist a[href*="tiktok.com"] svg    { fill: #00f2fe; }
+        .vlist a[href*="discord.gg"] svg     { fill: #5865f2; }
+        .vlist a[href*="whatsapp.com"] svg   { fill: #25d366; }
+
+        .vlist a[href*="instagram.com"]:hover {
+            border-color: #e1306c;
+            color: #e1306c;
+            box-shadow: 0 8px 25px rgba(225, 48, 108, 0.35);
+        }
+
+        .vlist a[href*="tiktok.com"]:hover {
+            border-color: #00f2fe;
+            color: #00f2fe;
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.35);
+        }
+
+        .vlist a[href*="discord.gg"]:hover {
+            border-color: #5865f2;
+            color: #5865f2;
+            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.35);
+        }
+
+        .vlist a[href*="whatsapp.com"]:hover {
+            border-color: #25d366;
+            color: #25d366;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+        }
+
+        .rlst {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-left: 20px;
+            color: var(--txt);
+            line-height: 1.55;
+        }
+
+        .rlst li {
+            font-size: 1.05rem;
+            color: var(--txt);
+        }
+
+        .rlst li strong {
+            color: var(--txt);
+            font-weight: 700;
+        }
+
         .clist { display: flex; flex-direction: column; gap: 14px; }
 
         .citem {
@@ -328,7 +382,7 @@
             align-items: flex-start;
             gap: 12px;
             background: var(--str);
-            border: 1px solid var(--line);
+            border: 1px solid var(--lin);
             padding: 14px 16px;
             border-radius: 12px;
             box-shadow: var(--shd);
@@ -350,7 +404,7 @@
             height: 160px;
             border-radius: 10px;
             overflow: hidden;
-            border: 1px solid var(--line);
+            border: 1px solid var(--lin);
         }
 
         .mpbx iframe {
@@ -368,7 +422,7 @@
 
         .ecard {
             background: var(--src);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             border-radius: var(--rad);
             padding: 24px;
             box-shadow: var(--shd);
@@ -376,10 +430,10 @@
             justify-content: space-between;
             align-items: center;
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.25s, box-shadow 0.25s;
-            animation: cardSlideUp 0.35s ease backwards;
+            animation: cdUp 0.35s ease backwards;
         }
 
-        @keyframes cardSlideUp {
+        @keyframes cdUp {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
@@ -409,7 +463,7 @@
             height: 68px;
             padding: 0 28px;
             background: var(--src);
-            border-bottom: 2px solid var(--line);
+            border-bottom: 2px solid var(--lin);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -422,7 +476,7 @@
             align-items: center;
             gap: 6px;
             padding: 6px;
-            border: 1px solid var(--line);
+            border: 1px solid var(--lin);
             border-radius: 12px;
             background: var(--str);
         }
@@ -439,14 +493,14 @@
             align-items: flex-start;
         }
 
-        .rnd { display: flex; flex-direction: column; min-width: 240px; position: relative; animation: fadeInRound 0.4s ease backwards; }
+        .rnd { display: flex; flex-direction: column; min-width: 240px; position: relative; animation: rdIn 0.4s ease backwards; }
 
-        @keyframes fadeInRound {
+        @keyframes rdIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .rtitle {
+        .rtit {
             font-size: 1.15rem;
             font-weight: 800;
             color: var(--acc);
@@ -456,11 +510,11 @@
             height: 32px;
         }
 
-        .mch-wrap { display: flex; align-items: center; justify-content: center; position: relative; }
+        .mwrap { display: flex; align-items: center; justify-content: center; position: relative; }
 
         .mch {
             background: var(--src);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             border-radius: 12px;
             padding: 8px;
             display: flex;
@@ -478,15 +532,15 @@
             box-shadow: 0 5px 25px var(--glw);
         }
 
-        .conn-col { display: flex; flex-direction: column; width: 44px; position: relative; margin-top: 54px; }
-        .conn-block { position: relative; width: 100%; }
-        .conn-line {
+        .ccol { display: flex; flex-direction: column; width: 44px; position: relative; margin-top: 54px; }
+        .cblk { position: relative; width: 100%; }
+        .cline {
             position: absolute; left: 0; width: 22px;
-            border-right: 4px solid var(--line); border-top: 4px solid var(--line); border-bottom: 4px solid var(--line);
+            border-right: 4px solid var(--lin); border-top: 4px solid var(--lin); border-bottom: 4px solid var(--lin);
         }
 
-        .conn-line.straight { border: none; background: var(--line); top: 50% !important; height: 4px !important; width: 44px; }
-        .conn-line::after { content: ""; position: absolute; top: 50%; right: -22px; width: 22px; height: 4px; background: var(--line); transform: translateY(-50%); }
+        .cline.strt { border: none; background: var(--lin); top: 50% !important; height: 4px !important; width: 44px; }
+        .cline::after { content: ""; position: absolute; top: 50%; right: -22px; width: 22px; height: 4px; background: var(--lin); transform: translateY(-50%); }
 
         .ply {
             padding: 10px 18px;
@@ -506,7 +560,7 @@
 
         footer {
             background: var(--src);
-            border-top: 2px solid var(--line);
+            border-top: 2px solid var(--lin);
             padding: 24px;
             margin-top: auto;
             text-align: center;
@@ -514,7 +568,7 @@
             z-index: 2;
         }
 
-        .fcontent {
+        .fcnt {
             max-width: 1250px;
             margin: 0 auto;
             display: flex;
@@ -524,7 +578,7 @@
         }
 
         .fcopy { font-size: 0.9rem; font-weight: 700; color: var(--txt); }
-        .fnotice { font-size: 0.78rem; color: var(--mut); max-width: 800px; line-height: 1.4; }
+        .fnot { font-size: 0.78rem; color: var(--mut); max-width: 800px; line-height: 1.4; }
 
         .moly {
             position: fixed; inset: 0; background: #000000b3;
@@ -535,7 +589,7 @@
 
         .mdl {
             background: var(--src);
-            border: 2px solid var(--line);
+            border: 2px solid var(--lin);
             border-radius: var(--rad);
             padding: 30px;
             width: 100%;
@@ -557,7 +611,7 @@
             font-weight: 800;
             font-size: 1.35rem;
             color: var(--acc);
-            border-bottom: 2px solid var(--line);
+            border-bottom: 2px solid var(--lin);
             padding-bottom: 12px;
         }
 
@@ -569,7 +623,7 @@
             padding: 12px 14px;
             border-radius: 12px;
             background: var(--str);
-            border: 1px solid var(--line);
+            border: 1px solid var(--lin);
             color: var(--txt);
             outline: none;
             font-size: 1rem;
@@ -611,7 +665,7 @@
 
     <header>
         <div class="brnd">
-            <div class="titles">
+            <div class="titls">
                 <span class="mtitl">LevelUP</span>
                 <span class="stitl">Unimar Gaming & E-Sports</span>
             </div>
@@ -633,24 +687,20 @@
         </nav>
 
         <div class="hact">
-            <button class="btn ico" id="oStgHdr" title="Ajustes">
+            <button class="btn ico" id="sHdr" title="Ajustes">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
             </button>
         </div>
     </header>
-
-    <button class="sbtn" id="oStg" title="Ajustes">
-        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
-    </button>
 
     <main>
         <section id="vInit" class="tab on">
             <div class="hero">
                 <div class="hcnt">
                     <h1><span class="acc">LevelUP</span>: Subiendo de Nivel</h1>
-                    <p>Desarrolladores de Eventos de Gaming y E-Sports en la Universidad de Margarita con +5000 de Aura</p>
+                    <p>Desarrolladores de Eventos de Gaming y E-Sports en la Universidad de Margarita con +200 de Aura</p>
                 </div>
-                <img src="pics/logo.png" alt="Logo" class="limg">
+                <img src="pics/logo.png" alt="xd" class="limg" id="lgo1">
             </div>
 
             <div class="csec">
@@ -686,13 +736,6 @@
                                 <span class="cval">levelupgamin917@gmail.com</span>
                             </div>
                         </div>
-                        <div class="citem">
-                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                            <div class="cdat">
-                                <span class="clbl">Teléfono</span>
-                                <span class="cval">+58 412 350 4575</span>
-                            </div>
-                        </div>
                         <div class="citem mcard">
                             <div class="chdr">
                                 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -717,16 +760,39 @@
                     <p>Mira la lista de eventos activos y explora sus brackets en tiempo real.</p>
                 </div>
             </div>
-            <div class="elist" id="eLst">Cargando eventos...</div>
+            <div class="elist" id="eLst">Cargando...</div>
         </section>
 
         <section id="vInfo" class="tab">
             <div class="hero">
                 <div class="hcnt">
-                    <h1>Relleno</h1>
-                    <p>Somos un grupo de estudiantes universitarios que busca unir los videojuegos y el aprendizaje. Con LevelUp queremos motivar a otros estudiantes a desarrollar habilidades en ingeniería y tecnología, conocer personas y aprender de forma divertida. También queremos demostrar que los videojuegos pueden ser una herramienta para estudiar, colaborar y resolver desafíos. <br><br>
-                    A través de actividades y experiencias interactivas, buscamos que cada persona pueda aprender a su propio ritmo, compartir sus ideas y descubrir nuevas áreas de interés. Así creamos una comunidad donde el entretenimiento y el aprendizaje van de la mano, y donde todos pueden participar, crecer y subir de nivel. 👾🕹️</p>
+                    <h1>¿Qué es LevelUP?</h1>
+                    <p>Somos un grupo de estudiantes universitarios que busca unir los videojuegos y el aprendizaje. Con LevelUp queremos motivar a otros estudiantes a desarrollar habilidades en ingeniería y tecnología, conocer personas y aprender de forma divertida. También queremos demostrar que los videojuegos pueden ser una herramienta para estudiar, colaborar y subir de nivel! 👾🕹️</p>
                 </div>
+                <img src="pics/a.png" alt="xd" class="limg" id="lgo2">
+            </div>
+
+            <div class="ssec">
+                <h2 class="sttl" style="font-size:2.2rem; font-weight:900; color:var(--txt);">Reglamento &amp; Formato</h2>
+                <p style="color:var(--mut); font-size:1.1rem; line-height:1.5;">Normas oficiales de participación para torneos de deportes electrónicos de LevelUP.</p>
+            </div>
+
+            <div class="ssec">
+                <h2 class="sttl">1. Formato de Competencia</h2>
+                <ul class="rlst">
+                    <li>Todos los torneos se disputan bajo el formato oficial de <strong>Eliminación Directa</strong> (Puede variar segun el organizador del torneo).</li>
+                    <li>Los números de Seed y emparejamientos iniciales se asignan por sorteo verificado por la administración.</li>
+                    <li>En torneos cuyo número de participantes no sea potencia de 2, las mejores cabezas de serie reciben <strong>Pase Libre (BYE)</strong> advancing directamente a la siguiente fase.</li>
+                </ul>
+            </div>
+
+            <div class="ssec">
+                <h2 class="sttl">2. Juego Limpio &amp; Puntualidad</h2>
+                <ul class="rlst">
+                    <li>Tolerancia de espera máxima de 5 minutos desde el llamado de la partida. La no presentación implica Walkover.</li>
+                    <li>Cero tolerancia al uso de hacks, scripts o lenguaje antideportivo. Los jueces se reservan el derecho de descalificación inmediata.</li>
+                    <li>Cualquier reclamo técnico debe ser presentado a los organizadores antes de reiniciar la partida.</li>
+                </ul>
             </div>
         </section>
     </main>
@@ -736,20 +802,20 @@
             <h2 id="bTtl" style="color:var(--acc);">Evento</h2>
             <div class="bact">
                 <div class="zctl" aria-label="Controles de zoom del bracket">
-                    <button class="btn ico zbtn" id="zOut" aria-label="Alejar bracket">−</button>
+                    <button class="btn ico zbtn" id="zOut" aria-label="Alejar bracket"><span>−</span></button>
                     <span class="zlbl" id="zLbl">100%</span>
-                    <button class="btn ico zbtn" id="zIn" aria-label="Acercar bracket">+</button>
+                    <button class="btn ico zbtn" id="zIn" aria-label="Acercar bracket"><span>+</span></button>
                 </div>
-                <button class="btn dng" id="bClsB" style="border-color:#ff4f7b; color:#ff4f7b;">✕ Volver</button>
+                <button class="btn dng" id="bClsB" style="border-color:#ff4f7b; color:#ff4f7b;"><span>✕</span></button>
             </div>
         </div>
         <div class="bcnt" id="bTree"></div>
     </div>
 
     <footer>
-        <div class="fcontent">
+        <div class="fcnt">
             <span class="fcopy">&copy; 2026 <span class="acc">LevelUP</span>. Todos los derechos reservados.</span>
-            <p class="fnotice">Proyecto independiente. Las marcas y nombres de videojuegos mencionados pertenecen a sus respectivos propietarios.</p>
+            <p class="fnot">Proyecto independiente. Las marcas y nombres de videojuegos mencionados pertenecen a sus respectivos propietarios.</p>
         </div>
     </footer>
 
@@ -757,15 +823,15 @@
         <div class="mdl">
             <div class="mhd">
                 <span>Ajustes</span>
-                <button id="cStg" class="btn ico" style="width:36px; height:36px; font-size:1rem; border-radius:8px;">✕</button>
+                <button id="cStg" class="btn ico" style="width:36px; height:36px; font-size:1rem; border-radius:8px;"><span>✕</span></button>
             </div>
             <div class="fgrp">
-                <label>Tema visual</label>
+                <label>Temas</label>
                 <select id="thSel">
-                    <option value="pDrk" selected>LevelUP Dark</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
                     <option value="pLgt">LevelUP Light</option>
-                    <option value="dark">Green Dark</option>
-                    <option value="light">Green Light</option>
+                    <option value="pDrk" selected>LevelUP Dark</option>
                     <option value="crim">Crimson</option>
                     <option value="nebu">Nebula</option>
                     <option value="eybrn">Eyeburn</option>
@@ -778,23 +844,27 @@
                     <option value="1">Activado</option>
                 </select>
             </div>
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0;">
-                <label for="animTgl" style="cursor:pointer;">Desactivar animaciones</label>
-                <input type="checkbox" id="animTgl" style="width:20px; height:20px; cursor:pointer;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 0;">
+                <label for="pTgl" style="cursor:pointer;">Activar Partículas</label>
+                <input type="checkbox" id="pTgl" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:4px 0;">
+                <label for="aTgl" style="cursor:pointer;">Desactivar animaciones</label>
+                <input type="checkbox" id="aTgl" style="width:20px; height:20px; cursor:pointer;">
             </div>
         </div>
     </div>
 
     <script>
         const dbUrl = "levelup-cottongras5.aws-us-east-1.turso.io";
-        const dbToken = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM4NDQzMTUsImlkIjoiMDFhMWE5NmItZWUwMS03NjJmLWJhZTQtMGY4NjhmZDc3ZTUzIiwia2lkIjoiZWFMZnRHc2RQVm0tQ25rV24xNkJBWmpzZFJZYlQ4X0VMcVpmZ0w0dGFHTSIsInJpZCI6IjkyMjg3YTE0LTJiNDAtNDRjZS1hOWJmLWJlMDUyY2MzNTMyZCJ9.6O1K-oL7J9DsezkkbsFRjML3OK3kCoTYvnl3SPR8Vp7wMvwunvPIqijEiYaXCgL5rWNhEEtoV2hgX-XvrKu4DA";
+        const dbTok = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM4NDQzMTUsImlkIjoiMDFhMWE5NmItZWUwMS03NjJmLWJhZTQtMGY4NjhmZDc3ZTUzIiwia2lkIjoiZWFMZnRHc2RQVm0tQ25rV24xNkJBWmpzZFJZYlQ4X0VMcVpmZ0w0dGFHTSIsInJpZCI6IjkyMjg3YTE0LTJiNDAtNDRjZS1hOWJmLWJlMDUyY2MzNTMyZCJ9.6O1K-oL7J9DsezkkbsFRjML3OK3kCoTYvnl3SPR8Vp7wMvwunvPIqijEiYaXCgL5rWNhEEtoV2hgX-XvrKu4DA";
 
-        async function queryTurso(sql, args = []) {
+        async function qTrs(sql, args = []) {
             try {
                 const res = await window.fetch(`https://${dbUrl}/v2/pipeline`, {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${dbToken}`,
+                        "Authorization": `Bearer ${dbTok}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
@@ -808,10 +878,10 @@
                     })
                 });
                 const data = await res.json();
-                const resObj = data.results[0]?.response;
-                if (!resObj || resObj.type === "error") return null;
-                const cols = resObj.result.cols.map(c => c.name);
-                const rows = resObj.result.rows;
+                const rObj = data.results[0]?.response;
+                if (!rObj || rObj.type === "error") return null;
+                const cols = rObj.result.cols.map(c => c.name);
+                const rows = rObj.result.rows;
                 return rows.map(row => {
                     let obj = {};
                     cols.forEach((col, i) => {
@@ -826,12 +896,12 @@
         }
 
         const sMod = document.getElementById("sMod");
-        const oStg = document.getElementById("oStg");
-        const oStgHdr = document.getElementById("oStgHdr");
+        const sHdr = document.getElementById("sHdr");
         const cStg = document.getElementById("cStg");
         const thSel = document.getElementById("thSel");
         const auSel = document.getElementById("auSel");
-        const animTgl = document.getElementById("animTgl");
+        const aTgl = document.getElementById("aTgl");
+        const pTgl = document.getElementById("pTgl");
         const eLst = document.getElementById("eLst");
         const bView = document.getElementById("bView");
         const bTtl = document.getElementById("bTtl");
@@ -840,42 +910,100 @@
         const zIn = document.getElementById("zIn");
         const zOut = document.getElementById("zOut");
         const zLbl = document.getElementById("zLbl");
+        const lgo1 = document.getElementById("lgo1");
+        const lgo2 = document.getElementById("lgo2");
 
         let aTid = null;
-        let currEvt = null;
+        let pTid = null;
+        let cEvt = null;
         let state = { p: [], w: {} };
         let zoom = 1;
+        let rg1 = 0, rg2 = 0;
 
-        const rawT = localStorage.getItem("melon-theme") || "pDrk";
+        lgo1.addEventListener("click", () => {
+            rg1 += 360;
+            lgo1.classList.add("spn");
+            lgo1.style.transform = `rotate(${rg1}deg)`;
+        });
+
+        lgo2.addEventListener("click", () => {
+            rg2 += Math.floor(Math.random() * 361) + 360;
+            lgo2.classList.add("spn");
+            lgo2.style.transform = `rotate(${rg2}deg)`;
+        });
+
+        document.addEventListener("click", (e) => {
+            const btn = e.target.closest(".btn");
+            if (btn) {
+                const icon = btn.querySelector("svg") || (btn.classList.contains("ico") || btn.classList.contains("dng") ? btn.querySelector("span") : null);
+                if (icon && icon !== btn) {
+                    icon.classList.remove("ispn");
+                    void icon.offsetWidth;
+                    icon.classList.add("ispn");
+                }
+            }
+        });
+
+        document.addEventListener("animationend", (e) => {
+            if (e.target.classList.contains("ispn")) {
+                e.target.classList.remove("ispn");
+            }
+        });
+
+        function sPart(on) {
+            localStorage.setItem("l_prt", on ? "1" : "0");
+            if (pTid) clearInterval(pTid);
+            if (on) {
+                pTid = setInterval(() => {
+                    if (document.body.classList.contains("noani")) return;
+                    const p = document.createElement("div");
+                    p.className = "bbl";
+                    const s = (Math.random() * 14 + 8) * 1.5;
+                    const dur = (Math.random() * 6 + 6) / 1.1;
+                    p.style.setProperty("--bs", `${s}px`);
+                    p.style.setProperty("--bx", `${Math.random() * 100}vw`);
+                    p.style.setProperty("--bd", `${dur}s`);
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), dur * 1000);
+                }, 290);
+            }
+        }
+
+        pTgl.addEventListener("change", (e) => sPart(e.target.checked));
+        if (localStorage.getItem("l_prt") === "1") {
+            pTgl.checked = true;
+            sPart(true);
+        }
+
+        const rawT = localStorage.getItem("m_thm") || "pDrk";
         const tMap = { "melon-light": "pLgt", "melon-dark": "pDrk", "mlt": "pLgt", "mdk": "pDrk", "lvl": "pDrk", "mllgt": "pLgt" };
-        const initTheme = tMap[rawT] || rawT.replace("melon-", "");
-        document.body.dataset.t = initTheme;
-        thSel.value = initTheme;
+        const iThm = tMap[rawT] || rawT.replace("melon-", "");
+        document.body.dataset.t = iThm;
+        thSel.value = iThm;
 
         thSel.addEventListener("change", (e) => {
             const val = e.target.value;
             document.body.dataset.t = val;
-            localStorage.setItem("melon-theme", val);
+            localStorage.setItem("m_thm", val);
         });
 
-        if (localStorage.getItem("lvl_no_anim") === "1") {
-            document.body.classList.add("no-anim");
-            animTgl.checked = true;
+        if (localStorage.getItem("l_noa") === "1") {
+            document.body.classList.add("noani");
+            aTgl.checked = true;
         }
 
-        animTgl.addEventListener("change", (e) => {
+        aTgl.addEventListener("change", (e) => {
             if (e.target.checked) {
-                document.body.classList.add("no-anim");
-                localStorage.setItem("lvl_no_anim", "1");
+                document.body.classList.add("noani");
+                localStorage.setItem("l_noa", "1");
             } else {
-                document.body.classList.remove("no-anim");
-                localStorage.removeItem("lvl_no_anim");
+                document.body.classList.remove("noani");
+                localStorage.removeItem("l_noa");
             }
         });
 
-        const toggleSettings = () => sMod.classList.toggle("on");
-        oStg.addEventListener("click", toggleSettings);
-        oStgHdr.addEventListener("click", toggleSettings);
+        const tStg = () => sMod.classList.toggle("on");
+        sHdr.addEventListener("click", tStg);
         cStg.addEventListener("click", () => sMod.classList.remove("on"));
         sMod.addEventListener("click", (e) => {
             if (e.target === sMod) sMod.classList.remove("on");
@@ -883,27 +1011,27 @@
 
         bClsB.addEventListener("click", () => bView.classList.remove("show"));
 
-        function setZoom(value) {
-            zoom = Math.min(2, Math.max(0.5, value));
+        function sZoom(val) {
+            zoom = Math.min(2, Math.max(0.5, val));
             bTree.style.zoom = zoom;
             zLbl.innerText = `${Math.round(zoom * 100)}%`;
         }
 
-        zIn.addEventListener("click", () => setZoom(zoom + 0.1));
-        zOut.addEventListener("click", () => setZoom(zoom - 0.1));
+        zIn.addEventListener("click", () => sZoom(zoom + 0.1));
+        zOut.addEventListener("click", () => sZoom(zoom - 0.1));
         bTree.addEventListener("wheel", (e) => {
             if (!bView.classList.contains("show")) return;
             e.preventDefault();
-            setZoom(zoom + (e.deltaY < 0 ? 0.1 : -0.1));
+            sZoom(zoom + (e.deltaY < 0 ? 0.1 : -0.1));
         }, { passive: false });
 
         function sAura(e) {
-            document.body.setAttribute("data-aura", e);
+            document.body.setAttribute("data-aur", e);
             localStorage.setItem("l_aur", e);
             if (aTid) clearInterval(aTid);
             if (e === "1") {
                 aTid = setInterval(() => {
-                    if (document.body.classList.contains("no-anim")) return;
+                    if (document.body.classList.contains("noani")) return;
                     const btns = document.querySelectorAll(".btn");
                     if (!btns.length) return;
                     for (let i = 0; i < 3; i++) {
@@ -947,16 +1075,16 @@
             if (tView) tView.classList.add("on");
             if (tBtn) tBtn.classList.add("on");
 
-            if (tId === "evnt") loadEvents();
+            if (tId === "evnt") ldEvt();
         }
 
         document.querySelectorAll("nav .nbtn").forEach(b => {
             b.addEventListener("click", () => sTab(b.getAttribute("data-tb")));
         });
 
-        async function loadEvents() {
+        async function ldEvt() {
             eLst.innerHTML = "Cargando...";
-            const data = await queryTurso("SELECT * FROM events ORDER BY id DESC;");
+            const data = await qTrs("SELECT * FROM events ORDER BY id DESC;");
             if (!data) {
                 eLst.innerHTML = "Error al cargar los eventos.";
                 return;
@@ -970,92 +1098,165 @@
                 const card = document.createElement("div");
                 card.className = "ecard";
                 card.style.animationDelay = `${idx * 0.06}s`;
-                const descText = (evt.description && evt.description.trim() !== "") ? evt.description : "Sin descripción disponible.";
+                const desc = (evt.description && evt.description.trim() !== "") ? evt.description : "Sin descripción disponible.";
                 card.innerHTML = `
                     <div>
                         <h3 style="color:var(--acc); font-size:1.3rem;">${evt.title}</h3>
-                        <p style="color:var(--mut); font-size:0.95rem; margin-top:4px;">${descText}</p>
+                        <p style="color:var(--mut); font-size:0.95rem; margin-top:4px;">${desc}</p>
                         <span style="font-size:0.85rem; color:var(--acc); font-weight:700; display:inline-block; margin-top:8px;">${evt.max_players} Jugadores</span>
                     </div>
-                    <button class="btn act view-btn">Ver Bracket</button>
+                    <button class="btn act vbtn">Ver Bracket</button>
                 `;
-                card.querySelector(".view-btn").addEventListener("click", () => openBracket(evt));
+                card.querySelector(".vbtn").addEventListener("click", () => oTree(evt));
                 eLst.appendChild(card);
             });
         }
 
-        window.openBracket = (evt) => {
-            currEvt = evt;
+        window.oTree = (evt) => {
+            cEvt = evt;
             try {
                 const raw = typeof evt.bracket_state === 'string' ? JSON.parse(evt.bracket_state) : evt.bracket_state;
                 state = raw && raw.p ? raw : { p: [], w: (raw || {}) };
             } catch(e) { state = { p: [], w: {} }; }
             bTtl.innerText = evt.title;
-            setZoom(1);
+            sZoom(1);
             bView.classList.add("show");
-            renderTree();
+            rTree();
         };
 
-        function renderTree() {
+        function rTree() {
             bTree.innerHTML = "";
-            const N = currEvt.max_players;
+            const N = cEvt.max_players;
 
-            let targetPower = 2;
-            while (targetPower * 2 <= N) targetPower *= 2;
-            if (targetPower === N) targetPower = N;
+            let tPwr = 2;
+            while (tPwr * 2 <= N) tPwr *= 2;
+            if (tPwr === N) tPwr = N;
 
-            const numPrelimMatches = N - targetPower;
-            const numDirectPlayers = N - (numPrelimMatches * 2);
+            const nPre = N - tPwr;
+            const nDir = N - (nPre * 2);
 
             let pMap = {};
             if (state.p) state.p.forEach((name, i) => pMap[i + 1] = name);
 
-            const mainRoundsCount = Math.log2(targetPower);
-            const totalRounds = numPrelimMatches > 0 ? mainRoundsCount + 1 : mainRoundsCount;
+            const nRnd = Math.log2(tPwr);
+            const tRnd = nPre > 0 ? nRnd + 1 : nRnd;
 
-            const MATCH_HEIGHT = 104;
-            const BASE_GAP = 36;
+            const mHgt = 104;
+            const bGap = 36;
 
-            for (let r = 0; r < totalRounds; r++) {
+            for (let r = 0; r < tRnd; r++) {
                 const rDiv = document.createElement("div");
                 rDiv.className = "rnd";
                 rDiv.style.animationDelay = `${r * 0.08}s`;
 
-                const isPrelimRound = (numPrelimMatches > 0 && r === 0);
-                const mainRoundIndex = numPrelimMatches > 0 ? r - 1 : r;
+                const isPre = (nPre > 0 && r === 0);
+                const mIdx = nPre > 0 ? r - 1 : r;
 
-                let matchesInRound = isPrelimRound ? numPrelimMatches : targetPower / Math.pow(2, mainRoundIndex + 1);
+                let nMch = isPre ? nPre : tPwr / Math.pow(2, mIdx + 1);
 
                 let rName = "";
-                if (isPrelimRound) {
+                if (isPre) {
                     rName = `Ronda de ${N}`;
                 } else {
-                    const playersInRound = matchesInRound * 2;
-                    if (playersInRound === 2) rName = "Final";
-                    else if (playersInRound === 4) rName = "Semifinales";
-                    else if (playersInRound === 8) rName = "Cuartos";
-                    else if (playersInRound === 16) rName = "Octavos";
-                    else if (playersInRound === 32) rName = "Ronda de 32";
-                    else if (playersInRound === 64) rName = "Ronda de 64";
-                    else rName = `Ronda de ${playersInRound}`;
+                    const nPly = nMch * 2;
+                    if (nPly === 2) rName = "Final";
+                    else if (nPly === 4) rName = "Semifinales";
+                    else if (nPly === 8) rName = "Cuartos";
+                    else if (nPly === 16) rName = "Octavos";
+                    else if (nPly === 32) rName = "Ronda de 32";
+                    else if (nPly === 64) rName = "Ronda de 64";
+                    else rName = `Ronda de ${nPly}`;
                 }
 
                 const rHdr = document.createElement("div");
-                rHdr.className = "rtitle";
+                rHdr.className = "rtit";
                 rHdr.innerText = rName;
                 rDiv.appendChild(rHdr);
 
-                const currentSlotHeight = (MATCH_HEIGHT + BASE_GAP) * Math.pow(2, isPrelimRound ? 0 : mainRoundIndex);
+                const sHgt = (mHgt + bGap) * Math.pow(2, isPre ? 0 : mIdx);
 
-                for (let m = 0; m < matchesInRound; m++) {
+                for (let m = 0; m < nMch; m++) {
                     const mWrap = document.createElement("div");
-                    mWrap.className = "mch-wrap";
-                    mWrap.style.height = `${currentSlotHeight}px`;
+                    mWrap.className = "mwrap";
+                    mWrap.style.height = `${sHgt}px`;
 
                     const mBox = document.createElement("div");
                     mBox.className = "mch";
 
                     let p1 = "", p2 = "";
 
-                    if (isPrelimRound) {
-                        let s1 =
+                    if (isPre) {
+                        let s1 = nDir + (m * 2) + 1;
+                        let s2 = nDir + (m * 2) + 2;
+                        p1 = pMap[s1] || `Seed ${s1}`;
+                        p2 = pMap[s2] || `Seed ${s2}`;
+                    } else if (r === (nPre > 0 ? 1 : 0)) {
+                        if (nPre > 0 && m < nPre) {
+                            let s1 = m + 1;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = state.w[`0_${m}`] || `Ganador Prelim M${m+1}`;
+                        } else {
+                            let offset = nPre + (m - nPre) * 2;
+                            let s1 = offset + 1;
+                            let s2 = offset + 2;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = pMap[s2] || `Seed ${s2}`;
+                        }
+                    } else {
+                        p1 = state.w[`${r-1}_${m*2}`] || `Esperando M${m*2+1}`;
+                        p2 = state.w[`${r-1}_${m*2+1}`] || `Esperando M${m*2+2}`;
+                    }
+
+                    const mKey = `${r}_${m}`;
+                    const cWin = state.w[mKey];
+
+                    let c1 = `ply ${!p1 || p1.startsWith('Esperando') || p1.startsWith('Ganador') ? 'empty' : ''} ${cWin && cWin === p1 ? 'win' : ''}`;
+                    let c2 = `ply ${!p2 || p2.startsWith('Esperando') || p2.startsWith('Ganador') ? 'empty' : ''} ${cWin && cWin === p2 ? 'win' : ''}`;
+
+                    mBox.innerHTML = `
+                        <div class="${c1}"><span>${p1}</span></div>
+                        <div class="${c2}"><span>${p2}</span></div>
+                    `;
+                    mWrap.appendChild(mBox);
+                    rDiv.appendChild(mWrap);
+                }
+                bTree.appendChild(rDiv);
+
+                if (r < tRnd - 1) {
+                    const cDiv = document.createElement("div");
+                    cDiv.className = "ccol";
+
+                    if (isPre) {
+                        for (let c = 0; c < nPre; c++) {
+                            const block = document.createElement("div");
+                            block.className = "cblk";
+                            block.style.height = `${sHgt}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "cline strt";
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    } else {
+                        const nxtM = nMch / 2;
+                        for (let c = 0; c < nxtM; c++) {
+                            const block = document.createElement("div");
+                            block.className = "cblk";
+                            block.style.height = `${sHgt * 2}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "cline";
+                            line.style.top = `${sHgt / 2}px`;
+                            line.style.height = `${sHgt}px`;
+
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    }
+                    bTree.appendChild(cDiv);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
