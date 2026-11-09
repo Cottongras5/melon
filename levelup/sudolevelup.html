@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudo LevelUP</title>
+    <link rel="icon" type="image/png" href="pics/icon.png">
+    <style>
+        :root {
+            --bg: #110a1e;
+            --src: #22183f;
+            --str: #37246b;
+            --txt: #f0f0f4;
+            --mut: #938fd6;
+            --line: #392f6f;
+            --acc: #1eff00;
+            --shd: 0 0 20px #0000004d;
+            --rad: 20px;
+            --glw: #1eff0066;
+        }
+
+        [data-t="pLgt"] { --bg: #d6c7ff; --src: #f4ebff; --str: #ebe0ff; --txt: #271b50; --mut: #7f6fa5; --line: #e1d6ff; --acc: #5ac47d; --shd: 0 0 20px #7820974d; --glw: #5ac47d66; }
+        [data-t="pDrk"] { --bg: #110a1e; --src: #22183f; --str: #37246b; --txt: #f0f0f4; --mut: #938fd6; --line: #392f6f; --acc: #1eff00; --shd: 0 0 20px #0000004d; --glw: #1eff0066; }
+        [data-t="light"] { --bg: #e9eee7; --src: #f5f8f3; --str: #ffffff; --txt: #17231b; --mut: #607064; --line: #c7d0c8; --acc: #63bd46; --glw: #63bd464d; }
+        [data-t="dark"]  { --bg: #111318; --src: #1c1f28; --str: #202430; --txt: #f4f5f7; --mut: #a5aab7; --line: #3f424b; --acc: #62c7b2; --glw: #62c7b24d; }
+        [data-t="crim"]  { --bg: #17090f; --src: #340d1d; --str: #671b37; --txt: #fff3f6; --mut: #d8a8b8; --line: #7f334d; --acc: #ff4f7b; --glw: #ff4f7b66; }
+        [data-t="nebu"]  { --bg: #110d1f; --src: #261641; --str: #51318a; --txt: #f8f2ff; --mut: #c4aedc; --line: #765b99; --acc: #c783ff; --glw: #c783ff66; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; user-select: none; }
+
+        html { font-size: 110%; }
+
+        body {
+            position: relative;
+            background: var(--bg);
+            color: var(--txt);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        body::before {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            content: "";
+            background: radial-gradient(circle at 50% -10%, var(--acc) 0, var(--bg) 60rem);
+            opacity: 0.25;
+            transition: background 0.4s ease;
+        }
+
+        body.no-anim *, body.no-anim *::before, body.no-anim *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        body.err { animation: flsh 0.1s infinite; }
+        @keyframes flsh {
+            0%, 100% { background: #ff0000; color: #ffffff; }
+            50% { background: #000000; color: #ff0000; }
+        }
+
+        .warn {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.3rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 25px #000;
+            text-align: center;
+            z-index: 200;
+        }
+
+        body.err .warn { display: block; }
+        body.err .box, body.err #bView, body.err .sbtn { opacity: 0; }
+
+        .box {
+            background: var(--src);
+            border: 2px solid var(--line);
+            border-radius: var(--rad);
+            padding: 35px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: var(--shd);
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            position: relative;
+            z-index: 2;
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.95) translateY(12px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h1 { color: var(--acc); font-size: 2.2rem; text-align: center; }
+
+        form, .fgrp { display: flex; flex-direction: column; gap: 12px; }
+        label { font-size: 1.1rem; color: var(--mut); font-weight: 500; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--str);
+            border: 1px solid var(--line);
+            color: var(--txt);
+            outline: none;
+            font-size: 1.1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 12px var(--glw);
+        }
+
+        textarea { resize: vertical; min-height: 90px; }
+
+        .btn {
+            background: var(--str);
+            border: 2px solid var(--line);
+            color: var(--txt);
+            padding: 15px 22px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shd);
+            transition: transform 0.15s ease, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--acc);
+            color: var(--acc);
+            box-shadow: 0 8px 25px var(--glw);
+        }
+
+        .btn:active { transform: scale(0.96) translateY(0); }
+
+        .btn.act { background: var(--acc); color: var(--bg); border-color: var(--acc); }
+        .btn.act:hover { color: var(--bg); filter: brightness(1.1); }
+
+        .btn.dng { border-color: #ff4f7b; color: #ff4f7b; background: #ff4f7b1a; }
+        .btn.dng:hover { background: #ff4f7b40; border-color: #ff4f7b; color: #fff; box-shadow: 0 8px 25px #ff4f7b66; }
+
+        .sbtn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--src);
+            border: 2px solid var(--line);
+            color: var(--txt);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shd);
+            z-index: 90;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, color 0.2s;
+        }
+
+        .sbtn:hover {
+            transform: rotate(90deg) scale(1.1);
+            border-color: var(--acc);
+            color: var(--acc);
+        }
+
+        .sbtn svg {
+            width: 26px;
+            height: 26px;
+            fill: currentColor;
+        }
+
+        #bView {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 10;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .bhdr {
+            height: 68px;
+            padding: 0 28px;
+            background: var(--src);
+            border-bottom: 2px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bcnt {
+            flex: 1;
+            display: flex;
+            padding: 44px;
+            overflow-x: auto;
+            overflow-y: auto;
+            align-items: flex-start;
+        }
+
+        .rnd { display: flex; flex-direction: column; min-width: 240px; position: relative; }
+        .rtit {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--acc);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 22px;
+            height: 32px;
+        }
+
+        .mwrap { display: flex; align-items: center; justify-content: center; position: relative; }
+
+        .mch {
+            background: var(--src);
+            border: 2px solid var(--line);
+            border-radius: 12px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: var(--shd);
+            width: 100%;
+            z-index: 2;
+            transition: transform 0.2s ease, border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .mch:hover {
+            transform: scale(1.02);
+            border-color: var(--acc);
+            box-shadow: 0 5px 25px var(--glw);
+        }
+
+        .mch.illegal {
+            border-color: #ff4f7b !important;
+            box-shadow: 0 0 20px #ff4f7bcc !important;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .conn-col { display: flex; flex-direction: column; width: 44px; position: relative; margin-top: 54px; }
+        .conn-block { position: relative; width: 100%; }
+        .conn-line {
+            position: absolute; left: 0; width: 22px;
+            border-right: 4px solid var(--line); border-top: 4px solid var(--line); border-bottom: 4px solid var(--line);
+        }
+        .conn-line.straight { border: none; background: var(--line); top: 50% !important; height: 4px !important; width: 44px; }
+        .conn-line::after { content: ""; position: absolute; top: 50%; right: -22px; width: 22px; height: 4px; background: var(--line); transform: translateY(-50%); }
+
+        .ply {
+            padding: 10px 18px;
+            background: var(--str);
+            border-radius: 8px;
+            font-size: 1.05rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--txt);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        }
+
+        .ply:hover:not(.emp) { background: #ffffff1f; transform: translateX(2px); }
+        .ply.win { border: 1px solid var(--acc); color: var(--acc); font-weight: 800; background: #b877ff26; }
+        .ply.emp { opacity: 0.45; cursor: default; }
+
+        .toast {
+            position: fixed;
+            bottom: 35px;
+            right: 35px;
+            background: #ff4f7b;
+            color: #fff;
+            padding: 20px 24px;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 1.15rem;
+            box-shadow: 0 10px 30px #ff4f7b66;
+            z-index: 200;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+
+        .toast.show { opacity: 1; transform: translateY(0) scale(1); }
+
+        .moly {
+            position: fixed; inset: 0; background: #000000b3;
+            backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 100;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+        .moly.on { opacity: 1; pointer-events: auto; }
+
+        .cmod {
+            position: fixed; inset: 0; background: #000000cc;
+            backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 300;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .cmod.on { opacity: 1; pointer-events: auto; }
+
+        .cbox {
+            background: var(--src);
+            border: 2px solid var(--acc);
+            box-shadow: 0 0 55px var(--glw), var(--shd);
+            border-radius: 26px;
+            padding: 44px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .cmod.on .cbox { transform: scale(1); }
+
+        .cicon { font-size: 5.5rem; animation: pulse 1.5s infinite alternate; }
+        @keyframes pulse {
+            from { transform: scale(1); filter: drop-shadow(0 0 10px var(--acc)); }
+            to { transform: scale(1.15); filter: drop-shadow(0 0 28px var(--acc)); }
+        }
+
+        .cttl { font-size: 3.2rem; font-weight: 900; color: var(--txt); }
+        .cname { font-size: 2.4rem; font-weight: 800; color: var(--acc); text-shadow: 0 0 22px var(--glw); }
+
+        #cCanv { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+        .plist { display: flex; flex-direction: column; gap: 10px; max-height: 220px; overflow-y: auto; margin-top: 10px; }
+        .pitem { display: flex; justify-content: space-between; align-items: center; background: var(--str); padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); }
+    </style>
+</head>
+<body>
+    <div class="warn">Jumpscare!!</div>
+    <div class="toast" id="tstMsg">Chamo tu eres marico? No puedes hacer eso!</div>
+
+    <canvas id="cCanv"></canvas>
+
+    <button class="sbtn" id="oStg" title="Ajustes">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/></svg>
+    </button>
+
+    <div class="cmod" id="cMod">
+        <div class="cbox">
+            <div class="cicon">👑</div>
+            <div class="cttl">¡Tenemos a un campeón!</div>
+            <div class="cname"><span id="cWin"></span> ha subido de Nivel</div>
+            <button class="btn act" id="cCls" style="margin-top:10px;">¡Qué fino!</button>
+        </div>
+    </div>
+
+    <div class="box" id="lCard">
+        <h1>Sudo LevelUP</h1>
+        <form id="lFrm">
+            <div class="fgrp">
+                <label>Usuario</label>
+                <input type="text" id="uInp" placeholder="cotton" required>
+            </div>
+            <div class="fgrp">
+                <label>Contraseña</label>
+                <input type="password" id="pInp" required>
+            </div>
+            <button type="submit" class="btn act">Entrar</button>
+        </form>
+    </div>
+
+    <div class="box" id="mCard" style="display:none;">
+        <h1>Administrador</h1>
+        <button class="btn act" id="bCrt">Crear Evento</button>
+        <button class="btn" id="bMng">Manejar Eventos</button>
+    </div>
+
+    <div class="box" id="cCard" style="display:none;">
+        <h1>Nuevo Evento</h1>
+        <form id="eFrm">
+            <div class="fgrp">
+                <label>Nombre</label>
+                <input type="text" id="eTtl" required>
+            </div>
+            <div class="fgrp">
+                <label>Descripción</label>
+                <textarea id="eDsc" placeholder="Descripción opcional del evento..."></textarea>
+            </div>
+            <div class="fgrp">
+                <label>Jugadores</label>
+                <select id="eCap">
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="16" selected>16</option>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
+                    <option value="32">32</option>
+                    <option value="36">36</option>
+                    <option value="40">40</option>
+                    <option value="44">44</option>
+                    <option value="48">48</option>
+                </select>
+            </div>
+            <button type="submit" class="btn act">Correctisimo!</button>
+            <button type="button" class="btn dng" id="bCnlC">Bodrio</button>
+        </form>
+    </div>
+
+    <div class="box" id="mLst" style="display:none;">
+        <h1>Eventos Planificados</h1>
+        <div id="eLst" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <button type="button" class="btn dng" id="bCnlM">No quiero</button>
+    </div>
+
+    <div id="bView">
+        <div class="bhdr">
+            <h2 id="bTtl" style="color:var(--acc);">Evento</h2>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" id="bAddP">+</button>
+                <button class="btn" id="bShf">⇄</button>
+                <button class="btn dng" id="bClsB">✕</button>
+            </div>
+        </div>
+        <div class="bcnt" id="bTree"></div>
+    </div>
+
+    <div class="moly" id="pMod">
+        <div class="box" style="max-width: 420px;">
+            <h3>Jugadores</h3>
+            <div class="fgrp">
+                <input type="text" id="pName" placeholder="GamerTag">
+                <button class="btn act" id="pSave">Añadir</button>
+            </div>
+            <div class="plist" id="pLst"></div>
+            <button class="btn dng" id="pCanc" style="margin-top:10px;">Cerrar</button>
+        </div>
+    </div>
+
+    <div class="moly" id="sMod">
+        <div class="box" style="max-width: 380px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="color:var(--acc);">Ajustes</h3>
+                <button id="cStg" class="btn" style="padding:4px 10px; min-width:auto;">✕</button>
+            </div>
+            <div class="fgrp">
+                <label>Tema</label>
+                <select id="tSel">
+                    <option value="pDrk">LevelUP Oscuro</option>
+                    <option value="pLgt">LevelUP Claro</option>
+                    <option value="dark">Oscuro</option>
+                    <option value="light">Claro</option>
+                    <option value="crim">Crimson</option>
+                    <option value="nebu">Nebula</option>
+                </select>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0;">
+                <label for="animTgl" style="cursor:pointer;">Desactivar animaciones</label>
+                <input type="checkbox" id="animTgl" style="width:20px; height:20px; cursor:pointer;">
+            </div>
+            <button class="btn dng" id="lgOut" style="margin-top:10px;">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script>
+        const dbUrl = "levelup-cottongras5.aws-us-east-1.turso.io";
+        const dbTok = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTM4NDQzMTUsImlkIjoiMDFhMWE5NmItZWUwMS03NjJmLWJhZTQtMGY4NjhmZDc3ZTUzIiwia2lkIjoiZWFMZnRHc2RQVm0tQ25rV24xNkJBWmpzZFJZYlQ4X0VMcVpmZ0w0dGFHTSIsInJpZCI6IjkyMjg3YTE0LTJiNDAtNDRjZS1hOWJmLWJlMDUyY2MzNTMyZCJ9.6O1K-oL7J9DsezkkbsFRjML3OK3kCoTYvnl3SPR8Vp7wMvwunvPIqijEiYaXCgL5rWNhEEtoV2hgX-XvrKu4DA";
+
+        const tSel = document.getElementById("tSel");
+        const animTgl = document.getElementById("animTgl");
+        const sMod = document.getElementById("sMod");
+        const oStg = document.getElementById("oStg");
+        const cStg = document.getElementById("cStg");
+        const lgOut = document.getElementById("lgOut");
+
+        const rawT = localStorage.getItem("melon-theme") || "pDrk";
+        const tMap = { "melon-light": "pLgt", "melon-dark": "pDrk", "mlt": "pLgt", "mdk": "pDrk" };
+        const initTheme = tMap[rawT] || rawT.replace("melon-", "");
+        document.body.dataset.t = initTheme;
+        tSel.value = initTheme;
+
+        tSel.addEventListener("change", (e) => {
+            const val = e.target.value;
+            document.body.dataset.t = val;
+            localStorage.setItem("melon-theme", val);
+        });
+
+        if (localStorage.getItem("lvl_no_anim") === "1") {
+            document.body.classList.add("no-anim");
+            animTgl.checked = true;
+        }
+
+        animTgl.addEventListener("change", (e) => {
+            if (e.target.checked) {
+                document.body.classList.add("no-anim");
+                localStorage.setItem("lvl_no_anim", "1");
+            } else {
+                document.body.classList.remove("no-anim");
+                localStorage.removeItem("lvl_no_anim");
+            }
+        });
+
+        oStg.addEventListener("click", () => sMod.classList.add("on"));
+        cStg.addEventListener("click", () => sMod.classList.remove("on"));
+
+        async function turso(reqs) {
+            try {
+                const res = await fetch(`https://${dbUrl}/v2/pipeline`, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${dbTok}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({ requests: [...reqs, { type: "close" }] })
+                });
+                const data = await res.json();
+                return data.results;
+            } catch (err) { return null; }
+        }
+
+        function stmt(sql, args = []) {
+            return {
+                type: "execute",
+                stmt: {
+                    sql,
+                    args: args.map(a => {
+                        if (typeof a === 'number') return { type: "integer", value: String(a) };
+                        if (a === null || a === undefined) return { type: "null" };
+                        return { type: "text", value: String(a) };
+                    })
+                }
+            };
+        }
+
+        function parse(res) {
+            const rObj = res?.response;
+            if (!rObj || rObj.type === "error" || !rObj.result?.cols) return null;
+            const cols = rObj.result.cols.map(c => c.name);
+            return (rObj.result.rows || []).map(row => {
+                let obj = {};
+                cols.forEach((col, i) => {
+                    let val = row[i];
+                    obj[col] = (val && typeof val === 'object' && 'value' in val) ? val.value : val;
+                });
+                return obj;
+            });
+        }
+
+        // Schema auto-migration: Ensure description column exists in Turso
+        turso([stmt("ALTER TABLE events ADD COLUMN description TEXT;")]);
+
+        let cEvt = null;
+        let state = { p: [], w: {} };
+        let evtStore = {};
+
+        const lFrm = document.getElementById("lFrm");
+        const lCard = document.getElementById("lCard");
+        const mCard = document.getElementById("mCard");
+        const cCard = document.getElementById("cCard");
+        const mLst = document.getElementById("mLst");
+        const bView = document.getElementById("bView");
+        const eLst = document.getElementById("eLst");
+        const bTree = document.getElementById("bTree");
+        const bTtl = document.getElementById("bTtl");
+        const pMod = document.getElementById("pMod");
+        const pLst = document.getElementById("pLst");
+        const tstMsg = document.getElementById("tstMsg");
+        const cMod = document.getElementById("cMod");
+        const cWin = document.getElementById("cWin");
+        const cCls = document.getElementById("cCls");
+        const cCanv = document.getElementById("cCanv");
+        const ctx = cCanv.getContext("2d");
+        let parts = [], animId = null;
+
+        function rSes(auth) {
+            lCard.style.display = auth ? "none" : "flex";
+            mCard.style.display = auth ? "flex" : "none";
+            if (!auth) {
+                cCard.style.display = "none";
+                mLst.style.display = "none";
+                bView.style.display = "none";
+            }
+        }
+
+        if (localStorage.getItem("lvl_auth") === "1") rSes(true);
+
+        lFrm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const u = document.getElementById("uInp").value.trim();
+            const p = document.getElementById("pInp").value.trim();
+            const res = await turso([stmt("SELECT * FROM admins WHERE username = ? AND password = ?;", [u, p])]);
+            const rows = parse(res?.[0]);
+            if (rows && rows.length > 0) {
+                localStorage.setItem("lvl_auth", "1");
+                rSes(true);
+            } else {
+                document.body.classList.add("err");
+                setTimeout(() => document.body.classList.remove("err"), 2500);
+            }
+        });
+
+        lgOut.addEventListener("click", () => {
+            sMod.classList.remove("on");
+            localStorage.removeItem("lvl_auth");
+            rSes(false);
+        });
+
+        document.getElementById("bCrt").addEventListener("click", () => {
+            mCard.style.display = "none";
+            cCard.style.display = "flex";
+        });
+
+        document.getElementById("bCnlC").addEventListener("click", () => {
+            cCard.style.display = "none";
+            mCard.style.display = "flex";
+        });
+
+        document.getElementById("bCnlM").addEventListener("click", () => {
+            mLst.style.display = "none";
+            mCard.style.display = "flex";
+        });
+
+        document.getElementById("bClsB").addEventListener("click", () => {
+            bView.style.display = "none";
+            mCard.style.display = "flex";
+        });
+
+        cCls.addEventListener("click", () => {
+            cMod.classList.remove("on");
+            cancelAnimationFrame(animId);
+            ctx.clearRect(0, 0, cCanv.width, cCanv.height);
+        });
+
+        document.getElementById("eFrm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const ttl = document.getElementById("eTtl").value.trim();
+            const dsc = document.getElementById("eDsc").value.trim();
+            const cap = parseInt(document.getElementById("eCap").value, 10);
+            const init = JSON.stringify({ p: [], w: {} });
+
+            let res = await turso([
+                stmt("INSERT INTO events (title, description, max_players, bracket_state) VALUES (?, ?, ?, ?);", [ttl, dsc, cap, init]),
+                stmt("SELECT * FROM events ORDER BY id DESC LIMIT 1;")
+            ]);
+
+            // Fallback if table doesn't support description column yet
+            if (res?.[0]?.response?.type === "error") {
+                res = await turso([
+                    stmt("INSERT INTO events (title, max_players, bracket_state) VALUES (?, ?, ?);", [ttl, cap, init]),
+                    stmt("SELECT * FROM events ORDER BY id DESC LIMIT 1;")
+                ]);
+            }
+
+            const rows = parse(res?.[1]);
+            if (rows && rows.length > 0) {
+                document.getElementById("eTtl").value = "";
+                document.getElementById("eDsc").value = "";
+                cCard.style.display = "none";
+                oTree(rows[0]);
+            } else {
+                const errDetail = res?.[0]?.response?.error?.message || res?.[1]?.response?.error?.message || "Error de red o base de datos.";
+                alert("Error al crear el evento:\n" + errDetail);
+            }
+        });
+
+        document.getElementById("bMng").addEventListener("click", async () => {
+            mCard.style.display = "none";
+            mLst.style.display = "flex";
+            ldEvt();
+        });
+
+        async function ldEvt() {
+            eLst.innerHTML = "...";
+            const res = await turso([stmt("SELECT * FROM events ORDER BY id DESC;")]);
+            const data = parse(res?.[0]);
+            if (!data || data.length === 0) {
+                eLst.innerHTML = "Sin eventos";
+                return;
+            }
+            eLst.innerHTML = "";
+            evtStore = {};
+            data.forEach(evt => {
+                evtStore[evt.id] = evt;
+                const item = document.createElement("div");
+                item.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--str); border-radius:10px; border:1px solid var(--line);";
+                item.innerHTML = `
+                    <div><strong>${evt.title}</strong> (${evt.max_players} Jugadores)</div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn act" onclick="openEvtById(${evt.id})">Ver</button>
+                        <button class="btn dng" onclick="delE(${evt.id})">✕</button>
+                    </div>
+                `;
+                eLst.appendChild(item);
+            });
+        }
+
+        window.openEvtById = (id) => {
+            if (evtStore[id]) oTree(evtStore[id]);
+        };
+
+        window.delE = async (id) => {
+            await turso([stmt("DELETE FROM events WHERE id = ?;", [id])]);
+            ldEvt();
+        };
+
+        window.oTree = (evt) => {
+            cEvt = evt;
+            try {
+                const raw = typeof evt.bracket_state === 'string' ? JSON.parse(evt.bracket_state) : evt.bracket_state;
+                state = raw && raw.p ? raw : { p: [], w: {} };
+            } catch(e) { state = { p: [], w: {} }; }
+            bTtl.innerText = evt.title;
+            mLst.style.display = "none";
+            bView.style.display = "flex";
+            rTree();
+        };
+
+        function rTree() {
+            bTree.innerHTML = "";
+            const N = cEvt.max_players;
+
+            let targetPower = 2;
+            while (targetPower * 2 <= N) targetPower *= 2;
+            if (targetPower === N) targetPower = N;
+
+            const numPrelimMatches = N - targetPower;
+            const numDirectPlayers = N - (numPrelimMatches * 2);
+
+            let pMap = {};
+            state.p.forEach((name, i) => pMap[i + 1] = name);
+
+            const mainRoundsCount = Math.log2(targetPower);
+            const totalRounds = numPrelimMatches > 0 ? mainRoundsCount + 1 : mainRoundsCount;
+
+            const MATCH_HEIGHT = 104;
+            const BASE_GAP = 36;
+
+            for (let r = 0; r < totalRounds; r++) {
+                const rDiv = document.createElement("div");
+                rDiv.className = "rnd";
+
+                const isPrelimRound = (numPrelimMatches > 0 && r === 0);
+                const mainRoundIndex = numPrelimMatches > 0 ? r - 1 : r;
+
+                let matchesInRound = isPrelimRound ? numPrelimMatches : targetPower / Math.pow(2, mainRoundIndex + 1);
+
+                let rName = "";
+                if (isPrelimRound) {
+                    rName = `Ronda de ${N}`;
+                } else {
+                    const playersInRound = matchesInRound * 2;
+                    if (playersInRound === 2) rName = "Final";
+                    else if (playersInRound === 4) rName = "Semifinales";
+                    else if (playersInRound === 8) rName = "Cuartos";
+                    else if (playersInRound === 16) rName = "Octavos";
+                    else if (playersInRound === 32) rName = "Ronda de 32";
+                    else if (playersInRound === 64) rName = "Ronda de 64";
+                    else rName = `Ronda de ${playersInRound}`;
+                }
+
+                const rHdr = document.createElement("div");
+                rHdr.className = "rtit";
+                rHdr.innerText = rName;
+                rDiv.appendChild(rHdr);
+
+                const currentSlotHeight = (MATCH_HEIGHT + BASE_GAP) * Math.pow(2, isPrelimRound ? 0 : mainRoundIndex);
+
+                for (let m = 0; m < matchesInRound; m++) {
+                    const mWrap = document.createElement("div");
+                    mWrap.className = "mwrap";
+                    mWrap.style.height = `${currentSlotHeight}px`;
+
+                    const mBox = document.createElement("div");
+                    mBox.className = "mch";
+                    mBox.id = `mch_${r}_${m}`;
+
+                    let p1 = "", p2 = "";
+
+                    if (isPrelimRound) {
+                        let s1 = numDirectPlayers + (m * 2) + 1;
+                        let s2 = numDirectPlayers + (m * 2) + 2;
+                        p1 = pMap[s1] || `Seed ${s1}`;
+                        p2 = pMap[s2] || `Seed ${s2}`;
+                    } else if (r === (numPrelimMatches > 0 ? 1 : 0)) {
+                        if (numPrelimMatches > 0 && m < numPrelimMatches) {
+                            let s1 = m + 1;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = state.w[`0_${m}`] || `Ganador Prelim M${m+1}`;
+                        } else {
+                            let offset = numPrelimMatches + (m - numPrelimMatches) * 2;
+                            let s1 = offset + 1;
+                            let s2 = offset + 2;
+                            p1 = pMap[s1] || `Seed ${s1}`;
+                            p2 = pMap[s2] || `Seed ${s2}`;
+                        }
+                    } else {
+                        p1 = state.w[`${r-1}_${m*2}`] || `Esperando M${m*2+1}`;
+                        p2 = state.w[`${r-1}_${m*2+1}`] || `Esperando M${m*2+2}`;
+                    }
+
+                    const mKey = `${r}_${m}`;
+                    const curWin = state.w[mKey];
+
+                    let p1Class = `ply ${!p1 || p1.startsWith('Esperando') || p1.startsWith('Ganador') ? 'emp' : ''} ${curWin && curWin === p1 ? 'win' : ''}`;
+                    let p2Class = `ply ${!p2 || p2.startsWith('Esperando') || p2.startsWith('Ganador') ? 'emp' : ''} ${curWin && curWin === p2 ? 'win' : ''}`;
+
+                    mBox.innerHTML = `
+                        <div class="${p1Class}" onclick="setW('${r}', '${m}', '${p1}', '${p2}')"><span>${p1}</span></div>
+                        <div class="${p2Class}" onclick="setW('${r}', '${m}', '${p2}', '${p1}')"><span>${p2}</span></div>
+                    `;
+                    mWrap.appendChild(mBox);
+                    rDiv.appendChild(mWrap);
+                }
+                bTree.appendChild(rDiv);
+
+                if (r < totalRounds - 1) {
+                    const cDiv = document.createElement("div");
+                    cDiv.className = "conn-col";
+
+                    if (isPrelimRound) {
+                        for (let c = 0; c < numPrelimMatches; c++) {
+                            const block = document.createElement("div");
+                            block.className = "conn-block";
+                            block.style.height = `${currentSlotHeight}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "conn-line straight";
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    } else {
+                        const nextMatches = matchesInRound / 2;
+                        for (let c = 0; c < nextMatches; c++) {
+                            const block = document.createElement("div");
+                            block.className = "conn-block";
+                            block.style.height = `${currentSlotHeight * 2}px`;
+
+                            const line = document.createElement("div");
+                            line.className = "conn-line";
+                            line.style.top = `${currentSlotHeight / 2}px`;
+                            line.style.height = `${currentSlotHeight}px`;
+
+                            block.appendChild(line);
+                            cDiv.appendChild(block);
+                        }
+                    }
+                    bTree.appendChild(cDiv);
+                }
+            }
+        }
+
+        function showIllegalWarning(r, m) {
+            const mBox = document.getElementById(`mch_${r}_${m}`);
+            if (mBox) {
+                mBox.classList.add("illegal");
+                setTimeout(() => mBox.classList.remove("illegal"), 300);
+            }
+            tstMsg.classList.add("show");
+            setTimeout(() => tstMsg.classList.remove("show"), 2500);
+        }
+
+        function launchConfetti() {
+            cCanv.width = window.innerWidth;
+            cCanv.height = window.innerHeight;
+            parts = [];
+            const clrs = ['#1eff00', '#5ac47d', '#00ff88', '#00aaee', '#ff9a00', '#ff4f7b', '#ffffff'];
+            for (let i = 0; i < 140; i++) {
+                parts.push({
+                    x: Math.random() * cCanv.width,
+                    y: Math.random() * cCanv.height + cCanv.height,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: -(Math.random() * 4 + 3),
+                    sz: Math.random() * 8 + 4,
+                    clr: clrs[Math.floor(Math.random() * clrs.length)]
+                });
+            }
+            function draw() {
+                ctx.clearRect(0, 0, cCanv.width, cCanv.height);
+                parts.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.y < -10) p.y = cCanv.height + 10;
+                    ctx.fillStyle = p.clr;
+                    ctx.fillRect(p.x, p.y, p.sz, p.sz);
+                });
+                animId = requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        window.setW = async (r, m, selected, opponent) => {
+            const isValid = (p) => p && p !== "" && !p.startsWith("Seed") && !p.startsWith("Esperando") && !p.startsWith("Ganador");
+
+            if (!isValid(selected) || !isValid(opponent)) {
+                showIllegalWarning(r, m);
+                return;
+            }
+
+            const mKey = `${r}_${m}`;
+            const N = cEvt.max_players;
+            let targetPower = 2;
+            while (targetPower * 2 <= N) targetPower *= 2;
+            if (targetPower === N) targetPower = N;
+            const numPrelimMatches = N - targetPower;
+            const finalRoundIndex = numPrelimMatches > 0 ? Math.log2(targetPower) : Math.log2(targetPower) - 1;
+
+            if (state.w[mKey] === selected) {
+                delete state.w[mKey];
+            } else {
+                state.w[mKey] = selected;
+                if (parseInt(r) === finalRoundIndex) {
+                    cWin.innerText = selected;
+                    cMod.classList.add("on");
+                    if (!document.body.classList.contains("no-anim")) launchConfetti();
+                }
+            }
+
+            await turso([stmt("UPDATE events SET bracket_state = ? WHERE id = ?;", [JSON.stringify(state), cEvt.id])]);
+            rTree();
+        };
+
+        document.getElementById("bShf").addEventListener("click", async () => {
+            if (!state.p || state.p.length < 2) return;
+            for (let i = state.p.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [state.p[i], state.p[j]] = [state.p[j], state.p[i]];
+            }
+            state.w = {};
+            await turso([stmt("UPDATE events SET bracket_state = ? WHERE id = ?;", [JSON.stringify(state), cEvt.id])]);
+            rTree();
+        });
+
+        function renderPlayerList() {
+            pLst.innerHTML = "";
+            if (!state.p || state.p.length === 0) {
+                pLst.innerHTML = "<div style='color:var(--mut); text-align:center;'>Sin jugadores aún</div>";
+                return;
+            }
+            state.p.forEach((name, idx) => {
+                const div = document.createElement("div");
+                div.className = "pitem";
+                div.innerHTML = `
+                    <span><strong>#${idx+1}</strong> ${name}</span>
+                    <button class="btn dng" style="padding:4px 8px;" onclick="delPlayer(${idx})">✕</button>
+                `;
+                pLst.appendChild(div);
+            });
+        }
+
+        window.delPlayer = async (idx) => {
+            state.p.splice(idx, 1);
+            state.w = {};
+            await turso([stmt("UPDATE events SET bracket_state = ? WHERE id = ?;", [JSON.stringify(state), cEvt.id])]);
+            renderPlayerList();
+            rTree();
+        };
+
+        document.getElementById("bAddP").addEventListener("click", () => {
+            renderPlayerList();
+            pMod.classList.add("on");
+        });
+
+        document.getElementById("pCanc").addEventListener("click", () => pMod.classList.remove("on"));
+
+        document.getElementById("pSave").addEventListener("click", async () => {
+            const name = document.getElementById("pName").value.trim();
+            if (!name) return;
+            if (state.p.length >= cEvt.max_players) {
+                alert("El evento ya está lleno.");
+                return;
+            }
+
+            state.p.push(name);
+            await turso([stmt("UPDATE events SET bracket_state = ? WHERE id = ?;", [JSON.stringify(state), cEvt.id])]);
+            document.getElementById("pName").value = "";
+            renderPlayerList();
+            rTree();
+        });
+    </script>
+</body>
+</html>
