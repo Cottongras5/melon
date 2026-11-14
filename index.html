@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Melon Project</title>
+  <link rel="icon" href="i.png">
   <style>
     :root {
       --bg: #203b40;
@@ -246,6 +247,8 @@
     .card:nth-child(2) { animation-delay: .08s; }
     .card:nth-child(3) { animation-delay: .16s; }
     .card:nth-child(4) { animation-delay: .24s; }
+    .card:nth-child(5) { animation-delay: .32s; }
+    .card:nth-child(6) { animation-delay: .4s; }
 
     .card:hover, .card:focus-within {
       border-color: var(--acc);
@@ -288,6 +291,8 @@
     }
 
     .socs { display: flex; flex-direction: column; gap: .55rem; }
+
+    .wrap { position: relative; }
 
     .socs, .wrap { pointer-events: auto; }
 
@@ -392,12 +397,31 @@
     @keyframes spin { from { transform: rotate(-10deg); } to { transform: rotate(350deg); } }
     @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: 0; } }
 
+    @media (max-aspect-ratio: 1/1), (max-width: 680px) {
+      .shll { padding-bottom: 1.75rem; }
+      .tools {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        left: auto;
+        width: min(920px, calc(100% - 2rem));
+        margin: 0 auto 2rem;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .5rem;
+        pointer-events: auto;
+      }
+      .socs { flex-direction: row; flex-wrap: wrap; gap: .45rem; }
+      .btn, .soc { width: 2.75rem; height: 2.75rem; border-radius: 12px; }
+      .pnl { bottom: 3.25rem; width: min(330px, calc(100vw - 1rem)); }
+    }
+
     @media (max-width: 680px) {
-      .shll { width: min(100% - 1rem, 560px); padding-top: 2rem; }
+      .shll, .tools { width: min(100% - 1rem, 560px); }
+      .shll { padding-top: 2rem; }
       .apps { grid-template-columns: 1fr; }
       .hero { padding: 2rem 1.2rem; border-radius: 24px; }
       .hdg { align-items: start; flex-direction: column; gap: .35rem; }
-      .tools { right: .7rem; bottom: .7rem; left: .7rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -431,6 +455,16 @@
       <a class="card" href="web/Themeditor.html">
         <span class="icon" aria-hidden="true">🎨</span>
         <span><h3>Themeditor</h3><p data-i="thm">.</p></span>
+        <span class="arrw" aria-hidden="true">↗</span>
+      </a>
+      <a class="card" href="web/Tamer.html">
+        <span class="icon" aria-hidden="true">⌚</span>
+        <span><h3>Tamer</h3><p data-i="tam">.</p></span>
+        <span class="arrw" aria-hidden="true">↗</span>
+      </a>
+      <a class="card" href="web/Sorry.html">
+        <span class="icon" aria-hidden="true">♟️</span>
+        <span><h3>Melon Sorry!</h3><p data-i="sor">.</p></span>
         <span class="arrw" aria-hidden="true">↗</span>
       </a>
       <a class="card" href="web/">
@@ -520,6 +554,8 @@
         mel: "A focused workspace for mixing ideas, notes, tasks and little sparks of limitless creativity, all stored locally.",
         mem: "A calm place to keep track of the things worth remembering, without feeding a mysterious cloud. Ideal for people with short-term memory issues",
         thm: "Tune colors, contrast, and atmosphere to create your own flavor of Melon. This will get you code you can use in your favorite Melon apps",
+        tam: "Create kitchen or workout timers to organize when to move, and when to tame your time. And say goodbye to those horrible adware wallet-eating playstore apps.",
+        sor: "The classic game of sweet revenge, but now even sweeter with our lightweight and free code. Make your memorable moments with your friends a bit more juicy!",
         moreT: "More soon",
         more: "The basket is still growing. If Cotton wants to get up, of course...",
         set: "Settings", thmL: "Theme", langL: "Language", auraL: "Aura Guardians", noaL: "Disable Animations"
@@ -531,6 +567,8 @@
         mel: "Un espacio enfocado para mezclar ideas, notas, listas y pequeñas chispas de creatividad sin límites.",
         mem: "Un lugar tranquilo para llevar rastro de tus recuerdos antes que se te olviden. Ideal para personas con problemas de memoria a corto plazo.",
         thm: "Ajusta colores, contraste y ambiente para crear tu propio estilo de Melon. Esto te dará un código que puedes utilizar en tus apps de Melon favoritas.",
+        tam: "Crea temporizadores de cocina o entrenamiento para organizar cuándo moverte y cuándo domar tu tiempo. Y dile adiós a esas horribles apps de la Play Store llenas de anuncios que devoran tu cartera.",
+        sor: "El clásico juego de la dulce venganza, pero ahora aún más dulce con nuestro código ligero y gratuito. ¡Haz que tus momentos memorables con amigos sean un poco más jugosos!",
         moreT: "Más apps",
         more: "La lista sigue creciendo. Claro, si es que Cotton quiere trabajar...",
         set: "Ajustes", thmL: "Tema", langL: "Idioma", auraL: "Guardianes del Aura", noaL: "Desactivar animaciones"
@@ -542,6 +580,8 @@
         mel: "Um espaço focado para misturar ideias, notas, tarefas e faíscas de criatividade sem limites, tudo salvo localmente.",
         mem: "Um lugar tranquilo para guardar o que merece ser lembrado, sem alimentar uma nuvem misteriosa. Ideal para quem esquece das coisas rapidinho.",
         thm: "Ajuste cores, contraste e clima para criar seu próprio estilo de Melon. No fim, você leva um código para usar nos seus apps Melon favoritos.",
+        tam: "Crie timers de cozinha ou treino para organizar quando se mexer e quando domar o seu tempo. E dê adeus àqueles apps horríveis da Play Store cheios de anúncios que devoram sua carteira.",
+        sor: "O clássico jogo da doce vingança, mas agora ainda mais doce com nosso código leve e gratuito. Deixe seus momentos memoráveis com os amigos um pouco mais suculentos!",
         moreT: "Mais em breve",
         more: "A cesta continua crescendo. Se o Cotton resolver levantar, é claro...",
         set: "Configurações", thmL: "Tema", langL: "Idioma", auraL: "Guardiões da Aura", noaL: "Desactivar animações"
@@ -581,7 +621,7 @@
     function setT(v) {
       const map = { bg: "bg", src: "surface", str: "surface-strong", txt: "text", mut: "muted", line: "line", acc: "accent", shd: "shadow" };
       const own = v.startsWith("own:") ? cst[v.slice(4)] : null;
-      b.dataset.t = own ? "custom" : v;
+      b.dataset.t = own ? "cst" : v;
       ["bg", "src", "str", "txt", "mut", "line", "acc"].forEach((k) => {
         b.style.removeProperty(`--${k}`);
         const val = own?.values[k] || own?.values[map[k]];
