@@ -4,106 +4,107 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Melon Project</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍈</text></svg>">
   <style>
     :root {
-      --bg: #29484d;
-      --surface: rgba(54, 88, 93, .9);
-      --surface-strong: #3d696e;
-      --text: #fff8ef;
-      --muted: #d3e1df;
-      --line: rgba(255, 248, 239, .2);
-      --accent: #ff974b;
-      --shadow: 0 24px 80px rgba(7, 22, 25, .42);
-      --radius: 24px;
+      --bg: #203b40;
+      --src: #2f4e53;
+      --str: #37636a;
+      --txt: #fff8ef;
+      --mut: #d3e1df;
+      --line: #50605f;
+      --acc: #ff974b;
+      --shd: 10px 20px 60px #0716194d;
+      --rad: 24px;
     }
 
     html { font-size: 110%; }
 
-    [data-theme="light"] {
+    [data-t="light"] {
       --bg: #e9eee7;
-      --surface: rgba(255, 255, 255, .9);
-      --surface-strong: #fff;
-      --text: #17231b;
-      --muted: #607064;
-      --line: rgba(23, 35, 27, .15);
-      --accent: #63bd46;
-      --shadow: 0 24px 80px rgba(40, 88, 42, .15);
+      --src: #f5f8f3;
+      --str: #fff;
+      --txt: #17231b;
+      --mut: #607064;
+      --line: #c7d0c8;
+      --acc: #63bd46;
+      --shd: 10px 20px 60px #28582a4d;
     }
 
-    [data-theme="dark"] {
+    [data-t="dark"] {
       --bg: #111318;
-      --surface: rgba(28, 31, 40, .88);
-      --surface-strong: #202430;
-      --text: #f4f5f7;
-      --muted: #a5aab7;
-      --line: rgba(255, 255, 255, .13);
-      --accent: #62c7b2;
+      --src: #1c1f28;
+      --str: #202430;
+      --txt: #f4f5f7;
+      --mut: #a5aab7;
+      --line: #3f424b;
+      --acc: #62c7b2;
+      --shd: 10px 20px 60px #1113184d;
     }
 
-    [data-theme="melon-light"] {
+    [data-t="mlt"] {
       --bg: #cfe9e5;
-      --surface: rgba(255, 251, 245, .92);
-      --surface-strong: #fff;
-      --text: #3d2920;
-      --muted: #866b5d;
-      --line: rgba(61, 41, 32, .15);
-      --accent: #f28a3d;
-      --shadow: 0 24px 80px rgba(151, 79, 32, .16);
+      --src: #fff8ee;
+      --str: #fff;
+      --txt: #3d2920;
+      --mut: #866b5d;
+      --line: #cdbeb5;
+      --acc: #f28a3d;
+      --shd: 10px 20px 60px #974f204d;
     }
 
-    [data-theme="melon-dark"] {
+    [data-t="mdk"] {
       --bg: #203b40;
-      --surface: rgba(47, 79, 84, .94);
-      --surface-strong: #37636a;
-      --text: #fff8ef;
-      --muted: #d3e1df;
-      --line: rgba(255, 248, 239, .2);
-      --accent: #ff974b;
+      --src: #2f4e53;
+      --str: #37636a;
+      --txt: #fff8ef;
+      --mut: #d3e1df;
+      --line: #50605f;
+      --acc: #ff974b;
+      --shd: 10px 20px 60px #0716194d;
     }
 
-    [data-theme="crimson"] {
+    [data-t="crim"] {
       --bg: #17090f;
-      --surface: rgba(52, 13, 29, .84);
-      --surface-strong: #671b37;
-      --text: #fff3f6;
-      --muted: #d8a8b8;
-      --line: rgba(255, 105, 145, .32);
-      --accent: #ff4f7b;
-      --shadow: 0 0 55px rgba(255, 23, 79, .22);
+      --src: #340d1d;
+      --str: #671b37;
+      --txt: #fff3f6;
+      --mut: #d8a8b8;
+      --line: #7f334d;
+      --acc: #ff4f7b;
+      --shd: 10px 20px 60px #ff174f4d;
     }
 
-    [data-theme="nebula"] {
+    [data-t="nebu"] {
       --bg: #110d1f;
-      --surface: rgba(38, 22, 65, .84);
-      --surface-strong: #51318a;
-      --text: #f8f2ff;
-      --muted: #c4aedc;
-      --line: rgba(194, 131, 255, .3);
-      --accent: #c783ff;
-      --shadow: 0 0 55px rgba(169, 77, 255, .22);
+      --src: #261641;
+      --str: #51318a;
+      --txt: #f8f2ff;
+      --mut: #c4aedc;
+      --line: #765b99;
+      --acc: #c783ff;
+      --shd: 10px 20px 60px #a94dff4d;
     }
 
-    [data-theme="eyeburn"] {
+    [data-t="burn"] {
       --bg: #000;
-      --surface: #080808;
-      --surface-strong: #111;
-      --text: #fff;
-      --muted: #bcbcbc;
-      --line: #555;
-      --accent: #fff;
-      --shadow: 0 0 30px rgba(255, 255, 255, .1);
+      --src: #080808;
+      --str: #111;
+      --txt: #fff;
+      --mut: #bcbcbc;
+      --line: #aaaaaa;
+      --acc: #fff;
+      --shd: 10px 20px 60px #3333334d;
     }
 
-    [data-theme="aura"] {
+    [data-t="aura"] {
       --bg: #fff;
-      --surface: rgba(255, 255, 255, .94);
-      --surface-strong: #fff;
-      --text: #000;
-      --muted: #888;
+      --src: #f0f0f0;
+      --str: #fff;
+      --txt: #000;
+      --mut: #888;
       --line: #000;
-      --accent: #000;
-      --shadow: 0 0 26px rgba(0, 0, 0, .22);
+      --acc: #000;
+      --shd: 10px 20px 60px #0000004d;
     }
 
     * { box-sizing: border-box; }
@@ -111,13 +112,12 @@
     html { min-height: 100%; }
 
     body {
+      position: relative;
       min-height: 100vh;
       margin: 0;
       overflow-x: hidden;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 42rem),
-        var(--bg);
+      color: var(--txt);
+      background: var(--bg);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       transition: background .4s ease, color .4s ease;
     }
@@ -125,21 +125,20 @@
     body::before {
       position: fixed;
       inset: 0;
-      z-index: -1;
+      z-index: 1;
       pointer-events: none;
       content: "";
-      opacity: .23;
-      background-image: linear-gradient(color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px),
-        linear-gradient(90deg, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px);
-      background-size: 38px 38px;
-      mask-image: linear-gradient(to bottom, #000, transparent 78%);
+      background: radial-gradient(circle at 50% -10%, var(--acc) 0, var(--bg) 60rem);
+      opacity: .25;
     }
 
     button, a { font: inherit; }
 
     a { color: inherit; text-decoration: none; }
 
-    .shell {
+    .shll {
+      position: relative;
+      z-index: 2;
       width: min(920px, calc(100% - 2rem));
       margin: 0 auto;
       padding: clamp(4rem, 10vw, 8rem) 0 7rem;
@@ -152,8 +151,8 @@
       text-align: center;
       border: 1px solid var(--line);
       border-radius: 32px;
-      background: var(--surface);
-      box-shadow: var(--shadow);
+      background: var(--src);
+      box-shadow: var(--shd);
       backdrop-filter: blur(20px);
       animation: rise .7s cubic-bezier(.2, .8, .2, 1) both;
     }
@@ -166,12 +165,12 @@
       right: -5rem;
       content: "";
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--acc);
       opacity: .12;
       filter: blur(8px);
     }
 
-    .brand {
+    .brnd {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -182,28 +181,28 @@
       line-height: 1;
     }
 
-    .melon {
+    .mln {
       display: grid;
       width: 1.1em;
       height: 1.1em;
       place-items: center;
       font-size: .82em;
       border-radius: 30% 55% 34% 58%;
-      background: var(--accent);
-      box-shadow: 0 0 0 .12em color-mix(in srgb, var(--accent) 20%, transparent);
+      background: var(--acc);
+      box-shadow: 0 0 0 .12em var(--acc);
       transform: rotate(-10deg);
       animation: bob 4s ease-in-out infinite;
     }
 
-    .intro {
+    .intr {
       max-width: 650px;
       margin: 1.5rem auto 0;
-      color: var(--muted);
+      color: var(--mut);
       font-size: clamp(1rem, 2vw, 1.14rem);
       line-height: 1.7;
     }
 
-    .section-heading {
+    .hdg {
       display: flex;
       align-items: end;
       justify-content: space-between;
@@ -211,15 +210,15 @@
       margin: 3.5rem .25rem 1rem;
     }
 
-    .section-heading h2 {
+    .hdg h2 {
       margin: 0;
       font-size: 1.15rem;
       letter-spacing: -.02em;
     }
 
-    .section-heading p {
+    .hdg p {
       margin: 0;
-      color: var(--muted);
+      color: var(--mut);
       font-size: .82rem;
     }
 
@@ -229,7 +228,7 @@
       gap: 1rem;
     }
 
-    .app-card {
+    .card {
       display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center;
@@ -237,46 +236,46 @@
       min-height: 150px;
       padding: 1.35rem;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+      border-radius: var(--rad);
+      background: var(--src);
+      box-shadow: 0 12px 35px #0000001f;
       transition: transform .25s ease, border-color .25s ease, background .25s ease;
       animation: rise .7s cubic-bezier(.2, .8, .2, 1) both;
     }
 
-    .app-card:nth-child(2) { animation-delay: .08s; }
-    .app-card:nth-child(3) { animation-delay: .16s; }
-    .app-card:nth-child(4) { animation-delay: .24s; }
+    .card:nth-child(2) { animation-delay: .08s; }
+    .card:nth-child(3) { animation-delay: .16s; }
+    .card:nth-child(4) { animation-delay: .24s; }
 
-    .app-card:hover, .app-card:focus-within {
-      border-color: var(--accent);
-      background: var(--surface-strong);
+    .card:hover, .card:focus-within {
+      border-color: var(--acc);
+      background: var(--str);
       transform: translateY(-5px);
     }
 
-    .app-icon {
+    .icon {
       display: grid;
       width: 3.1rem;
       height: 3.1rem;
       place-items: center;
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: color-mix(in srgb, var(--accent) 15%, transparent);
+      background: var(--acc);
       font-size: 1.45rem;
     }
 
-    .app-card h3 { margin: 0 0 .4rem; font-size: 1.08rem; }
-    .app-card p { max-width: 28ch; margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+    .card h3 { margin: 0 0 .4rem; font-size: 1.08rem; }
+    .card p { max-width: 28ch; margin: 0; color: var(--mut); font-size: .9rem; line-height: 1.45; }
 
-    .arrow {
-      color: var(--accent);
+    .arrw {
+      color: var(--acc);
       font-size: 1.3rem;
       transition: transform .25s ease;
     }
 
-    .app-card:hover .arrow { transform: translateX(4px); }
+    .card:hover .arrw { transform: translateX(4px); }
 
-    .corner-tools {
+    .tools {
       position: fixed;
       right: 1.25rem;
       bottom: 1.25rem;
@@ -288,36 +287,36 @@
       pointer-events: none;
     }
 
-    .socials { display: flex; flex-direction: column; gap: .55rem; }
+    .socs { display: flex; flex-direction: column; gap: .55rem; }
 
-    .socials, .settings-wrap { pointer-events: auto; }
+    .socs, .wrap { pointer-events: auto; }
 
-    .icon-button, .social {
+    .btn, .soc {
       display: grid;
       width: 3.18rem;
       height: 3.18rem;
       place-items: center;
-      color: var(--text);
+      color: var(--txt);
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: var(--surface);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+      background: var(--src);
+      box-shadow: 0 10px 28px #0000002e;
       cursor: pointer;
       transition: transform .2s ease, color .2s ease, border-color .2s ease;
       backdrop-filter: blur(12px);
     }
 
-    .icon-button:hover, .social:hover, .icon-button:focus-visible, .social:focus-visible {
-      color: var(--accent);
-      border-color: var(--accent);
+    .btn:hover, .soc:hover, .btn:focus-visible, .soc:focus-visible {
+      color: var(--acc);
+      border-color: var(--acc);
       outline: none;
       transform: translateY(-3px);
     }
 
-    .icon-button { font-size: 1.18rem; }
-    .social svg { width: 1.3rem; height: 1.3rem; fill: currentColor; }
+    .btn { font-size: 1.18rem; }
+    .soc svg { width: 1.3rem; height: 1.3rem; fill: currentColor; }
 
-    .settings-panel {
+    .pnl {
       position: absolute;
       right: 0;
       bottom: 3.5rem;
@@ -325,8 +324,8 @@
       padding: 1.2rem;
       border: 1px solid var(--line);
       border-radius: 20px;
-      background: var(--surface-strong);
-      box-shadow: var(--shadow);
+      background: var(--str);
+      box-shadow: var(--shd);
       opacity: 0;
       pointer-events: none;
       transform: translateY(8px) scale(.97);
@@ -334,27 +333,27 @@
       transition: opacity .2s ease, transform .2s ease;
     }
 
-    .settings-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-    .settings-panel h2 { margin: 0 0 1rem; font-size: 1.1rem; }
-    .setting { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-top: 1px solid var(--line); }
-    .setting label, .setting span { font-size: .88rem; }
+    .pnl.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+    .pnl h2 { margin: 0 0 1rem; font-size: 1.1rem; }
+    .set { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-top: 1px solid var(--line); }
+    .set label, .set span { font-size: .88rem; }
 
     select {
-      color: var(--text);
+      color: var(--txt);
       border: 1px solid var(--line);
       border-radius: 9px;
       padding: .45rem .55rem;
-      background: var(--surface);
+      background: var(--src);
     }
 
-    .switch { position: relative; width: 2.8rem; height: 1.55rem; }
-    .switch input { width: 0; height: 0; opacity: 0; }
-    .slider { position: absolute; inset: 0; border-radius: 2rem; background: var(--muted); cursor: pointer; transition: .25s; }
-    .slider::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s; }
-    .switch input:checked + .slider { background: var(--accent); }
-    .switch input:checked + .slider::before { transform: translateX(1.25rem); }
+    .swch { position: relative; width: 2.8rem; height: 1.55rem; }
+    .swch input { width: 0; height: 0; opacity: 0; }
+    .sld { position: absolute; inset: 0; border-radius: 2rem; background: var(--mut); cursor: pointer; transition: .25s; }
+    .sld::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s; }
+    .swch input:checked + .sld { background: var(--acc); }
+    .swch input:checked + .sld::before { transform: translateX(1.25rem); }
 
-    .particle {
+    .prt {
       position: fixed;
       top: -2rem;
       z-index: 10;
@@ -364,41 +363,41 @@
       animation: fall linear forwards;
     }
 
-    [data-theme="aura"] .hero, [data-theme="aura"] .app-card, [data-theme="aura"] .icon-button, [data-theme="aura"] .social, [data-theme="aura"] .settings-panel {
+    [data-t="aura"] .hero, [data-t="aura"] .card, [data-t="aura"] .btn, [data-t="aura"] .soc, [data-t="aura"] .pnl {
       text-shadow: 0 0 10px #000;
       border-color: #000;
-      box-shadow: 0 0 8px rgba(0, 0, 0, .78), 0 0 22px rgba(0, 0, 0, .28);
+      box-shadow: 0 0 8px #000000c7, 0 0 22px #00000047;
     }
 
-    [data-theme="aura"] .melon {
-      animation: aura-spin 1.7s linear infinite;
-      box-shadow: 0 0 0 .12em #000, 0 0 10px rgba(0, 0, 0, .8);
+    [data-t="aura"] .mln {
+      animation: spin 1.7s linear infinite;
+      box-shadow: 0 0 0 .12em #000, 0 0 10px #000000cc;
     }
 
-    .no-animations *, .no-animations *::before, .no-animations *::after {
+    .noa *, .noa *::before, .noa *::after {
       animation: none !important;
       scroll-behavior: auto !important;
       transition: none !important;
     }
 
-    .no-animations .app-card:hover, .no-animations .app-card:focus-within,
-    .no-animations .app-card:hover .arrow,
-    .no-animations .icon-button:hover, .no-animations .social:hover,
-    .no-animations .icon-button:focus-visible, .no-animations .social:focus-visible {
+    .noa .card:hover, .noa .card:focus-within,
+    .noa .card:hover .arrw,
+    .noa .btn:hover, .noa .soc:hover,
+    .noa .btn:focus-visible, .noa .soc:focus-visible {
       transform: none;
     }
 
     @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes bob { 0%, 100% { transform: rotate(-10deg) translateY(0); } 50% { transform: rotate(-4deg) translateY(-5px); } }
-    @keyframes aura-spin { from { transform: rotate(-10deg); } to { transform: rotate(350deg); } }
+    @keyframes spin { from { transform: rotate(-10deg); } to { transform: rotate(350deg); } }
     @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: 0; } }
 
     @media (max-width: 680px) {
-      .shell { width: min(100% - 1rem, 560px); padding-top: 2rem; }
+      .shll { width: min(100% - 1rem, 560px); padding-top: 2rem; }
       .apps { grid-template-columns: 1fr; }
       .hero { padding: 2rem 1.2rem; border-radius: 24px; }
-      .section-heading { align-items: start; flex-direction: column; gap: .35rem; }
-      .corner-tools { right: .7rem; bottom: .7rem; left: .7rem; }
+      .hdg { align-items: start; flex-direction: column; gap: .35rem; }
+      .tools { right: .7rem; bottom: .7rem; left: .7rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -406,215 +405,258 @@
     }
   </style>
 </head>
-<body data-theme="melon-dark">
-  <main class="shell">
-    <section class="hero" aria-labelledby="site-title">
-      <h1 class="brand" id="site-title"><span class="melon" aria-hidden="true">🍈</span><span>The Melon Project</span></h1>
-      <p class="intro" data-i18n="intro">.</p>
+<body data-t="mdk">
+  <main class="shll">
+    <section class="hero" aria-labelledby="title">
+      <h1 class="brnd" id="title"><span class="mln" aria-hidden="true">🍈</span><span>The Melon Project</span></h1>
+      <p class="intr" data-i="intro">.</p>
     </section>
 
-    <div class="section-heading">
-      <h2 data-i18n="appsTitle">.</h2>
-      <p class="appsHint" data-i18n="appsHint">.</p>
+    <div class="hdg">
+      <h2 data-i="h2">.</h2>
+      <p class="hint" data-i="hint">.</p>
     </div>
 
     <section class="apps" aria-label="Melon applications">
-      <a class="app-card" href="web/Melange.html">
-        <span class="app-icon" aria-hidden="true">🖼️</span>
-        <span><h3>Melange</h3><p data-i18n="melange">.</p></span>
-        <span class="arrow" aria-hidden="true">↗</span>
+      <a class="card" href="web/Melange.html">
+        <span class="icon" aria-hidden="true">🖼️</span>
+        <span><h3>Melange</h3><p data-i="mel">.</p></span>
+        <span class="arrw" aria-hidden="true">↗</span>
       </a>
-      <a class="app-card" href="web/Memory.html">
-        <span class="app-icon" aria-hidden="true">💡</span>
-        <span><h3>Memory</h3><p data-i18n="memory">.</p></span>
-        <span class="arrow" aria-hidden="true">↗</span>
+      <a class="card" href="web/Memory.html">
+        <span class="icon" aria-hidden="true">💡</span>
+        <span><h3>Memory</h3><p data-i="mem">.</p></span>
+        <span class="arrw" aria-hidden="true">↗</span>
       </a>
-      <a class="app-card" href="web/Themeditor.html">
-        <span class="app-icon" aria-hidden="true">🎨</span>
-        <span><h3>Themeditor</h3><p data-i18n="themeditor">.</p></span>
-        <span class="arrow" aria-hidden="true">↗</span>
+      <a class="card" href="web/Themeditor.html">
+        <span class="icon" aria-hidden="true">🎨</span>
+        <span><h3>Themeditor</h3><p data-i="thm">.</p></span>
+        <span class="arrw" aria-hidden="true">↗</span>
       </a>
-      <a class="app-card" href="web/">
-        <span class="app-icon" aria-hidden="true">🍈</span>
-        <span><h3 data-i18n="moreTitle">More soon</h3><p data-i18n="more">.</p></span>
-        <span class="arrow" aria-hidden="true">→</span>
+      <a class="card" href="web/">
+        <span class="icon" aria-hidden="true">🍈</span>
+        <span><h3 data-i="moreT">More soon</h3><p data-i="more">.</p></span>
+        <span class="arrw" aria-hidden="true">→</span>
       </a>
     </section>
   </main>
 
-  <div class="corner-tools">
-    <nav class="socials" aria-label="Social links">
-      <a class="social" href="https://www.youtube.com/@cottongras5/" aria-label="YouTube" title="YouTube">
+  <div class="tools">
+    <nav class="socs" aria-label="Social links">
+      <a class="soc" href="https://www.youtube.com/@cottongras5/" aria-label="YouTube" title="YouTube">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.7V8.3l6.4 3.7-6.4 3.7Z"/></svg>
       </a>
-      <a class="social" href="https://www.instagram.com/cottongras5/" aria-label="Instagram" title="Instagram">
+      <a class="soc" href="https://www.instagram.com/cottongras5/" aria-label="Instagram" title="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5ZM17.5 6a1 1 0 1 1-1 1 1 1 0 0 1 1-1Z"/></svg>
       </a>
-      <a class="social" href="https://github.com/Cottongras5" aria-label="GitHub" title="GitHub">
+      <a class="soc" href="https://github.com/Cottongras5" aria-label="GitHub" title="GitHub">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.4-5.5-6a4.7 4.7 0 0 1 1.2-3.3c-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.3a11.3 11.3 0 0 1 6 0c2.3-1.6 3.3-1.3 3.3-1.3.6 1.6.2 2.9.1 3.2a4.7 4.7 0 0 1 1.2 3.3c0 4.6-2.8 5.7-5.5 6 .4.3.8 1 .8 2v3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
       </a>
-      <a class="social" href="https://open.spotify.com/artist/1bqA5mrXCGveTqfghw7Sxp" aria-label="Spotify" title="Spotify">
+      <a class="soc" href="https://open.spotify.com/artist/1bqA5mrXCGveTqfghw7Sxp" aria-label="Spotify" title="Spotify">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5a10.5 10.5 0 1 0 0 21 10.5 10.5 0 0 0 0-21Zm4.8 15.2a.8.8 0 0 1-1.1.2c-3-1.8-6.7-2.2-11-1.2a.8.8 0 1 1-.4-1.5c4.8-1.4 8.9-1 12.2 1a.8.8 0 0 1 .3 1.5Zm1.4-3.1a1 1 0 0 1-1.3.3c-3.5-2.1-8.7-2.7-12.7-1.5a1 1 0 1 1-.6-1.8c4.6-1.4 10.3-.7 14.2 1.7a1 1 0 0 1 .4 1.3Zm.1-3.3C14.1 8 7.3 7.7 3.5 8.9a1.2 1.2 0 1 1-.7-2.3c4.4-1.3 11.8-1 16.2 1.6a1.2 1.2 0 0 1-.7 2.1Z"/></svg>
       </a>
-      <a class="social" href="https://www.tiktok.com/@cottongras5" aria-label="TikTok" title="TikTok">
+      <a class="soc" href="https://www.tiktok.com/@cottongras5" aria-label="TikTok" title="TikTok">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3c.2 1.7 1.2 3.2 2.8 4.1 1 .6 2.1.9 3.2.9v3.2a9.6 9.6 0 0 1-3.2-.6v5.5a6.1 6.1 0 1 1-5.3-6v3.3a2.8 2.8 0 1 0 2 2.7V3h.5Z"/></svg>
       </a>
     </nav>
 
-    <div class="settings-wrap">
-      <section class="settings-panel" id="settings-panel" aria-label="Settings">
-        <h2 data-i18n="settings">Settings</h2>
-        <div class="setting">
-          <label for="theme" data-i18n="theme">Theme</label>
-          <select id="theme">
+    <div class="wrap">
+      <section class="pnl" id="pnl" aria-label="Settings">
+        <h2 data-i="set">Settings</h2>
+        <div class="set">
+          <label for="thm" data-i="thmL">Theme</label>
+          <select id="thm">
             <option value="light">Light</option>
             <option value="dark">Dark</option>
-            <option value="melon-light">Melon Light</option>
-            <option value="melon-dark">Melon Dark</option>
-            <option value="crimson">Crimson</option>
-            <option value="nebula">Nebula</option>
-            <option value="eyeburn">Eyeburn</option>
+            <option value="mlt">Melon Light</option>
+            <option value="mdk">Melon Dark</option>
+            <option value="crim">Crimson</option>
+            <option value="nebu">Nebula</option>
+            <option value="burn">Eyeburn</option>
           </select>
         </div>
-        <div class="setting">
-          <label for="language" data-i18n="language">Language</label>
-          <select id="language">
+        <div class="set">
+          <label for="lang" data-i="langL">Language</label>
+          <select id="lang">
             <option value="en">English</option>
             <option value="es">Español</option>
-            <option value="pt-BR">Português</option>
+            <option value="pt-BR">Português (Brasil)</option>
           </select>
         </div>
-        <div class="setting">
-          <span data-i18n="aura">Aura Guardians</span>
-          <label class="switch">
+        <div class="set">
+          <span data-i="auraL">Aura Guardians</span>
+          <label class="swch">
             <input id="aura" type="checkbox">
-            <span class="slider"></span>
+            <span class="sld"></span>
           </label>
         </div>
-        <div class="setting">
-          <span data-i18n="disableAnimations">Disable Animations</span>
-          <label class="switch">
-            <input id="disable-animations" type="checkbox">
-            <span class="slider"></span>
+        <div class="set">
+          <span data-i="noaL">Disable Animations</span>
+          <label class="swch">
+            <input id="noa" type="checkbox">
+            <span class="sld"></span>
           </label>
         </div>
       </section>
-      <button class="icon-button" id="settings-button" type="button" aria-label="Open settings" aria-expanded="false">⚙</button>
+      <button class="btn" id="btn" type="button" aria-label="Open settings" aria-expanded="false">⚙</button>
     </div>
   </div>
 
   <script>
-    const body = document.body;
-    const settingsButton = document.querySelector("#settings-button");
-    const settingsPanel = document.querySelector("#settings-panel");
-    const theme = document.querySelector("#theme");
-    const language = document.querySelector("#language");
+    const b = document.body;
+    const btn = document.querySelector("#btn");
+    const pnl = document.querySelector("#pnl");
+    const thm = document.querySelector("#thm");
+    const lang = document.querySelector("#lang");
     const aura = document.querySelector("#aura");
-    const disableAnimations = document.querySelector("#disable-animations");
+    const noa = document.querySelector("#noa");
+    let cst = JSON.parse(localStorage.getItem("themeditor-themes") || "{}");
 
-    const translations = {
+    const tr = {
       en: {
         intro: "Lightweight and efficient tools made with care (and actually obedient workers), clean interfaces, and a healthy respect for your computer's hardware. No Node-shaped bloat required; just useful web apps that actually let your machine breathe. Your fans will thank you.",
-        appsTitle: "Pick a melon, any melon",
-        appsHint: "All of it is Free and Open Source!",
-        melange: "A focused workspace for mixing ideas, notes, tasks and little sparks of limitless creativity, all stored locally.",
-        memory: "A calm place to keep track of the things worth remembering, without feeding a mysterious cloud. Ideal for people with short-term memory issues",
-        themeditor: "Tune colors, contrast, and atmosphere to create your own flavor of Melon. This will get you code you can use in your favorite Melon apps",
-        moreTitle: "More soon",
+        h2: "Pick a melon, any melon",
+        hint: "All of it is Free and Open Source!",
+        mel: "A focused workspace for mixing ideas, notes, tasks and little sparks of limitless creativity, all stored locally.",
+        mem: "A calm place to keep track of the things worth remembering, without feeding a mysterious cloud. Ideal for people with short-term memory issues",
+        thm: "Tune colors, contrast, and atmosphere to create your own flavor of Melon. This will get you code you can use in your favorite Melon apps",
+        moreT: "More soon",
         more: "The basket is still growing. If Cotton wants to get up, of course...",
-        settings: "Settings", theme: "Theme", language: "Language", aura: "Aura Guardians", disableAnimations: "Disable Animations"
+        set: "Settings", thmL: "Theme", langL: "Language", auraL: "Aura Guardians", noaL: "Disable Animations"
       },
       es: {
         intro: "Herramientas ligeras y eficientes hechas con cuidado (y asistentes obedientes), interfaces limpias y respeto por el hardware de tu computadora. Sin bloatware en forma de Node: solo apps útiles para que la PC del tianguis sobreviva. Tus ventiladores te lo agradecerán",
-        appsTitle: "Acá tenemos de las vainas buenas:",
-        appsHint: "Todo esto es gratis!",
-        melange: "Un espacio enfocado para mezclar ideas, notas, listas y pequeñas chispas de creatividad sin límites.",
-        memory: "Un lugar tranquilo para llevar rastro de tus recuerdos antes que se te olviden. Ideal para personas con problemas de memoria a corto plazo.",
-        themeditor: "Ajusta colores, contraste y ambiente para crear tu propio estilo de Melon. Esto te dará un código que puedes utilizar en tus apps de Melon favoritas.",
-        moreTitle: "Más apps",
+        h2: "Acá tenemos de las vainas buenas:",
+        hint: "Todo esto es gratis!",
+        mel: "Un espacio enfocado para mezclar ideas, notas, listas y pequeñas chispas de creatividad sin límites.",
+        mem: "Un lugar tranquilo para llevar rastro de tus recuerdos antes que se te olviden. Ideal para personas con problemas de memoria a corto plazo.",
+        thm: "Ajusta colores, contraste y ambiente para crear tu propio estilo de Melon. Esto te dará un código que puedes utilizar en tus apps de Melon favoritas.",
+        moreT: "Más apps",
         more: "La lista sigue creciendo. Claro, si es que Cotton quiere trabajar...",
-        settings: "Ajustes", theme: "Tema", language: "Idioma", aura: "Guardianes del Aura", disableAnimations: "Desactivar animaciones"
+        set: "Ajustes", thmL: "Tema", langL: "Idioma", auraL: "Guardianes del Aura", noaL: "Desactivar animaciones"
       },
       "pt-BR": {
         intro: "Ferramentas leves e eficientes, feitas com cuidado (e assistentes realmente obedientes), interfaces limpas e respeito pelo hardware do seu computador. Nada de bloatware com cara de Node: só apps úteis para sua máquina. Sua ventoinha agradece.",
-        appsTitle: "Escolha um Melon, qualquer Melon",
-        appsHint: "Tudo isso é grátis!",
-        melange: "Um espaço focado para misturar ideias, notas, tarefas e faíscas de criatividade sem limites, tudo salvo localmente.",
-        memory: "Um lugar tranquilo para guardar o que merece ser lembrado, sem alimentar uma nuvem misteriosa. Ideal para quem esquece das coisas rapidinho.",
-        themeditor: "Ajuste cores, contraste e clima para criar seu próprio estilo de Melon. No fim, você leva um código para usar nos seus apps Melon favoritos.",
-        moreTitle: "Mais em breve",
+        h2: "Escolha um Melon, qualquer Melon",
+        hint: "Tudo isso é grátis!",
+        mel: "Um espaço focado para misturar ideias, notas, tarefas e faíscas de criatividade sem limites, tudo salvo localmente.",
+        mem: "Um lugar tranquilo para guardar o que merece ser lembrado, sem alimentar uma nuvem misteriosa. Ideal para quem esquece das coisas rapidinho.",
+        thm: "Ajuste cores, contraste e clima para criar seu próprio estilo de Melon. No fim, você leva um código para usar nos seus apps Melon favoritos.",
+        moreT: "Mais em breve",
         more: "A cesta continua crescendo. Se o Cotton resolver levantar, é claro...",
-        settings: "Configurações", theme: "Tema", language: "Idioma", aura: "Guardiões da Aura", disableAnimations: "Desativar animações"
+        set: "Configurações", thmL: "Tema", langL: "Idioma", auraL: "Guardiões da Aura", noaL: "Desactivar animações"
       }
     };
 
-    function applyLanguage(value) {
-      document.querySelectorAll("[data-i18n]").forEach((element) => {
-        element.textContent = translations[value][element.dataset.i18n];
+    function opts() {
+      thm.querySelectorAll('option[value^="own:"]').forEach((el) => el.remove());
+      Object.entries(cst).forEach(([k, item]) => {
+        const opt = document.createElement("option");
+        opt.value = `own:${k}`;
+        opt.textContent = item.name;
+        thm.appendChild(opt);
       });
-      document.documentElement.lang = value;
-      localStorage.setItem("melon-language", value);
     }
 
-    function spawnParticle() {
-      if (!aura.checked || disableAnimations.checked) return;
-      const particle = document.createElement("span");
-      particle.className = "particle";
-      particle.textContent = ["✦", "✧", "·", "🍈", "!", "◌"][Math.floor(Math.random() * 6)];
-      particle.style.left = `${Math.random() * 100}vw`;
-      particle.style.animationDuration = `${.55 + Math.random() * .75}s`;
-      particle.style.fontSize = `${.7 + Math.random() * 1.2}rem`;
-      document.body.appendChild(particle);
-      particle.addEventListener("animationend", () => particle.remove());
+    function setL(v) {
+      document.querySelectorAll("[data-i]").forEach((el) => {
+        el.textContent = tr[v][el.dataset.i];
+      });
+      document.documentElement.lang = v;
+      localStorage.setItem("melon-language", v);
     }
 
-    function applyTheme(value) {
-      body.dataset.theme = value;
-      if (value !== "aura") {
-        theme.value = value;
-        localStorage.setItem("melon-theme", value);
+    function drop() {
+      if (!aura.checked || noa.checked) return;
+      const p = document.createElement("span");
+      p.className = "prt";
+      p.textContent = ["✦", "✧", "·", "🍈", "!", "◌"][Math.floor(Math.random() * 6)];
+      p.style.left = `${Math.random() * 100}vw`;
+      p.style.animationDuration = `${.55 + Math.random() * .75}s`;
+      p.style.fontSize = `${.7 + Math.random() * 1.2}rem`;
+      b.appendChild(p);
+      p.addEventListener("animationend", () => p.remove());
+    }
+
+    function setT(v) {
+      const map = { bg: "bg", src: "surface", str: "surface-strong", txt: "text", mut: "muted", line: "line", acc: "accent", shd: "shadow" };
+      const own = v.startsWith("own:") ? cst[v.slice(4)] : null;
+      b.dataset.t = own ? "custom" : v;
+      ["bg", "src", "str", "txt", "mut", "line", "acc"].forEach((k) => {
+        b.style.removeProperty(`--${k}`);
+        const val = own?.values[k] || own?.values[map[k]];
+        if (val) b.style.setProperty(`--${k}`, val);
+      });
+      b.style.removeProperty("--shd");
+      if (own) {
+        const s = own.values.shd || own.values.shadow;
+        b.style.setProperty("--shd", s
+          ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, "$1px $2px $3px #$4")
+          : "10px 20px 60px #0000004d");
+        thm.value = v;
+        localStorage.setItem("melon-theme", v);
+      } else if (v !== "aura") {
+        thm.value = v;
+        localStorage.setItem("melon-theme", v);
       }
     }
 
-    settingsButton.addEventListener("click", () => {
-      const open = settingsPanel.classList.toggle("open");
-      settingsButton.setAttribute("aria-expanded", String(open));
+    btn.addEventListener("click", () => {
+      const open = pnl.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
     });
 
-    theme.addEventListener("change", () => applyTheme(theme.value));
-    language.addEventListener("change", () => applyLanguage(language.value));
+    thm.addEventListener("change", () => setT(thm.value));
+    lang.addEventListener("change", () => setL(lang.value));
     aura.addEventListener("change", () => {
       if (aura.checked) {
-        localStorage.setItem("melon-theme-before-aura", body.dataset.theme);
-        applyTheme("aura");
-        for (let i = 0; i < 24; i += 1) setTimeout(spawnParticle, i * 55);
+        localStorage.setItem("melon-theme-before-aura", thm.value);
+        setT("aura");
+        for (let i = 0; i < 24; i += 1) setTimeout(drop, i * 55);
       } else {
-        applyTheme(localStorage.getItem("melon-theme-before-aura") || theme.value);
+        setT(localStorage.getItem("melon-theme-before-aura") || thm.value);
       }
       localStorage.setItem("melon-aura", String(aura.checked));
     });
 
-    disableAnimations.addEventListener("change", () => {
-      body.classList.toggle("no-animations", disableAnimations.checked);
-      localStorage.setItem("melon-disable-animations", String(disableAnimations.checked));
+    noa.addEventListener("change", () => {
+      b.classList.toggle("noa", noa.checked);
+      localStorage.setItem("melon-disable-animations", String(noa.checked));
     });
 
-    const storedTheme = localStorage.getItem("melon-theme");
-    const availableThemes = ["light", "dark", "melon-light", "melon-dark", "crimson", "nebula", "eyeburn", "plum", "sand"];
-    const savedTheme = storedTheme === "midnight" || !availableThemes.includes(storedTheme)
-      ? "dark"
-      : storedTheme;
-    const savedLanguage = localStorage.getItem("melon-language") || "en";
-    const savedAura = localStorage.getItem("melon-aura") === "true";
-    const savedDisableAnimations = localStorage.getItem("melon-disable-animations") === "true";
-    theme.value = savedTheme;
-    applyTheme(savedAura ? "aura" : savedTheme);
-    applyLanguage(savedLanguage);
-    language.value = savedLanguage;
-    aura.checked = savedAura;
-    disableAnimations.checked = savedDisableAnimations;
-    body.classList.toggle("no-animations", savedDisableAnimations);
-    setInterval(spawnParticle, 145);
+    window.addEventListener("storage", (e) => {
+      if (e.key === "themeditor-themes") {
+        cst = JSON.parse(e.newValue || "{}");
+        const cur = thm.value;
+        opts();
+        if (cur.startsWith("own:") && !cst[cur.slice(4)]) setT("mdk");
+        else if (!aura.checked) setT(cur);
+      }
+    });
+
+    opts();
+
+    const mapT = { "melon-light": "mlt", "melon-dark": "mdk", "crimson": "crim", "nebula": "nebu", "eyeburn": "burn" };
+    const rawT = localStorage.getItem("melon-theme");
+    const sThm = mapT[rawT] || rawT;
+    const aThm = ["light", "dark", "mlt", "mdk", "crim", "nebu", "burn"];
+    const vThm = !sThm
+      ? "mdk"
+      : (!aThm.includes(sThm) && !cst[sThm.slice(4)])
+        ? "dark"
+        : sThm;
+    const vLang = localStorage.getItem("melon-language") || "en";
+    const vAura = localStorage.getItem("melon-aura") === "true";
+    const vNoa = localStorage.getItem("melon-disable-animations") === "true";
+
+    thm.value = vThm;
+    setT(vAura ? "aura" : vThm);
+    setL(vLang);
+    lang.value = vLang;
+    aura.checked = vAura;
+    noa.checked = vNoa;
+    b.classList.toggle("noa", vNoa);
+    setInterval(drop, 145);
   </script>
 </body>
 </html>
