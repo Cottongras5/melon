@@ -1,158 +1,841 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Melange</title>
+<link rel="icon" href="melange.png">
 <style>
-:root{--bg:#111318;--src:#1c1f28;--str:#202430;--txt:#f4f5f7;--mut:#a5aab7;--acc:#62c7b2;--line:#3f424b;--sd:#1c1f28;--shd:10px 20px 60px #1113184d}
-*{box-sizing:border-box;margin:0;padding:0;user-select:none}
-html,body{width:100%;height:100%}
-body{position:relative;background:var(--bg);color:var(--txt);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;overflow:hidden;transition:background .3s,color .3s}
-body::before{position:absolute;inset:0;z-index:0;pointer-events:none;content:"";min-height:100%;background:radial-gradient(circle at 50% -10%,var(--acc) 0,var(--bg) 60rem);opacity:.25}
-#sd{position:fixed;top:50%;left:16px;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:8px;background:var(--sd);padding:10px;border-radius:20px;border:1px solid var(--line);box-shadow:var(--shd)}
-button{background:transparent;border:1px solid transparent;color:var(--acc);width:48px;height:48px;border-radius:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,border-color .2s,background .2s,color .2s}
-button:hover{background:var(--acc);border-color:var(--acc);color:var(--bg);transform:translateY(-2px)}
-button svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.sep{height:1px;background:var(--line);margin:2px 4px}
-#fl{display:none}
-#svg{position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
-#svg path{pointer-events:visibleStroke;cursor:pointer;transition:stroke-width .15s,stroke .15s}
-#svg path:hover{stroke-width:8;stroke:#ff4444}
-#bd{width:100vw;height:100vh;position:relative;overflow:auto;z-index:1}
-.cd{position:absolute;width:290px;background:var(--src);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:var(--shd);z-index:2;cursor:grab;transition:box-shadow .2s,border-color .2s}
-.cd{min-height:80px}
-.cd:hover{border-color:var(--acc);box-shadow:var(--shd)}
-.cd:active{cursor:grabbing}
-.cd.col{width:340px;min-height:200px}
-.cd.tbl{width:430px}
-.cd.doc,.cd.clr{width:150px}
-.cd.lnk{border-color:var(--acc);box-shadow:0 0 18px var(--acc)}
-.bts{position:absolute;top:6px;right:6px;display:flex;gap:8px;z-index:10}
-mark{background:var(--line);color:var(--txt);width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
-mark svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;pointer-events:none}
-mark:hover{background:var(--acc);color:#fff}
-.cd content{display:block;outline:none;min-height:40px;color:inherit;user-select:text;margin-top:32px;font-size:16px;line-height:1.5;cursor:text}
-.cd content code{background:var(--acc);padding:2px 4px;border-radius:4px;font-family:monospace;font-size:14px}
-.cd content h1,.cd content h2,.cd content h3{margin:6px 0;font-weight:700}
-.cd content h1{font-size:20px}.cd content h2{font-size:18px}.cd content h3{font-size:16px}
-.cd img{max-width:100%;border-radius:8px;display:block;pointer-events:none}
-.dpv{display:flex;flex-direction:column;align-items:flex-start;padding:12px 6px 6px;cursor:pointer}
-.dic{width:64px;height:80px;background:var(--bg);border:1px solid var(--line);border-radius:8px 16px 8px 8px;display:flex;flex-direction:column;padding:10px;justify-content:space-between;margin-bottom:12px;position:relative}
-.dic::after{content:'';position:absolute;top:0;right:0;width:16px;height:16px;background:var(--line);border-bottom-left-radius:8px}
-.dln{display:flex;flex-direction:column;gap:4px}
-.dln span{height:4px;background:var(--acc);border-radius:2px}
-.dln span:nth-child(1){width:80%}.dln span:nth-child(2){width:50%}.dln span:nth-child(3){width:90%}
-.dtl{font-size:15px;font-weight:700;margin-bottom:4px;outline:none;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dmt{font-size:12px;opacity:.6}
-#dmd{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#00000085;z-index:3000;backdrop-filter:blur(8px);justify-content:center;align-items:center}
-.ddg{background:var(--src);border:1px solid var(--line);width:min(650px,calc(100vw - 2rem));height:min(80vh,720px);border-radius:22px;display:flex;flex-direction:column;box-shadow:var(--shd);overflow:hidden}
-.dhd{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
-.dhd input{font-size:20px;font-weight:700;background:transparent;border:none;color:var(--txt);outline:none;width:60%}
-.dac{display:flex;gap:8px;align-items:center}
-.dby{flex:1;padding:20px;font-family:monospace;font-size:15px;line-height:1.6;background:var(--bg);color:var(--txt);border:none;outline:none;resize:none;width:100%}
-.tdo{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:16px}
-.tdo input[type="checkbox"]{accent-color:var(--acc);cursor:pointer;width:20px;height:20px}
-.tdo span{outline:none;color:inherit;flex:1;user-select:text;cursor:text}
-.tdo span.dn{text-decoration:line-through;opacity:.4}
-.tdo del{cursor:pointer;font-size:16px;color:#888;font-weight:700;padding:4px 6px;border-radius:8px}
-.tdo del:hover{color:#ff4444;background:#ff44441a}
-.swc{width:100%;height:60px;border-radius:12px;margin-bottom:8px;transition:background .2s}
-.hex{width:100%;background:var(--bg);border:none;color:inherit;padding:6px 8px;border-radius:10px;font-family:monospace;font-size:14px;outline:none;text-align:center}
-.hd{margin-top:20px;margin-bottom:12px}
-.ttl{outline:none;font-size:20px;font-weight:700;user-select:text;cursor:text}
-.lst{display:flex;flex-direction:column;gap:10px;margin-top:10px;min-height:80px;padding:8px;border-radius:12px;background:var(--bg)}
-.lst .cd{position:relative!important;left:auto!important;top:auto!important;width:100%!important;box-shadow:none}
-.thd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:30px;margin-bottom:10px}
-.tttl{font-weight:700;font-size:16px;user-select:text;cursor:text}
-.tgrd{display:grid;gap:2px;padding:2px;border:1px solid var(--line);border-radius:10px;background:var(--line);overflow:auto}
-.tcl{position:relative;min-width:72px;min-height:42px;padding:9px 27px 8px 9px;color:var(--txt);background:var(--src);outline:none;line-height:1.35;cursor:default}
-.tctx{display:block;min-height:24px;outline:none;user-select:text;cursor:text}
-.tcl:first-child{border-radius:7px 0 0 0}.tcl:nth-child(3){border-radius:0 7px 0 0}
-.tbtn{position:absolute;top:4px;right:4px;width:19px;height:19px;padding:0;border:0;border-radius:6px;background:var(--line);font-size:11px;opacity:.55}
-.tbtn:hover{opacity:1}
-.rsz{position:absolute;right:1px;bottom:1px;width:12px;height:12px;cursor:nwse-resize;opacity:.35}
-.rsz::after{content:"";position:absolute;right:1px;bottom:1px;width:7px;height:7px;border-right:2px solid var(--txt);border-bottom:2px solid var(--txt);border-radius:0 0 3px 0}
-.tpop{position:fixed;display:flex;flex-direction:column;gap:9px;width:170px;padding:11px;background:var(--src);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shd);z-index:2200}
-.tpop label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--txt);font-size:12px}
-.tpop input{width:64px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--txt);outline:none}
-.tpop button{width:100%;height:30px;background:var(--acc);color:var(--bg);font-size:12px;font-weight:700}
-#mdl{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--src);border:1px solid var(--line);padding:20px;border-radius:20px;box-shadow:var(--shd);z-index:2000;width:min(330px,calc(100vw - 2rem))}
-#mdl h3{height:25px;margin-bottom:14px;font-size:20px;color:var(--txt)}
-#mdl select{width:100%;height:60px;padding:15px;border-radius:16px;border:1px solid var(--line);background:var(--bg);color:var(--txt);outline:none;font-size:18px;cursor:pointer}
-#mdl button{height:48px;margin-top:16px;width:100%;background:var(--acc);color:var(--bg);border-radius:14px;font-size:16px;font-weight:700}
-.ppi{animation:pi .12s ease-out forwards}
-.ppo{animation:po .12s ease-in forwards}
-@keyframes pi{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-@keyframes po{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.92)}}
-.mn{position:absolute;display:flex;flex-wrap:wrap;gap:6px;width:150px;padding:8px;background:var(--src);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shd);z-index:1000}
-.dt{width:22px;height:22px;border-radius:50%;border:1px solid #00000026;cursor:pointer;transition:transform .1s}
-.dt:hover{transform:scale(1.2)}
-.acc{color:var(--acc)}
-.noa *, .noa *::before, .noa *::after{animation:none!important;transition:none!important}
-@media(max-width:700px){#sd{top:auto;right:12px;bottom:12px;left:12px;transform:none;flex-direction:row;flex-wrap:wrap;justify-content:center}.sep{width:1px;height:36px;margin:4px 2px}.cd{max-width:calc(100vw - 32px)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+:root {
+  --bg: #203b40;
+  --src: #2f4e53;
+  --str: #37636a;
+  --txt: #fff8ef;
+  --mut: #d3e1df;
+  --line: #50605f;
+  --acc: #ff974b;
+  --shd: 10px 20px 60px #0716194d;
+  --rad: 24px;
+}
+
+[data-t="light"] {
+  --bg: #e9eee7;
+  --src: #f5f8f3;
+  --str: #fff;
+  --txt: #17231b;
+  --mut: #607064;
+  --line: #c7d0c8;
+  --acc: #63bd46;
+  --shd: 10px 20px 60px #28582a4d;
+}
+
+[data-t="dark"] {
+  --bg: #111318;
+  --src: #1c1f28;
+  --str: #202430;
+  --txt: #f4f5f7;
+  --mut: #a5aab7;
+  --line: #3f424b;
+  --acc: #62c7b2;
+  --shd: 10px 20px 60px #1113184d;
+}
+
+[data-t="mlt"] {
+  --bg: #cfe9e5;
+  --src: #fff8ee;
+  --str: #fff;
+  --txt: #3d2920;
+  --mut: #866b5d;
+  --line: #cdbeb5;
+  --acc: #f28a3d;
+  --shd: 10px 20px 60px #974f204d;
+}
+
+[data-t="mdk"] {
+  --bg: #203b40;
+  --src: #2f4e53;
+  --str: #37636a;
+  --txt: #fff8ef;
+  --mut: #d3e1df;
+  --line: #50605f;
+  --acc: #ff974b;
+  --shd: 10px 20px 60px #0716194d;
+}
+
+[data-t="crim"] {
+  --bg: #17090f;
+  --src: #340d1d;
+  --str: #671b37;
+  --txt: #fff3f6;
+  --mut: #d8a8b8;
+  --line: #7f334d;
+  --acc: #ff4f7b;
+  --shd: 10px 20px 60px #ff174f4d;
+}
+
+[data-t="nebu"] {
+  --bg: #110d1f;
+  --src: #261641;
+  --str: #51318a;
+  --txt: #f8f2ff;
+  --mut: #c4aedc;
+  --line: #765b99;
+  --acc: #c783ff;
+  --shd: 10px 20px 60px #a94dff4d;
+}
+
+[data-t="burn"] {
+  --bg: #000;
+  --src: #080808;
+  --str: #111;
+  --txt: #fff;
+  --mut: #bcbcbc;
+  --line: #aaaaaa;
+  --acc: #fff;
+  --shd: 10px 20px 60px #3333334d;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+html, body { width: 100%; height: 100%; }
+html { font-size: 105%; }
+
+body {
+  position: relative;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  overflow: hidden;
+  transition: background .35s ease, color .35s ease;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background: radial-gradient(circle at 50% -10%, var(--acc) 0, var(--bg) 60rem);
+  opacity: .25;
+}
+
+button, input, select, textarea { font: inherit; }
+
+#sd {
+  position: fixed;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--src);
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shd);
+  backdrop-filter: blur(16px);
+  animation: dockIn .45s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+#sd button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--acc);
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s cubic-bezier(.2, .8, .2, 1), border-color .2s ease, background .2s ease, color .2s ease;
+}
+
+#sd button:hover, #sd button:focus-visible {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--bg);
+  outline: none;
+  transform: translateY(-2px) scale(1.04);
+}
+
+#sd button:active { transform: scale(.92); }
+
+#sd svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s cubic-bezier(.2, .8, .2, 1);
+}
+
+#sd button:hover svg { transform: scale(1.06); }
+
+.sep { height: 1px; background: var(--line); margin: 2px 4px; }
+#fl { display: none; }
+
+#svg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#svg path {
+  pointer-events: visibleStroke;
+  stroke: var(--acc);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+  cursor: pointer;
+  transition: stroke .15s ease, stroke-width .15s ease;
+}
+
+#svg path:hover {
+  stroke: #ff4f7b;
+  stroke-width: 6;
+}
+
+#bd {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+  z-index: 2;
+  touch-action: pan-x pan-y;
+}
+
+#bd.dots {
+  background-image: radial-gradient(var(--line) 1.15px, transparent 1.15px);
+  background-size: 26px 26px;
+  background-attachment: local;
+}
+
+.cd {
+  position: absolute;
+  width: 290px;
+  min-width: 180px;
+  min-height: 84px;
+  background: var(--src);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: var(--shd);
+  z-index: 2;
+  cursor: grab;
+  touch-action: none;
+  transform-origin: center center;
+  transition: transform .22s cubic-bezier(.2, .8, .2, 1), box-shadow .22s ease, border-color .22s ease, background .25s ease;
+}
+
+.cd:hover {
+  border-color: var(--acc);
+  transform: translateY(-2px);
+}
+
+.cd:active { cursor: grabbing; }
+
+.cd.drg {
+  z-index: 900 !important;
+  cursor: grabbing;
+  border-color: var(--acc);
+  box-shadow: 0 22px 48px #00000059, 0 0 0 1px var(--acc);
+  transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+.cd.rsz-act {
+  z-index: 900 !important;
+  border-color: var(--acc);
+  transition: none;
+}
+
+.cd.col { width: 340px; min-width: 240px; min-height: 160px; }
+.cd.col.drop-hov {
+  border-color: var(--acc);
+  background: var(--str);
+  transform: scale(1.015);
+  box-shadow: 0 0 0 2px var(--acc), var(--shd);
+}
+
+.cd.tbl { width: 430px; min-width: 240px; min-height: 130px; }
+.cd.doc, .cd.clr { width: 165px; min-width: 140px; min-height: 110px; cursor: pointer; }
+
+.cd.lnk {
+  border-color: var(--acc);
+  animation: pulseLnk 1.3s ease-in-out infinite;
+}
+
+.bts {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: flex;
+  gap: 6px;
+  z-index: 10;
+}
+
+mark {
+  background: var(--str);
+  border: 1px solid var(--line);
+  color: var(--txt);
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .16s cubic-bezier(.2, .8, .2, 1), background .15s, border-color .15s, color .15s;
+}
+
+mark svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+mark:hover {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--bg);
+  transform: scale(1.1);
+}
+
+mark:active { transform: scale(.9); }
+
+.cd content {
+  display: block;
+  outline: none;
+  min-height: 36px;
+  color: inherit;
+  user-select: text;
+  touch-action: auto;
+  margin-top: 30px;
+  font-size: 15.5px;
+  line-height: 1.5;
+  cursor: text;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.cd.doc content { cursor: pointer; user-select: none; }
+
+.cd content code {
+  background: var(--str);
+  border: 1px solid var(--line);
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13.5px;
+}
+
+.cd content h1, .cd content h2, .cd content h3 { margin: 4px 0; font-weight: 700; }
+.cd content h1 { font-size: 19px; }
+.cd content h2 { font-size: 17px; }
+.cd content h3 { font-size: 15.5px; }
+
+.cd img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  pointer-events: none;
+}
+
+.dpv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px 4px 2px;
+  cursor: pointer;
+}
+
+.dic {
+  width: 58px;
+  height: 72px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px 15px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 9px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  position: relative;
+  transition: transform .22s cubic-bezier(.2, .8, .2, 1), border-color .2s ease;
+}
+
+.cd.doc:hover .dic {
+  transform: translateY(-3px) rotate(-2deg);
+  border-color: var(--acc);
+}
+
+.dic::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  background: var(--line);
+  border-bottom-left-radius: 7px;
+}
+
+.dln { display: flex; flex-direction: column; gap: 4px; }
+.dln span { height: 4px; background: var(--acc); border-radius: 2px; }
+.dln span:nth-child(1) { width: 80%; }
+.dln span:nth-child(2) { width: 50%; }
+.dln span:nth-child(3) { width: 90%; }
+
+.dtl {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 3px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dmt { font-size: 12px; color: var(--mut); }
+
+#dmd, #mdl-ov {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #00000085;
+  z-index: 3000;
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  animation: fadeIn .18s ease-out both;
+}
+
+#mdl-ov { z-index: 2000; }
+
+.ddg {
+  background: var(--src);
+  border: 1px solid var(--line);
+  width: min(650px, 100%);
+  height: min(80vh, 720px);
+  border-radius: var(--rad);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shd);
+  overflow: hidden;
+}
+
+.dhd {
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dhd input {
+  font-size: 18px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: var(--txt);
+  outline: none;
+  flex: 1;
+  min-width: 0;
+  user-select: text;
+}
+
+.dac { display: flex; gap: 8px; align-items: center; }
+
+.dby {
+  flex: 1;
+  padding: 18px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 14.5px;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--txt);
+  border: none;
+  outline: none;
+  resize: none;
+  width: 100%;
+  user-select: text;
+}
+
+.tdo { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 15px; }
+.tdo:last-child { margin-bottom: 0; }
+.tdo input[type="checkbox"] {
+  accent-color: var(--acc);
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform .18s cubic-bezier(.2, .8, .2, 1);
+}
+.tdo input[type="checkbox"]:checked { animation: chkPop .26s cubic-bezier(.2, .8, .2, 1); }
+.tdo span {
+  outline: none;
+  color: inherit;
+  flex: 1;
+  user-select: text;
+  touch-action: auto;
+  cursor: text;
+  min-width: 0;
+  transition: opacity .2s ease;
+}
+.tdo span.dn { text-decoration: line-through; opacity: .45; }
+.tdo del {
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--mut);
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 7px;
+  text-decoration: none;
+  transition: color .15s ease, background .15s ease, transform .15s ease;
+}
+.tdo del:hover { color: #ff4f7b; background: #ff4f7b1f; transform: scale(1.1); }
+
+.swc {
+  width: 100%;
+  height: 56px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+  transition: background .25s ease, transform .2s ease;
+}
+
+.swc:hover { transform: scale(1.02); }
+
+.hex {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: inherit;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 13.5px;
+  outline: none;
+  text-align: center;
+  user-select: text;
+  transition: border-color .2s ease;
+}
+
+.hex:focus { border-color: var(--acc); }
+
+.hd { margin-top: 4px; margin-bottom: 10px; padding-right: 92px; }
+.ttl { outline: none; font-size: 18px; font-weight: 700; user-select: text; touch-action: auto; cursor: text; }
+
+.lst {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 84px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.lst .cd {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-shadow: none;
+}
+
+.lst .cd:hover { transform: translateY(-1px); }
+
+.thd { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px; margin-bottom: 8px; padding-right: 120px; }
+.tttl { font-weight: 700; font-size: 15.5px; user-select: text; touch-action: auto; cursor: text; outline: none; }
+
+.tgrd {
+  display: grid;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--line);
+  overflow-x: auto;
+  touch-action: pan-x;
+}
+
+.tcl {
+  position: relative;
+  min-width: 68px;
+  min-height: 40px;
+  padding: 8px 25px 8px 8px;
+  color: var(--txt);
+  background: var(--src);
+  outline: none;
+  line-height: 1.35;
+  cursor: default;
+  transition: background .2s ease, color .2s ease;
+}
+
+.tctx { display: block; min-height: 22px; outline: none; user-select: text; touch-action: auto; cursor: text; }
+.tcl:first-child { border-radius: 7px 0 0 0; }
+
+.tbtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: var(--line);
+  color: var(--txt);
+  font-size: 10px;
+  opacity: .65;
+  cursor: pointer;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.tbtn:hover { opacity: 1; transform: scale(1.12); }
+
+.rsz {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 22px;
+  height: 22px;
+  cursor: nwse-resize;
+  touch-action: none;
+  opacity: .45;
+  z-index: 12;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.rsz:hover { opacity: .95; transform: scale(1.12); }
+
+.rsz::after {
+  content: "";
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--txt);
+  border-bottom: 2px solid var(--txt);
+  border-radius: 0 0 3px 0;
+}
+
+.tpop {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 175px;
+  padding: 12px;
+  background: var(--str);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shd);
+  z-index: 2200;
+}
+
+.tpop label { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--txt); font-size: 13px; }
+.tpop input { width: 64px; padding: 5px 7px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--txt); outline: none; user-select: text; }
+.tpop button, #mdl > button {
+  width: 100%;
+  border: none;
+  background: var(--acc);
+  color: var(--bg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, opacity .15s ease;
+}
+.tpop button { height: 32px; border-radius: 9px; font-size: 13px; }
+.tpop button:hover, #mdl > button:hover { opacity: .92; transform: translateY(-1px); }
+
+#mdl {
+  background: var(--str);
+  border: 1px solid var(--line);
+  padding: 1.3rem;
+  border-radius: var(--rad);
+  box-shadow: var(--shd);
+  width: min(330px, 100%);
+}
+
+#mdl h3 { margin-bottom: .9rem; font-size: 1.1rem; color: var(--txt); }
+.mset { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-top: 1px solid var(--line); }
+.mset label, .mset span { font-size: .88rem; color: var(--txt); }
+#mdl select { color: var(--txt); border: 1px solid var(--line); border-radius: 9px; padding: .45rem .55rem; background: var(--src); outline: none; cursor: pointer; max-width: 11rem; }
+
+.swch { position: relative; width: 2.8rem; height: 1.55rem; flex-shrink: 0; }
+.swch input { width: 0; height: 0; opacity: 0; }
+.sld { position: absolute; inset: 0; border-radius: 2rem; background: var(--mut); cursor: pointer; transition: .25s; }
+.sld::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s; }
+.swch input:checked + .sld { background: var(--acc); }
+.swch input:checked + .sld::before { transform: translateX(1.25rem); }
+
+#mdl > button { height: 42px; margin-top: .8rem; border-radius: 12px; font-size: .95rem; }
+
+.ppi { animation: pi .26s cubic-bezier(.2, .85, .25, 1.15) both; }
+.ppo { animation: po .16s cubic-bezier(.4, 0, 1, 1) forwards !important; pointer-events: none; }
+.rise { animation: rise .36s cubic-bezier(.2, .8, .2, 1) both; }
+
+@keyframes pi { from { opacity: 0; transform: scale(.88) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes po { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.86) translateY(6px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes dockIn { from { opacity: 0; transform: translate(-18px, -50%); } to { opacity: 1; transform: translate(0, -50%); } }
+@keyframes dockInMob { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulseLnk { 0%, 100% { box-shadow: 0 0 0 1px var(--acc), 0 0 14px #00000033; } 50% { box-shadow: 0 0 0 3px var(--acc), 0 0 26px var(--acc); } }
+@keyframes chkPop { 0% { transform: scale(1); } 45% { transform: scale(1.26); } 100% { transform: scale(1); } }
+
+.mn {
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 152px;
+  padding: 8px;
+  background: var(--str);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shd);
+  z-index: 2500;
+}
+
+.dt {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #00000026;
+  cursor: pointer;
+  transition: transform .16s cubic-bezier(.2, .8, .2, 1);
+}
+.dt:hover { transform: scale(1.22); }
+
+.noa *, .noa *::before, .noa *::after { animation: none !important; transition: none !important; }
+.noa #sd button:hover, .noa #sd button:focus-visible, .noa .dt:hover, .noa .cd:hover { transform: none; }
+
+@media (max-aspect-ratio: 1/1), (max-width: 700px) {
+  #sd {
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px;
+    gap: 6px;
+    animation: dockInMob .45s cubic-bezier(.2, .8, .2, 1) both;
+  }
+  #sd button { width: 42px; height: 42px; }
+  .sep { width: 1px; height: 32px; margin: 4px 2px; }
+  .cd { max-width: calc(100vw - 24px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
 </style>
 </head>
-<body>
+<body data-t="mdk">
 
 <div id="sd">
-  <button onclick="add('text')" title="Nueva tarjeta">
+  <button onclick="add('text')" data-t="nTxt" title="New card">
     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
   </button>
-  <button onclick="add('col')" title="Nueva columna">
+  <button onclick="add('col')" data-t="nCol" title="New column">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
   </button>
-  <button onclick="add('doc')" title="Nuevo documento">
+  <button onclick="add('doc')" data-t="nDoc" title="New document">
     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
   </button>
-  <button onclick="add('tdo')" title="Nueva lista">
+  <button onclick="add('tdo')" data-t="nTdo" title="New list">
     <svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
   </button>
-  <button onclick="add('tbl')" title="Nueva tabla">
+  <button onclick="add('tbl')" data-t="nTbl" title="New table">
     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/></svg>
   </button>
-  <button onclick="add('clr')" title="Nueva paleta de color">
+  <button onclick="add('clr')" data-t="nClr" title="New swatch">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
   </button>
   <div class="sep"></div>
-  <button onclick="inp()" title="Importar JSON">
+  <button onclick="inp()" data-t="imp" title="Import JSON">
     <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
   </button>
-  <button onclick="out()" title="Exportar JSON">
+  <button onclick="out()" data-t="exp" title="Export JSON">
     <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
   </button>
-  <button onclick="pop()" title="Ajustes">
+  <button onclick="pop()" data-t="set" title="Settings">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
   </button>
-  <button onclick="wipe()" title="Limpiar el tablero">
+  <button onclick="wipe()" data-t="wip" title="Clear board">
     <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
   </button>
-  <input type="file" id="fl" onchange="read(event)">
+  <input type="file" id="fl" accept=".json,application/json" onchange="read(event)">
 </div>
 
-<div id="mdl">
-  <h3>Temas</h3>
-  <select id="slc" onchange="apply(this.value)"></select>
-  <label style="display:flex;align-items:center;gap:10px;margin-top:12px;color:var(--txt);font-size:14px;">
-    <input type="checkbox" id="anm" onchange="setA(this.checked)">
-    <span>Disable Animations</span>
-  </label>
-  <button onclick="pop()">Cerrar</button>
+<div id="mdl-ov" onclick="if(event.target===this)pop()">
+  <div id="mdl" class="ppi">
+    <h3 data-i="set">Settings</h3>
+    <div class="mset">
+      <label for="slc" data-i="thmL">Theme</label>
+      <select id="slc" onchange="aply(this.value)"></select>
+    </div>
+    <div class="mset">
+      <label for="lng" data-i="lngL">Language</label>
+      <select id="lng" onchange="setL(this.value)">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="pt-BR">Português</option>
+      </select>
+    </div>
+    <div class="mset">
+      <span data-i="dotL">Background Dots</span>
+      <label class="swch">
+        <input type="checkbox" id="dot" onchange="setD(this.checked)">
+        <span class="sld"></span>
+      </label>
+    </div>
+    <div class="mset">
+      <span data-i="noaL">Disable Animations</span>
+      <label class="swch">
+        <input type="checkbox" id="anm" onchange="setA(this.checked)">
+        <span class="sld"></span>
+      </label>
+    </div>
+    <button onclick="pop()" data-i="cls">Close</button>
+  </div>
 </div>
 
-<div id="dmd">
+<div id="dmd" onclick="if(event.target===this)clsD()">
   <div class="ddg ppi">
     <div class="dhd">
-      <input type="text" id="dti" placeholder="Título">
+      <input type="text" id="dti" data-p="docT" placeholder="Title">
       <div class="dac">
-        <mark onclick="dlDoc()" title="Descargar .md">
+        <mark onclick="dlDc()" data-t="dlMd" title="Download .md">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </mark>
-        <mark onclick="clsD()" title="Cerrar">✕</mark>
+        <mark onclick="clsD()" data-t="cls" title="Close">✕</mark>
       </div>
     </div>
-    <textarea id="dtx" class="dby" placeholder="Escribe tus proyectadas en Markdown aquí."></textarea>
+    <textarea id="dtx" class="dby" data-p="docB" placeholder="Write in Markdown here..."></textarea>
   </div>
 </div>
 
@@ -160,179 +843,224 @@ mark:hover{background:var(--acc);color:#fff}
 <div id="bd"></div>
 
 <script>
-let elB = document.getElementById('bd');
-let elS = document.getElementById('svg');
-let elF = document.getElementById('fl');
-let elM = document.getElementById('mdl');
-let elC = document.getElementById('slc');
-let elD = document.getElementById('dmd');
-let elI = document.getElementById('dti');
-let elT = document.getElementById('dtx');
-let elN = document.getElementById('anm');
+const $ = id => document.getElementById(id);
+const elB = $('bd'), elS = $('svg'), elF = $('fl'), elO = $('mdl-ov'), elC = $('slc');
+const elD = $('dmd'), elI = $('dti'), elT = $('dtx'), elN = $('anm'), elL = $('lng'), elG = $('dot');
 
-let aid = null;
-let cds = [];
-let lks = [];
-let drg = null;
-let rsz = null;
-let src = null;
-let ox = 0, oy = 0, sx = 0, sy = 0;
-let shf = false;
-let thm = 'dark';
-let noa = false;
+const kThm = 'melon-theme', kAni = 'melon-disable-animations', kLng = 'melon-language', kCst = 'themeditor-themes', kDot = 'melange-dots';
 
-elB.addEventListener('scroll', draw, {passive:true});
-window.addEventListener('resize', draw);
+let aid = null, cds = [], lks = [], drg = null, rsz = null, src = null;
+let ox = 0, oy = 0, sx = 0, sy = 0, lx = 0, shf = false;
+let thm = 'mdk', noa = false, lng = 'en', dot = false;
+let cst = JSON.parse(localStorage.getItem(kCst) || '{}');
 
-const pre = {
-  light:{name:"Light",bg:"#e9eee7",src:"#f5f8f3",txt:"#17231b",acc:"#63bd46",line:"#c7d0c8",sd:"#f5f8f3",shd:"10px 20px 60px #28582a4d"},
-  dark:{name:"Dark",bg:"#111318",src:"#1c1f28",txt:"#f4f5f7",acc:"#62c7b2",line:"#3f424b",sd:"#1c1f28",shd:"10px 20px 60px #1113184d"},
-  mlt:{name:"Melon Light",bg:"#cfe9e5",src:"#fff8ee",txt:"#3d2920",acc:"#f28a3d",line:"#cdbeb5",sd:"#fff8ee",shd:"10px 20px 60px #974f204d"},
-  mdk:{name:"Melon Dark",bg:"#203b40",src:"#2f4e53",txt:"#fff8ef",acc:"#ff974b",line:"#50605f",sd:"#2f4e53",shd:"10px 20px 60px #0716194d"},
-  crim:{name:"Crimson",bg:"#17090f",src:"#340d1d",txt:"#fff3f6",acc:"#ff4f7b",line:"#7f334d",sd:"#340d1d",shd:"10px 20px 60px #ff174f4d"},
-  nebu:{name:"Nebula",bg:"#110d1f",src:"#261641",txt:"#f8f2ff",acc:"#c783ff",line:"#765b99",sd:"#261641",shd:"10px 20px 60px #a94dff4d"},
-  burn:{name:"Eyeburn",bg:"#000000",src:"#080808",txt:"#ffffff",acc:"#ffffff",line:"#aaaaaa",sd:"#080808",shd:"10px 20px 60px #3333334d"}
-};
+const pre = [
+  ['light', 'Light'], ['dark', 'Dark'], ['mlt', 'Melon Light'], ['mdk', 'Melon Dark'],
+  ['crim', 'Crimson'], ['nebu', 'Nebula'], ['burn', 'Eyeburn']
+];
 
 const clrs = {
-  default:"var(--src)",red:"#d03040",orange:"#f07000",yellow:"#ffba00",
-  lime:"#a0c000",green:"#209080",cyan:"#0090c0",blue:"#0050b0",
-  purple:"#6010b0",pink:"#e02090",brown:"#7a3a2a",white:"#f0f0f0",
-  silver:"#707a80",gray:"#414243",black:"#101010"
+  default: 'var(--src)', red: '#d03040', orange: '#f07000', yellow: '#ffba00',
+  lime: '#a0c000', green: '#209080', cyan: '#0090c0', blue: '#0050b0',
+  purple: '#6010b0', pink: '#e02090', brown: '#7a3a2a', white: '#f0f0f0',
+  silver: '#707a80', gray: '#414243', black: '#101010'
 };
 
-function setup(){
+const tr = {
+  en: {
+    set: 'Settings', thmL: 'Theme', lngL: 'Language', dotL: 'Background Dots', noaL: 'Disable Animations', cls: 'Close',
+    nTxt: 'New card', nCol: 'New column', nDoc: 'New document', nTdo: 'New list',
+    nTbl: 'New table', nClr: 'New swatch', imp: 'Import JSON', exp: 'Export JSON',
+    wip: 'Clear board', dlMd: 'Download .md', docT: 'Title', docB: 'Write your naughty Markdown self-inserts here...',
+    defN: 'Note', defC: 'Column', defD: 'New document', defT: 'Table', wrd: 'words',
+    rows: 'Rows', cols: 'Columns', aply: 'Apply', cClr: 'Change color', lnk: 'Connect link',
+    del: 'Delete', tSz: 'Table size', addT: 'Add task', nTsk: 'New task', cCel: 'Cell color'
+  },
+  es: {
+    set: 'Ajustes', thmL: 'Tema', lngL: 'Idioma', dotL: 'Puntos de fondo', noaL: 'Desactivar animaciones', cls: 'Cerrar',
+    nTxt: 'Nueva tarjeta', nCol: 'Nueva columna', nDoc: 'Nuevo documento', nTdo: 'Nueva lista',
+    nTbl: 'Nueva tabla', nClr: 'Nuevo color', imp: 'Importar JSON', exp: 'Exportar JSON',
+    wip: 'Limpiar tablero', dlMd: 'Descargar .md', docT: 'Título', docB: 'Escribe tus proyectadas en Markdown aquí...',
+    defN: 'La nota', defC: 'Columna', defD: 'Nuevo documento', defT: 'Tabla', wrd: 'palabras',
+    rows: 'Filas', cols: 'Columnas', aply: 'Aplicar', cClr: 'Cambiar color', lnk: 'Conectar enlace',
+    del: 'Eliminar', tSz: 'Tamaño de tabla', addT: 'Añadir tarea', nTsk: 'Nueva tarea', cCel: 'Color de Zelda'
+  },
+  'pt-BR': {
+    set: 'Configurações', thmL: 'Tema', lngL: 'Idioma', dotL: 'Pontos de fundo', noaL: 'Desativar animações', cls: 'Fechar',
+    nTxt: 'Novo cartão', nCol: 'Nova coluna', nDoc: 'Novo documento', nTdo: 'Nova lista',
+    nTbl: 'Nova tabela', nClr: 'Novo cor', imp: 'Importar JSON', exp: 'Exportar JSON',
+    wip: 'Limpar quadro', dlMd: 'Baixar .md', docT: 'Título', docB: 'Escreva seus self-inserts em Markdown aqui...',
+    defN: 'Nota', defC: 'Coluna', defD: 'Novo documento', defT: 'Tabela', wrd: 'palavras',
+    rows: 'Linhas', cols: 'Colunas', aply: 'Aplicar', cClr: 'Mudar cor', lnk: 'Conectar link',
+    del: 'Excluir', tSz: 'Tamanho da tabela', addT: 'Adicionar tarefa', nTsk: 'Nova tarefa', cCel: 'Cor da célula'
+  }
+};
+
+const t = k => (tr[lng] || tr.en)[k] || tr.en[k] || k;
+
+function setL(v) {
+  lng = tr[v] ? v : 'en';
+  document.documentElement.lang = lng;
+  localStorage.setItem(kLng, lng);
+  elL.value = lng;
+  document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
+  document.querySelectorAll('[data-t]').forEach(el => { el.title = t(el.dataset.t); });
+  document.querySelectorAll('[data-p]').forEach(el => { el.placeholder = t(el.dataset.p); });
+  rndr();
+}
+
+function opts() {
   elC.innerHTML = '';
-  Object.keys(pre).forEach(k => {
-    let o = document.createElement('option');
+  pre.forEach(([k, nam]) => {
+    const o = document.createElement('option');
     o.value = k;
-    o.innerText = pre[k].name;
-    if(k === thm) o.selected = true;
+    o.textContent = nam;
     elC.appendChild(o);
   });
-  Object.entries(JSON.parse(localStorage.getItem('themeditor-themes') || '{}')).forEach(([k,v]) => {
-    let o = document.createElement('option');
+  Object.entries(cst).forEach(([k, v]) => {
+    const o = document.createElement('option');
     o.value = 'own:' + k;
-    o.innerText = v.name || k;
-    if(o.value === thm) o.selected = true;
+    o.textContent = v.name || k;
     elC.appendChild(o);
   });
 }
 
-function apply(n){
-  thm = n;
-  elC.value = n;
-  const mapT = {"melon-light":"mlt", "melon-dark":"mdk", "crimson":"crim", "nebula":"nebu", "eyeburn":"burn", "melonlight":"mlt", "melon":"mdk", "redspace":"crim", "purplespace":"nebu"};
-  const realK = mapT[n] || n;
-  let own = realK.startsWith('own:') ? JSON.parse(localStorage.getItem('themeditor-themes') || '{}')[realK.slice(4)] : null;
-  const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent", shd:"shadow" };
-  let c = own ? own.values : (pre[realK] || pre.dark);
-  if(!c) return;
+function aply(n) {
+  const mapT = { 'melon-light': 'mlt', 'melon-dark': 'mdk', crimson: 'crim', nebula: 'nebu', eyeburn: 'burn', melonlight: 'mlt', melon: 'mdk', redspace: 'crim', purplespace: 'nebu' };
+  const map = { bg: 'bg', src: 'surface', str: 'surface-strong', txt: 'text', mut: 'muted', line: 'line', acc: 'accent', shd: 'shadow' };
+  const rK = mapT[n] || n || 'mdk';
+  const own = rK.startsWith('own:') ? cst[rK.slice(4)] : null;
+  thm = own || pre.some(([k]) => k === rK) ? rK : 'mdk';
 
-  const getV = (k) => c[k] || c[map[k]];
+  document.body.dataset.t = own ? 'cst' : thm;
+  ['bg', 'src', 'str', 'txt', 'mut', 'line', 'acc'].forEach(k => {
+    document.body.style.removeProperty(`--${k}`);
+    const val = own?.values[k] || own?.values[map[k]];
+    if (val) document.body.style.setProperty(`--${k}`, val);
+  });
+  document.body.style.removeProperty('--shd');
+  if (own) {
+    const s = own.values.shd || own.values.shadow;
+    document.body.style.setProperty('--shd', s
+      ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, '$1px $2px $3px #$4')
+      : '10px 20px 60px #0000004d');
+  }
 
-  document.documentElement.style.setProperty('--bg', getV('bg'));
-  document.documentElement.style.setProperty('--src', getV('src'));
-  document.documentElement.style.setProperty('--str', getV('str') || getV('src'));
-  document.documentElement.style.setProperty('--txt', getV('txt'));
-  document.documentElement.style.setProperty('--mut', getV('mut') || getV('txt'));
-  document.documentElement.style.setProperty('--acc', getV('acc'));
-  document.documentElement.style.setProperty('--line', getV('line'));
-  document.documentElement.style.setProperty('--sd', getV('src'));
-  let sh = getV('shd') || '10 20 60 #0000004d';
-  sh = sh.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, '$1px $2px $3px $4');
-  document.documentElement.style.setProperty('--shd', sh);
-  document.documentElement.classList.toggle('noa', noa);
-  save();
+  elC.value = thm;
+  localStorage.setItem(kThm, thm);
 }
 
-function setA(off){
-  noa = off;
+function setA(off) {
+  noa = !!off;
   document.documentElement.classList.toggle('noa', noa);
   elN.checked = noa;
-  save();
+  localStorage.setItem(kAni, String(noa));
 }
 
-function pop(){
-  elM.style.display = elM.style.display === 'block' ? 'none' : 'block';
+function setD(on) {
+  dot = !!on;
+  elB.classList.toggle('dots', dot);
+  elG.checked = dot;
+  localStorage.setItem(kDot, String(dot));
 }
 
-function load(){
-  let r = localStorage.getItem('melange');
-  if(r){
-    try{
-      let d = JSON.parse(r);
-      cds = d.cds || [];
-      cds.sort((a,b) => a.ord - b.ord);
-      lks = d.lks || [];
-      thm = d.thm || 'dark';
-      noa = !!d.noa;
-      rndr();
-      draw();
-    }catch(e){}
+function pop() {
+  const box = $('mdl');
+  if (elO.style.display === 'flex') {
+    box.classList.remove('ppi');
+    box.classList.add('ppo');
+    setTimeout(() => {
+      elO.style.display = 'none';
+      box.classList.remove('ppo');
+    }, noa ? 0 : 150);
+  } else {
+    elO.style.display = 'flex';
+    box.classList.add('ppi');
   }
-  setup();
-  apply(thm);
 }
 
-function save(){
-  localStorage.setItem('melange', JSON.stringify({cds:cds, lks:lks, thm:thm, noa:noa}));
-  draw();
+function load() {
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem('melange') || '{}'); } catch (e) {}
+  cds = d.cds || [];
+  cds.sort((a, b) => (a.ord || 0) - (b.ord || 0));
+  lks = d.lks || [];
+
+  opts();
+
+  const rawA = localStorage.getItem(kAni);
+  setA(rawA !== null ? rawA === 'true' : !!d.noa);
+  setD(localStorage.getItem(kDot) === 'true');
+  aply(localStorage.getItem(kThm) || d.thm || 'mdk');
+  setL(localStorage.getItem(kLng) || 'en');
+  rndr(null, true);
 }
 
-function wipe(){
-  cds = [];
-  lks = [];
-  elB.innerHTML = '';
-  localStorage.removeItem('melange');
-  draw();
+function save(reDrw = true) {
+  localStorage.setItem('melange', JSON.stringify({ cds, lks }));
+  if (reDrw) draw();
 }
 
-function out(){
-  let b = new Blob([JSON.stringify({cds:cds, lks:lks, thm:thm}, null, 2)], {type:'application/json'});
-  let a = document.createElement('a');
+function wipe() {
+  const items = [...elB.querySelectorAll('.cd')];
+  const clear = () => {
+    cds = [];
+    lks = [];
+    elB.innerHTML = '';
+    localStorage.removeItem('melange');
+    draw();
+  };
+  if (!items.length || noa) return clear();
+  items.forEach(el => el.classList.add('ppo'));
+  setTimeout(clear, 160);
+}
+
+function out() {
+  const b = new Blob([JSON.stringify({ cds, lks, thm }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
   a.href = URL.createObjectURL(b);
   a.download = 'melange.json';
   a.click();
+  URL.revokeObjectURL(a.href);
 }
 
-function inp(){ elF.click(); }
+function inp() { elF.click(); }
 
-function read(e){
-  let f = e.target.files[0];
-  if(!f) return;
-  let r = new FileReader();
-  r.onload = (res) => {
-    try{
-      let d = JSON.parse(res.target.result);
+function read(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = res => {
+    try {
+      const d = JSON.parse(res.target.result);
       cds = d.cds || d.cards || [];
-      cds.sort((a,b) => (a.ord || a.order) - (b.ord || b.order));
+      cds.sort((a, b) => (a.ord || a.order || 0) - (b.ord || b.order || 0));
       lks = d.lks || d.links || [];
-      thm = d.thm || d.theme || 'dark';
-      rndr();
-      apply(thm);
+      if (d.thm || d.theme) aply(d.thm || d.theme);
+      rndr(null, true);
       save();
-    }catch(err){}
+    } catch (err) {}
   };
   r.readAsText(f);
+  e.target.value = '';
 }
 
-function add(t, x, y, v){
+function add(tp, x, y, v) {
   let init = v;
-  if(!init){
-    if(t === 'tdo') init = [{txt:'-', dn:false}];
-    else if(t === 'tbl') init = {ttl:'Tabla', rows:3, cols:3, cells:[]};
-    else if(t === 'clr') init = '#e65100';
-    else if(t === 'col') init = {ttl:'Columna'};
-    else if(t === 'doc') init = {ttl:'Nuevo documento', cnt:''};
-    else init = 'La nota';
+  if (init === undefined) {
+    if (tp === 'tdo') init = [{ txt: '-', dn: false }];
+    else if (tp === 'tbl') init = { ttl: t('defT'), rows: 3, cols: 3, cells: [] };
+    else if (tp === 'clr') init = '#ff974b';
+    else if (tp === 'col') init = { ttl: t('defC') };
+    else if (tp === 'doc') init = { ttl: t('defD'), cnt: '' };
+    else init = t('defN');
   }
 
-  let item = {
+  const item = {
     id: Date.now(),
-    t: t || 'text',
-    x: x || 120,
-    y: y || 120,
+    t: tp || 'text',
+    x: x ?? Math.round(elB.scrollLeft + 90 + (cds.length % 5) * 24),
+    y: y ?? Math.round(elB.scrollTop + 70 + (cds.length % 5) * 24),
     clr: 'default',
     val: init,
     prn: null,
@@ -343,839 +1071,654 @@ function add(t, x, y, v){
   save();
 }
 
-function nest(p, c){
+function nest(p, c) {
   let cur = cds.find(i => i.id === c);
-  while(cur && cur.prn){
-    if(cur.prn === p) return true;
+  while (cur && cur.prn) {
+    if (cur.prn === p) return true;
     cur = cds.find(i => i.id === cur.prn);
   }
   return false;
 }
 
-function parse(t){
-  if(!t) return '';
-  return t.replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-          .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-          .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/`(.*?)`/g, '<code>$1</code>')
-          .replace(/\n/g, '<br>');
+const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
+function pars(txt) {
+  return esc(txt)
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/\n/g, '<br>');
 }
 
-function getC(n){
-  let s = window.getSelection();
-  if(!s.rangeCount) return 0;
-  let r = s.getRangeAt(0);
-  let p = r.cloneRange();
-  p.selectNodeContents(n);
-  p.setEnd(r.endContainer, r.endOffset);
-  return p.toString().length;
+function minS(item, tp) {
+  if (tp === 'col' || tp === 'column') return { w: 240, h: 160 };
+  if (tp === 'tbl' || tp === 'table') return { w: Math.max(240, Math.max(1, Number(item.val?.cols) || 3) * 72 + 28), h: 130 };
+  if (tp === 'doc' || tp === 'clr' || tp === 'color') return { w: 140, h: 110 };
+  if (tp === 'tdo' || tp === 'todo') return { w: 200, h: 90 };
+  if (tp === 'img') return { w: 120, h: 90 };
+  return { w: 180, h: 84 };
 }
 
-function setC(n, p){
-  let r = document.createRange();
-  let stk = [n];
-  let f = false, c = 0;
-  while(stk.length > 0){
-    let node = stk.pop();
-    if(node.nodeType === 3){
-      let nxt = c + node.nodeValue.length;
-      if(!f && p >= c && p <= nxt){
-        r.setStart(node, p - c);
-        r.collapse(true);
-        f = true;
-        break;
-      }
-      c = nxt;
-    }else{
-      let i = node.childNodes.length;
-      while(i--) stk.push(node.childNodes[i]);
-    }
-  }
-  if(f){
-    let s = window.getSelection();
-    s.removeAllRanges();
-    s.addRange(r);
-  }
-}
-
-function rndr(frs){
+function rndr(frs, init = false) {
   elB.innerHTML = '';
 
-  let bse = cds.filter(c => c.t === 'col' || c.type === 'column');
-  let rst = cds.filter(c => c.t !== 'col' && c.type !== 'column');
-  let q = [...bse, ...rst];
+  const bse = cds.filter(c => c.t === 'col' || c.type === 'column');
+  const rst = cds.filter(c => c.t !== 'col' && c.type !== 'column');
 
-  q.forEach(item => {
-    let type = item.t || item.type;
-    let elem = document.createElement('div');
-    elem.className = 'cd' + (type === 'col' || type === 'column' ? ' col' : '') + (type === 'doc' ? ' doc' : '') + (type === 'clr' || type === 'color' ? ' clr' : '') + (type === 'tbl' || type === 'table' ? ' tbl' : '');
-    if(frs === item.id) elem.classList.add('ppi');
+  [...bse, ...rst].forEach((item, idx) => {
+    const tp = item.t || item.type;
+    const elem = document.createElement('div');
+    elem.className = 'cd'
+      + (tp === 'col' || tp === 'column' ? ' col' : '')
+      + (tp === 'doc' ? ' doc' : '')
+      + (tp === 'clr' || tp === 'color' ? ' clr' : '')
+      + (tp === 'tbl' || tp === 'table' ? ' tbl' : '');
+
+    if (frs === item.id) elem.classList.add('ppi');
+    else if (init) {
+      elem.classList.add('rise');
+      elem.style.animationDelay = `${Math.min(idx * 35, 350)}ms`;
+    }
 
     elem.id = 'c' + item.id;
-    
-    let prn = item.prn || item.parent;
-    if(!prn){
+
+    const prn = item.prn || item.parent;
+    if (!prn) {
       elem.style.left = item.x + 'px';
       elem.style.top = item.y + 'px';
     }
-    if(item.w) elem.style.width = item.w + 'px';
-    if(item.h) elem.style.height = item.h + 'px';
 
-    let cName = item.clr || item.color || 'default';
-    elem.style.background = clrs[cName] || clrs.default;
-    if(['white','yellow','lime'].includes(cName)) elem.style.color = '#000000';
-    else if(cName !== 'default') elem.style.color = '#ffffff';
+    const m = minS(item, tp);
+    elem.style.minWidth = m.w + 'px';
+    elem.style.minHeight = (item.h ? Math.max(m.h, item.h) : m.h) + 'px';
+    if (item.w) elem.style.width = Math.max(m.w, item.w) + 'px';
+    if (tp === 'img' && item.h) elem.style.height = Math.max(m.h, item.h) + 'px';
 
-    let bts = document.createElement('div');
+    const cNam = item.clr || item.color || 'default';
+    elem.style.background = clrs[cNam] || clrs.default;
+    if (['white', 'yellow', 'lime'].includes(cNam)) elem.style.color = '#000000';
+    else if (cNam !== 'default') elem.style.color = '#ffffff';
+
+    const bts = document.createElement('div');
     bts.className = 'bts';
 
-    let pal = document.createElement('mark');
-    pal.title = 'Cambiar color';
-    pal.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>`;
-    pal.onclick = (e) => { e.stopPropagation(); menu(item.id, e); };
+    const mkBtn = (title, html, fn) => {
+      const b = document.createElement('mark');
+      b.title = title;
+      b.innerHTML = html;
+      b.onclick = e => { e.stopPropagation(); fn(e); };
+      return b;
+    };
 
-    let pin = document.createElement('mark');
-    pin.innerText = '➔';
-    pin.title = 'Conectar enlace';
-    pin.onclick = (e) => { e.stopPropagation(); conn(item.id); };
+    bts.appendChild(mkBtn(t('cClr'), `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>`, e => clrM(c => { item.clr = c; }, e)));
 
-    let cls = document.createElement('mark');
-    cls.innerText = '✕';
-    cls.title = 'Eliminar tarjeta';
-    cls.onclick = (e) => { e.stopPropagation(); del(item.id); };
-
-    bts.appendChild(pal);
-    if(type === 'tbl' || type === 'table'){
-      let sz = document.createElement('mark');
-      sz.title = 'Editar tamaño de tabla';
-      sz.innerHTML = `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg>`;
-      sz.onclick = (e) => { e.stopPropagation(); popT(item, e); };
-      bts.appendChild(sz);
+    if (tp === 'tbl' || tp === 'table') {
+      bts.appendChild(mkBtn(t('tSz'), `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg>`, e => popT(item, e)));
     }
-    bts.appendChild(pin);
 
-    if(type === 'tdo' || type === 'todo'){
-      let ab = document.createElement('mark');
-      ab.title = 'Añadir tarea';
-      ab.innerHTML = `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-      ab.onclick = (e) => {
-        e.stopPropagation();
-        if(!Array.isArray(item.val)) item.val = [];
-        item.val.push({txt:'Nueva tarea', dn:false});
+    bts.appendChild(mkBtn(t('lnk'), '➔', () => conn(item.id)));
+
+    if (tp === 'tdo' || tp === 'todo') {
+      bts.appendChild(mkBtn(t('addT'), `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`, () => {
+        if (!Array.isArray(item.val)) item.val = [];
+        item.val.push({ txt: t('nTsk'), dn: false });
         save();
         rndr();
-      };
-      bts.appendChild(ab);
+      }));
     }
 
-    bts.appendChild(cls);
+    bts.appendChild(mkBtn(t('del'), '✕', () => del(item.id)));
 
-    let bdy = document.createElement('content');
+    const bdy = document.createElement('content');
 
-    if(type === 'img'){
-      let img = document.createElement('img');
+    if (tp === 'img') {
+      const img = document.createElement('img');
       img.src = item.val;
       bdy.appendChild(img);
-    }else if(type === 'tdo' || type === 'todo'){
-      bdy.contentEditable = false;
-      todos(bdy, item);
-    }else if(type === 'clr' || type === 'color'){
-      bdy.contentEditable = false;
-      swch(bdy, item);
-    }else if(type === 'col' || type === 'column'){
-      bdy.contentEditable = false;
-      colC(bdy, item);
-    }else if(type === 'doc'){
-      bdy.contentEditable = false;
-      docC(bdy, item);
-    }else if(type === 'tbl' || type === 'table'){
-      bdy.contentEditable = false;
-      table(bdy, item);
-    }else{
-      bdy.contentEditable = true;
-      let rawV = typeof item.val === 'string' ? item.val : '';
-      bdy.innerHTML = parse(rawV);
-      bdy.oninput = () => {
-        let pos = getC(bdy);
-        item.val = bdy.innerText;
-        bdy.innerHTML = parse(item.val);
-        setC(bdy, pos);
-        syncM(elem, item, type);
-        save();
-      };
+    } else if (tp === 'tdo' || tp === 'todo') todo(bdy, item);
+    else if (tp === 'clr' || tp === 'color') swch(bdy, item);
+    else if (tp === 'col' || tp === 'column') colC(bdy, item);
+    else if (tp === 'doc') docC(bdy, item);
+    else if (tp === 'tbl' || tp === 'table') tabl(bdy, item);
+    else {
+      bdy.contentEditable = 'true';
+      bdy.innerHTML = pars(typeof item.val === 'string' ? item.val : '');
       bdy.onfocus = () => { bdy.innerText = item.val || ''; };
-      bdy.onblur = () => {
-        item.val = bdy.innerText;
-        bdy.innerHTML = parse(item.val);
-        syncM(elem, item, type);
-        save();
-      };
+      bdy.oninput = () => { item.val = bdy.innerText; save(false); draw(); };
+      bdy.onblur = () => { item.val = bdy.innerText; bdy.innerHTML = pars(item.val); save(); };
     }
 
-    elem.onmousedown = (e) => {
-      if(e.target.closest('.bts') || e.target.closest('input') || e.target.closest('select') || e.target.closest('del') || e.target.closest('button') || e.target.isContentEditable) return;
-      syncM(elem, item, type);
-      let rect = elem.getBoundingClientRect();
-      let edge = 10;
-      let left = e.clientX <= rect.left + edge;
-      let right = e.clientX >= rect.right - edge;
-      let top = e.clientY <= rect.top + edge;
-      let btm = e.clientY >= rect.bottom - edge;
-      if(left || right || top || btm){
-        e.preventDefault();
-        e.stopPropagation();
-        rsz = {
-          kind:'card',
-          item,
-          elem,
-          startX:e.clientX,
-          startY:e.clientY,
-          startW:rect.width,
-          startH:rect.height,
-          startLeft:item.x,
-          startTop:item.y,
-          minW:item.minW || Math.round(rect.width),
-          minH:item.minH || Math.round(rect.height),
-          left,
-          right,
-          top,
-          bottom: btm
-        };
-        return;
-      }
+    const startRsz = (e, left, right, top, btm, cap) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = elem.getBoundingClientRect();
+      const bm = minS(item, tp);
+      elem.classList.add('rsz-act');
+      rsz = { kind: 'card', item, tp, elem, sX: e.clientX, sY: e.clientY, sW: rect.width, sH: rect.height, sL: item.x, sT: item.y, mW: bm.w, mH: bm.h, left, right, top, btm };
+      cap.setPointerCapture(e.pointerId);
+    };
+
+    elem.onpointerdown = e => {
+      if (e.button !== 0 && e.pointerType === 'mouse') return;
+      if (e.target.closest('.bts, input, select, del, button, mark, [contenteditable="true"]')) return;
+
+      const rect = elem.getBoundingClientRect();
+      const edge = e.pointerType === 'touch' ? 14 : 10;
+      const left = !prn && e.clientX <= rect.left + edge;
+      const right = e.clientX >= rect.right - edge;
+      const top = !prn && e.clientY <= rect.top + edge;
+      const btm = e.clientY >= rect.bottom - edge;
+
+      if (left || right || top || btm) return startRsz(e, left, right, top, btm, elem);
+
       e.stopPropagation();
       drg = item;
       shf = false;
-      sx = e.clientX;
+      sx = lx = e.clientX;
       sy = e.clientY;
-      let r = elem.getBoundingClientRect();
-      ox = e.clientX - r.left;
-      oy = e.clientY - r.top;
+      ox = sx - (rect.left + elB.scrollLeft);
+      oy = sy - (rect.top + elB.scrollTop);
+      elem.setPointerCapture(e.pointerId);
     };
 
-    elem.appendChild(bts);
-    elem.appendChild(bdy);
-    let grip = document.createElement('span');
+    const grip = document.createElement('span');
     grip.className = 'rsz';
-    grip.title = 'Resize';
-    grip.onmousedown = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      syncM(elem, item, type);
-      let rect = elem.getBoundingClientRect();
-      rsz = {kind:'card',item,elem,startX:e.clientX,startY:e.clientY,startW:rect.width,startH:rect.height,startLeft:item.x,startTop:item.y,minW:item.minW || Math.round(rect.width),minH:item.minH || Math.round(rect.height),left:false,right:true,top:false,bottom:true};
+    grip.onpointerdown = e => {
+      if (e.button === 0 || e.pointerType !== 'mouse') startRsz(e, false, true, false, true, grip);
     };
-    elem.appendChild(grip);
 
-    if(item.w) elem.style.width = item.w + 'px';
-    if(item.h) elem.style.height = item.h + 'px';
+    elem.append(bts, bdy, grip);
 
-    if(prn){
-      let node = document.getElementById('lst' + prn);
-      if(node) node.appendChild(elem);
-      else elB.appendChild(elem);
-    }else{
-      elB.appendChild(elem);
-    }
-    syncM(elem, item, type);
+    const node = prn ? $('l' + prn) : null;
+    (node || elB).appendChild(elem);
   });
 
   draw();
 }
 
-function docC(ctr, item){
-  ctr.innerHTML = '';
-  let prv = document.createElement('div');
-  prv.className = 'dpv';
-  
-  let vObj = item.val && typeof item.val === 'object' ? item.val : {};
-  let title = vObj.ttl || vObj.title || 'Sin título';
-  let cnt = vObj.cnt || vObj.content || '';
-  let wrd = cnt.trim() ? cnt.trim().split(/\s+/).length : 0;
-
-  prv.innerHTML = `
-    <div class="dic">
-      <div class="dln"><span></span><span></span><span></span></div>
-      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    </div>
-    <div class="dtl">${esc(title)}</div>
-    <div class="dmt">${wrd} palabras</div>
-  `;
-
-  prv.onclick = (e) => {
-    e.stopPropagation();
-    openD(item);
-  };
-
-  ctr.appendChild(prv);
-}
-
-function openD(item){
+function opnD(item) {
+  if (!item || elD.style.display === 'flex') return;
   aid = item.id;
-  let v = item.val && typeof item.val === 'object' ? item.val : {};
+  const v = item.val && typeof item.val === 'object' ? item.val : {};
   elI.value = v.ttl || v.title || '';
   elT.value = v.cnt || v.content || '';
   elD.style.display = 'flex';
+  elD.querySelector('.ddg').classList.add('ppi');
 }
 
-function clsD(){
-  if(!aid) return;
-  let item = cds.find(c => c.id === aid);
-  if(item){
-    if(typeof item.val !== 'object') item.val = {};
+function docC(ctr, item) {
+  const v = item.val && typeof item.val === 'object' ? item.val : {};
+  const tit = v.ttl || v.title || t('docT');
+  const cnt = v.cnt || v.content || '';
+  const wrd = cnt.trim() ? cnt.trim().split(/\s+/).length : 0;
+
+  const prv = document.createElement('div');
+  prv.className = 'dpv';
+  prv.innerHTML = `
+    <div class="dic">
+      <div class="dln"><span></span><span></span><span></span></div>
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </div>
+    <div class="dtl">${esc(tit)}</div>
+    <div class="dmt">${wrd} ${t('wrd')}</div>
+  `;
+  prv.onclick = e => { e.stopPropagation(); opnD(item); };
+  ctr.appendChild(prv);
+}
+
+function clsD() {
+  if (!aid) return;
+  const item = cds.find(c => c.id === aid);
+  if (item) {
+    if (typeof item.val !== 'object' || !item.val) item.val = {};
     item.val.ttl = elI.value;
     item.val.cnt = elT.value;
     save();
-    rndr();
   }
-  elD.style.display = 'none';
-  aid = null;
+  const dlg = elD.querySelector('.ddg');
+  dlg.classList.remove('ppi');
+  dlg.classList.add('ppo');
+  setTimeout(() => {
+    elD.style.display = 'none';
+    dlg.classList.remove('ppo');
+    aid = null;
+    rndr();
+  }, noa ? 0 : 150);
 }
 
-function dlDoc(){
-  let t = elI.value || 'documento';
-  let c = elT.value || '';
-  let b = new Blob([c], {type:'text/markdown'});
-  let a = document.createElement('a');
+function dlDc() {
+  const b = new Blob([elT.value || ''], { type: 'text/markdown' });
+  const a = document.createElement('a');
   a.href = URL.createObjectURL(b);
-  a.download = `${t.toLowerCase().replace(/\s+/g, '_')}.md`;
+  a.download = `${(elI.value || 'doc').toLowerCase().replace(/\s+/g, '_')}.md`;
   a.click();
+  URL.revokeObjectURL(a.href);
 }
 
-function todos(ctr, item){
-  ctr.innerHTML = '';
-  let list = Array.isArray(item.val) ? item.val : [];
-  list.forEach((t, i) => {
-    let row = document.createElement('div');
+function todo(ctr, item) {
+  const lst = Array.isArray(item.val) ? item.val : [];
+  lst.forEach((tk, i) => {
+    const row = document.createElement('div');
     row.className = 'tdo';
+    const txt = tk.txt ?? tk.text ?? '';
+    const dn = tk.dn ?? !!tk.done;
 
-    let txt = t.txt !== undefined ? t.txt : (t.text !== undefined ? t.text : '');
-    let dn = t.dn !== undefined ? t.dn : (t.done !== undefined ? t.done : false);
-
-    let chk = document.createElement('input');
+    const chk = document.createElement('input');
     chk.type = 'checkbox';
     chk.checked = dn;
     chk.onchange = () => {
-      t.dn = chk.checked;
-      if(t.done !== undefined) t.done = chk.checked;
-      lbl.className = t.dn ? 'dn' : '';
-      save();
+      tk.dn = chk.checked;
+      if (tk.done !== undefined) tk.done = chk.checked;
+      lbl.className = tk.dn ? 'dn' : '';
+      save(false);
     };
 
-    let lbl = document.createElement('span');
-    lbl.contentEditable = true;
+    const lbl = document.createElement('span');
+    lbl.contentEditable = 'true';
     lbl.className = dn ? 'dn' : '';
     lbl.innerText = txt;
     lbl.oninput = () => {
-      t.txt = lbl.innerText;
-      if(t.text !== undefined) t.text = lbl.innerText;
-      syncM(ctr.closest('.cd'), item, item.t || item.type);
-      save();
+      tk.txt = lbl.innerText;
+      if (tk.text !== undefined) tk.text = lbl.innerText;
+      save(false);
     };
+    lbl.onblur = () => draw();
 
-    let del = document.createElement('del');
-    del.innerText = '✕';
-    del.onclick = (e) => {
+    const dBtn = document.createElement('del');
+    dBtn.textContent = '✕';
+    dBtn.onclick = e => {
       e.stopPropagation();
-      list.splice(i, 1);
-      save();
-      rndr();
+      row.classList.add('ppo');
+      setTimeout(() => { lst.splice(i, 1); save(); rndr(); }, noa ? 0 : 140);
     };
 
-    row.appendChild(chk);
-    row.appendChild(lbl);
-    row.appendChild(del);
+    row.append(chk, lbl, dBtn);
     ctr.appendChild(row);
   });
 }
 
-function swch(ctr, item){
-  ctr.innerHTML = '';
-  let cVal = typeof item.val === 'string' ? item.val : '#000000';
-  let box = document.createElement('div');
+function swch(ctr, item) {
+  const cVal = typeof item.val === 'string' ? item.val : '#ff974b';
+  const box = document.createElement('div');
   box.className = 'swc';
   box.style.background = cVal;
 
-  let inp = document.createElement('input');
-  inp.className = 'hex';
-  inp.value = cVal;
-  inp.oninput = () => {
-    box.style.background = inp.value;
-    item.val = inp.value;
-    save();
-  };
+  const ip = document.createElement('input');
+  ip.className = 'hex';
+  ip.value = cVal;
+  ip.oninput = () => { box.style.background = item.val = ip.value; save(false); };
 
-  ctr.appendChild(box);
-  ctr.appendChild(inp);
+  ctr.append(box, ip);
 }
 
-function table(ctr, item){
-  ctr.innerHTML = '';
-  let val = item.val && typeof item.val === 'object' ? item.val : {};
-  let rows = Math.max(1, Math.min(20, Number(val.rows) || 3));
-  let cols = Math.max(1, Math.min(12, Number(val.cols) || 3));
-  let cells = Array.isArray(val.cells) ? val.cells : [];
-  let rowH = Array.isArray(val.rowHeights) ? val.rowHeights : [];
-  val.ttl = val.ttl || 'Tabla';
+function tabl(ctr, item) {
+  const val = item.val && typeof item.val === 'object' ? item.val : {};
+  const rows = Math.max(1, Math.min(20, Number(val.rows) || 3));
+  const cols = Math.max(1, Math.min(12, Number(val.cols) || 3));
+  const cells = Array.isArray(val.cells) ? val.cells : [];
+  const rowH = Array.isArray(val.rowHeights) ? val.rowHeights : [];
+  val.ttl = val.ttl || t('defT');
   val.rows = rows;
   val.cols = cols;
   val.rowHeights = rowH;
-  for(let i = 0; i < rows; i++) val.rowHeights[i] = Math.max(42, Number(val.rowHeights[i]) || 42);
-  val.rowHeights.length = rows;
+  for (let i = 0; i < rows; i++) rowH[i] = Math.max(40, Number(rowH[i]) || 40);
+  rowH.length = rows;
 
-  for(let i = 0; i < rows * cols; i++){
-    if(!cells[i] || typeof cells[i] !== 'object') cells[i] = {text:'', color:'default'};
-    cells[i].text = cells[i].text !== undefined ? cells[i].text : (cells[i].value || '');
+  for (let i = 0; i < rows * cols; i++) {
+    if (!cells[i] || typeof cells[i] !== 'object') cells[i] = { text: '', color: 'default' };
+    cells[i].text = cells[i].text ?? cells[i].value ?? '';
     cells[i].color = cells[i].color || 'default';
   }
   cells.length = rows * cols;
   val.cells = cells;
 
-  let head = document.createElement('div');
+  const head = document.createElement('div');
   head.className = 'thd';
-  let title = document.createElement('span');
-  title.className = 'tttl';
-  title.contentEditable = true;
-  title.innerText = val.ttl;
-  title.oninput = () => {
-    val.ttl = title.innerText;
-    syncM(ctr.closest('.cd'), item, item.t || item.type);
-    save();
-  };
+  const tit = document.createElement('span');
+  tit.className = 'tttl';
+  tit.contentEditable = 'true';
+  tit.innerText = val.ttl;
+  tit.oninput = () => { val.ttl = tit.innerText; save(false); };
+  head.appendChild(tit);
 
-  head.appendChild(title);
-
-  let grid = document.createElement('div');
+  const grid = document.createElement('div');
   grid.className = 'tgrd';
-  grid.style.gridTemplateColumns = `repeat(${cols}, minmax(72px, 1fr))`;
-  grid.style.gridTemplateRows = val.rowHeights.map(h => `${h}px`).join(' ');
+  grid.style.gridTemplateColumns = `repeat(${cols}, minmax(68px, 1fr))`;
+  grid.style.gridTemplateRows = rowH.map(h => `${h}px`).join(' ');
 
   cells.forEach((cell, idx) => {
-    let tile = document.createElement('div');
+    const tile = document.createElement('div');
     tile.className = 'tcl';
-    tile.style.minHeight = '0';
-    let color = clrs[cell.color] || clrs.default;
-    tile.style.background = color;
-    if(['white','yellow','lime'].includes(cell.color)) tile.style.color = '#000';
-    else if(cell.color !== 'default') tile.style.color = '#fff';
-    let text = document.createElement('span');
-    text.className = 'tctx';
-    text.contentEditable = true;
-    text.innerText = cell.text;
-    text.oninput = () => {
-      cell.text = text.innerText;
-      fitT(item, grid);
-      syncM(ctr.closest('.cd'), item, item.t || item.type);
-      save();
-    };
-    let cBtn = document.createElement('button');
+    tile.style.background = clrs[cell.color] || clrs.default;
+    if (['white', 'yellow', 'lime'].includes(cell.color)) tile.style.color = '#000';
+    else if (cell.color !== 'default') tile.style.color = '#fff';
+
+    const txt = document.createElement('span');
+    txt.className = 'tctx';
+    txt.contentEditable = 'true';
+    txt.innerText = cell.text;
+    txt.oninput = () => { cell.text = txt.innerText; fitT(item, grid); save(false); };
+    txt.onblur = () => draw();
+
+    const cBtn = document.createElement('button');
     cBtn.className = 'tbtn';
     cBtn.type = 'button';
-    cBtn.innerText = '●';
-    cBtn.title = 'Cambiar color de celda';
-    cBtn.onclick = (e) => {
-      e.stopPropagation();
-      cellM(cell, tile, e);
-    };
-    tile.appendChild(text);
-    tile.appendChild(cBtn);
-    tile.onmousedown = (e) => {
-      let rect = tile.getBoundingClientRect();
-      let row = Math.floor(idx / cols);
-      if(e.clientY >= rect.bottom - 8){
+    cBtn.textContent = '●';
+    cBtn.title = t('cCel');
+    cBtn.onclick = e => { e.stopPropagation(); clrM(c => { cell.color = c; }, e); };
+
+    tile.append(txt, cBtn);
+    tile.onpointerdown = e => {
+      if (e.target.closest('button, [contenteditable="true"]')) return;
+      const rect = tile.getBoundingClientRect();
+      const row = Math.floor(idx / cols);
+      if (e.clientY >= rect.bottom - 10) {
         e.preventDefault();
         e.stopPropagation();
-        rsz = {kind:'row', item, row, startY:e.clientY, startHeight:val.rowHeights[row], grid, elem:ctr.closest('.cd')};
-        return;
+        rsz = { kind: 'row', item, row, sY: e.clientY, sH: rowH[row], grid };
+        tile.setPointerCapture(e.pointerId);
       }
-      if(e.target.closest('button') || e.target.isContentEditable) return;
     };
     grid.appendChild(tile);
   });
 
-  ctr.appendChild(head);
-  ctr.appendChild(grid);
+  ctr.append(head, grid);
   fitT(item, grid);
 }
 
-function fitT(item, grid){
-  let val = item.val;
-  if(!val || !Array.isArray(val.rowHeights)) return;
-  let cols = Math.max(1, Number(val.cols) || 1);
-  let next = val.rowHeights.map(h => Math.max(42, Number(h) || 42));
+function fitT(item, grid) {
+  const val = item.val;
+  if (!val || !Array.isArray(val.rowHeights)) return;
+  const cols = Math.max(1, Number(val.cols) || 1);
+  const nxt = val.rowHeights.map(h => Math.max(40, Number(h) || 40));
   [...grid.children].forEach((tile, idx) => {
-    let txt = tile.querySelector('.tctx');
-    if(!txt) return;
-    let row = Math.floor(idx / cols);
-    next[row] = Math.max(next[row], txt.scrollHeight + 17);
+    const txt = tile.querySelector('.tctx');
+    if (txt) nxt[Math.floor(idx / cols)] = Math.max(nxt[Math.floor(idx / cols)], txt.scrollHeight + 16);
   });
-  val.rowHeights = next;
-  grid.style.gridTemplateRows = next.map(h => `${h}px`).join(' ');
+  val.rowHeights = nxt;
+  grid.style.gridTemplateRows = nxt.map(h => `${h}px`).join(' ');
 }
 
-function popT(item, e){
-  let old = document.querySelector('.tpop');
-  if(old) old.remove();
-  let val = item.val;
-  let pop = document.createElement('div');
-  pop.className = 'tpop ppi';
-  pop.style.left = Math.min(e.clientX, innerWidth - 180) + 'px';
-  pop.style.top = Math.min(e.clientY, innerHeight - 190) + 'px';
-  let rLbl = document.createElement('label');
-  rLbl.innerText = 'Rows';
-  let rInp = document.createElement('input');
-  rInp.type = 'number';
-  rInp.min = '1';
-  rInp.max = '20';
-  rInp.value = val.rows;
-  rLbl.appendChild(rInp);
-  let cLbl = document.createElement('label');
-  cLbl.innerText = 'Columns';
-  let cInp = document.createElement('input');
-  cInp.type = 'number';
-  cInp.min = '1';
-  cInp.max = '12';
-  cInp.value = val.cols;
-  cLbl.appendChild(cInp);
-  let btn = document.createElement('button');
+function popT(item, e) {
+  document.querySelector('.tpop')?.remove();
+  const val = item.val;
+  const p = document.createElement('div');
+  p.className = 'tpop ppi';
+  p.style.left = Math.min(e.clientX, innerWidth - 185) + 'px';
+  p.style.top = Math.min(e.clientY, innerHeight - 170) + 'px';
+
+  const mkIn = (lbl, v, max) => {
+    const l = document.createElement('label');
+    l.textContent = lbl;
+    const i = document.createElement('input');
+    i.type = 'number';
+    i.min = '1';
+    i.max = String(max);
+    i.value = v;
+    l.appendChild(i);
+    return [l, i];
+  };
+
+  const [rLbl, rInp] = mkIn(t('rows'), val.rows, 20);
+  const [cLbl, cInp] = mkIn(t('cols'), val.cols, 12);
+  const btn = document.createElement('button');
   btn.type = 'button';
-  btn.innerText = 'Apply';
+  btn.textContent = t('aply');
   btn.onclick = () => {
     val.rows = Math.max(1, Math.min(20, Number(rInp.value) || 1));
     val.cols = Math.max(1, Math.min(12, Number(cInp.value) || 1));
-    if(!Array.isArray(val.rowHeights)) val.rowHeights = [];
-    for(let i = 0; i < val.rows; i++) val.rowHeights[i] = Math.max(42, Number(val.rowHeights[i]) || 42);
+    if (!Array.isArray(val.rowHeights)) val.rowHeights = [];
+    for (let i = 0; i < val.rows; i++) val.rowHeights[i] = Math.max(40, Number(val.rowHeights[i]) || 40);
     val.rowHeights.length = val.rows;
-    pop.remove();
+    p.remove();
     save();
     rndr();
   };
-  pop.appendChild(rLbl);
-  pop.appendChild(cLbl);
-  pop.appendChild(btn);
-  document.body.appendChild(pop);
+
+  p.append(rLbl, cLbl, btn);
+  document.body.appendChild(p);
   rInp.focus();
   rInp.select();
   setTimeout(() => {
-    let close = (evt) => {
-      if(!pop.contains(evt.target)){
-        pop.remove();
-        window.removeEventListener('click', close);
-      }
-    };
-    window.addEventListener('click', close);
+    const close = evt => { if (!p.contains(evt.target)) { p.remove(); window.removeEventListener('pointerdown', close); } };
+    window.addEventListener('pointerdown', close);
   }, 10);
 }
 
-function colC(ctr, item){
-  ctr.innerHTML = '';
-  let vObj = item.val && typeof item.val === 'object' ? item.val : {};
-  let title = vObj.ttl || vObj.title || 'Columna';
-
-  let head = document.createElement('div');
+function colC(ctr, item) {
+  const v = item.val && typeof item.val === 'object' ? item.val : {};
+  const head = document.createElement('div');
   head.className = 'hd';
 
-  let ttl = document.createElement('div');
+  const ttl = document.createElement('div');
   ttl.className = 'ttl';
-  ttl.contentEditable = true;
-  ttl.innerText = title;
+  ttl.contentEditable = 'true';
+  ttl.innerText = v.ttl || v.title || t('defC');
   ttl.oninput = () => {
-    if(typeof item.val !== 'object') item.val = {};
+    if (typeof item.val !== 'object') item.val = {};
     item.val.ttl = ttl.innerText;
-    syncM(ctr.closest('.cd'), item, item.t || item.type);
-    save();
+    save(false);
   };
 
-  let lst = document.createElement('div');
+  const lst = document.createElement('div');
   lst.className = 'lst';
-  lst.id = 'lst' + item.id;
+  lst.id = 'l' + item.id;
 
   head.appendChild(ttl);
-  ctr.appendChild(head);
-  ctr.appendChild(lst);
+  ctr.append(head, lst);
 }
 
-function menu(id, e){
-  let old = document.querySelector('.mn');
-  if(old) old.remove();
-
-  let item = cds.find(c => c.id === id);
-  if(!item) return;
-
-  let m = document.createElement('div');
+function clrM(pick, e) {
+  document.querySelector('.mn')?.remove();
+  const m = document.createElement('div');
   m.className = 'mn ppi';
-  m.style.left = e.clientX + 'px';
-  m.style.top = e.clientY + 'px';
+  m.style.left = Math.min(e.clientX, innerWidth - 165) + 'px';
+  m.style.top = Math.min(e.clientY, innerHeight - 130) + 'px';
 
   Object.keys(clrs).forEach(k => {
-    let d = document.createElement('div');
+    const d = document.createElement('div');
     d.className = 'dt';
     d.style.background = clrs[k];
-    d.onclick = () => {
-      item.clr = k;
-      m.remove();
-      save();
-      rndr();
-    };
+    d.onclick = () => { pick(k); m.remove(); save(); rndr(); };
     m.appendChild(d);
   });
 
   document.body.appendChild(m);
   setTimeout(() => {
-    let close = (evt) => {
-      if(!m.contains(evt.target)){
-        m.remove();
-        window.removeEventListener('click', close);
-      }
-    };
-    window.addEventListener('click', close);
+    const close = evt => { if (!m.contains(evt.target)) { m.remove(); window.removeEventListener('pointerdown', close); } };
+    window.addEventListener('pointerdown', close);
   }, 10);
 }
 
-function cellM(cell, tile, e){
-  let old = document.querySelector('.mn');
-  if(old) old.remove();
-  let m = document.createElement('div');
-  m.className = 'mn ppi';
-  m.style.left = e.clientX + 'px';
-  m.style.top = e.clientY + 'px';
-  Object.keys(clrs).forEach(k => {
-    let d = document.createElement('div');
-    d.className = 'dt';
-    d.style.background = clrs[k];
-    d.onclick = () => {
-      cell.color = k;
-      m.remove();
-      save();
-      rndr();
-    };
-    m.appendChild(d);
-  });
-  document.body.appendChild(m);
-  setTimeout(() => {
-    let close = (evt) => {
-      if(!m.contains(evt.target)){
-        m.remove();
-        window.removeEventListener('click', close);
-      }
-    };
-    window.addEventListener('click', close);
-  }, 10);
-}
-
-function conn(id){
-  if(!src){
+function conn(id) {
+  if (!src) {
     src = id;
-    let el = document.getElementById('c' + id);
-    if(el) el.classList.add('lnk');
-  }else{
-    if(src !== id){
-      let ex = lks.find(l => (l.a === src && l.b === id) || (l.a === id && l.b === src));
-      if(!ex){
-        lks.push({a: src, b: id});
-      }else{
-        lks = lks.filter(l => l !== ex);
-      }
+    $('c' + id)?.classList.add('lnk');
+  } else {
+    if (src !== id) {
+      const ex = lks.find(l => (l.a === src && l.b === id) || (l.a === id && l.b === src));
+      if (!ex) lks.push({ a: src, b: id });
+      else lks = lks.filter(l => l !== ex);
       save();
     }
-    let el = document.getElementById('c' + src);
-    if(el) el.classList.remove('lnk');
+    $('c' + src)?.classList.remove('lnk');
     src = null;
     draw();
   }
 }
 
-function del(id){
-  cds = cds.filter(c => c.id !== id);
-  lks = lks.filter(l => l.a !== id && l.b !== id);
-  cds.forEach(c => {
-    if(c.prn === id) c.prn = null;
-  });
-  save();
-  rndr();
+function del(id) {
+  const el = $('c' + id);
+  const run = () => {
+    cds = cds.filter(c => c.id !== id);
+    lks = lks.filter(l => l.a !== id && l.b !== id);
+    cds.forEach(c => { if (c.prn === id) c.prn = null; });
+    save();
+    rndr();
+  };
+  if (el && !noa) {
+    el.classList.add('ppo');
+    setTimeout(run, 155);
+  } else run();
 }
 
-function draw(){
+function draw() {
   elS.innerHTML = '';
   lks.forEach(l => {
-    let e1 = document.getElementById('c' + l.a);
-    let e2 = document.getElementById('c' + l.b);
-    if(!e1 || !e2) return;
-
-    let r1 = e1.getBoundingClientRect();
-    let r2 = e2.getBoundingClientRect();
-
-    let x1 = r1.left + r1.width / 2;
-    let y1 = r1.top + r1.height / 2;
-    let x2 = r2.left + r2.width / 2;
-    let y2 = r2.top + r2.height / 2;
-
-    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    let dx = Math.abs(x2 - x1) * 0.5;
-    let d = `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
-
-    path.setAttribute('d', d);
-    path.setAttribute('stroke', 'var(--acc)');
-    path.setAttribute('stroke-width', '3');
-    path.setAttribute('fill', 'none');
-
-    path.onclick = () => {
-      lks = lks.filter(item => item !== l);
-      save();
-      draw();
-    };
-
-    elS.appendChild(path);
+    const e1 = $('c' + l.a), e2 = $('c' + l.b);
+    if (!e1 || !e2) return;
+    const r1 = e1.getBoundingClientRect(), r2 = e2.getBoundingClientRect();
+    const x1 = r1.left + r1.width / 2, y1 = r1.top + r1.height / 2;
+    const x2 = r2.left + r2.width / 2, y2 = r2.top + r2.height / 2;
+    const dx = Math.abs(x2 - x1) * 0.5;
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`);
+    p.onclick = () => { lks = lks.filter(i => i !== l); save(); };
+    elS.appendChild(p);
   });
 }
 
-function esc(str){
-  if(!str) return '';
-  return str.replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-}
-
-function syncM(elem, item, type){
-  if(!elem) return;
-  let baseW = 290;
-  let baseH = 80;
-  if(type === 'col' || type === 'column'){
-    baseW = 340;
-    baseH = 200;
-  }else if(type === 'tbl' || type === 'table'){
-    baseW = 430;
-  }else if(type === 'doc' || type === 'clr' || type === 'color'){
-    baseW = 150;
-  }
-
-  let cnt = elem.querySelector('content');
-  let minW = baseW;
-  let minH = baseH;
-  if(cnt){
-    minW = Math.max(minW, cnt.scrollWidth + 26);
-    minH = Math.max(minH, cnt.offsetTop + cnt.scrollHeight + 13);
-  }
-
-  let grid = elem.querySelector('.tgrd');
-  if(grid){
-    minW = Math.max(minW, grid.scrollWidth + 26);
-    minH = Math.max(minH, grid.offsetTop + grid.scrollHeight + 13);
-  }
-
-  item.minW = Math.ceil(minW);
-  item.minH = Math.ceil(minH);
-  elem.style.minWidth = item.minW + 'px';
-  elem.style.minHeight = item.minH + 'px';
-
-  if(item.w && item.w < item.minW){
-    item.w = item.minW;
-    elem.style.width = item.w + 'px';
-  }
-  if(item.h && item.h < item.minH){
-    item.h = item.minH;
-    elem.style.height = item.h + 'px';
-  }
-}
-
-window.onmousemove = (e) => {
-  if(rsz){
-    if(rsz.kind === 'card'){
-      let dx = e.clientX - rsz.startX;
-      let dy = e.clientY - rsz.startY;
-      if(rsz.left){
-        rsz.item.w = Math.max(rsz.minW, Math.round(rsz.startW - dx));
-        let actDx = rsz.startW - rsz.item.w;
-        rsz.item.x = Math.round(rsz.startLeft + actDx);
+function onPm(e) {
+  if (rsz) {
+    if (rsz.kind === 'card') {
+      const dx = e.clientX - rsz.sX, dy = e.clientY - rsz.sY;
+      if (rsz.left) {
+        rsz.item.w = Math.max(rsz.mW, Math.round(rsz.sW - dx));
+        rsz.item.x = Math.round(rsz.sL + (rsz.sW - rsz.item.w));
         rsz.elem.style.left = rsz.item.x + 'px';
-      }else if(rsz.right){
-        rsz.item.w = Math.max(rsz.minW, Math.round(rsz.startW + dx));
+        rsz.elem.style.width = rsz.item.w + 'px';
+      } else if (rsz.right) {
+        rsz.item.w = Math.max(rsz.mW, Math.round(rsz.sW + dx));
+        rsz.elem.style.width = rsz.item.w + 'px';
       }
-      if(rsz.top){
-        rsz.item.h = Math.max(rsz.minH, Math.round(rsz.startH - dy));
-        let actDy = rsz.startH - rsz.item.h;
-        rsz.item.y = Math.round(rsz.startTop + actDy);
+      if (rsz.top) {
+        rsz.item.h = Math.max(rsz.mH, Math.round(rsz.sH - dy));
+        rsz.item.y = Math.round(rsz.sT + (rsz.sH - rsz.item.h));
         rsz.elem.style.top = rsz.item.y + 'px';
-      }else if(rsz.bottom){
-        rsz.item.h = Math.max(rsz.minH, Math.round(rsz.startH + dy));
+        rsz.elem.style.minHeight = rsz.item.h + 'px';
+        if (rsz.tp === 'img') rsz.elem.style.height = rsz.item.h + 'px';
+      } else if (rsz.btm) {
+        rsz.item.h = Math.max(rsz.mH, Math.round(rsz.sH + dy));
+        rsz.elem.style.minHeight = rsz.item.h + 'px';
+        if (rsz.tp === 'img') rsz.elem.style.height = rsz.item.h + 'px';
       }
-      rsz.item.minW = rsz.minW;
-      rsz.item.minH = rsz.minH;
-      if(rsz.right) rsz.elem.style.width = rsz.item.w + 'px';
-      if(rsz.left) rsz.elem.style.width = rsz.item.w + 'px';
-      if(rsz.bottom) rsz.elem.style.height = rsz.item.h + 'px';
-      if(rsz.top) rsz.elem.style.height = rsz.item.h + 'px';
       draw();
-    }else if(rsz.kind === 'row'){
-      let h = Math.max(42, Math.round(rsz.startHeight + e.clientY - rsz.startY));
+    } else if (rsz.kind === 'row') {
+      const h = Math.max(40, Math.round(rsz.sH + e.clientY - rsz.sY));
       rsz.item.val.rowHeights[rsz.row] = h;
       rsz.grid.style.gridTemplateRows = rsz.item.val.rowHeights.map(v => `${v}px`).join(' ');
-      syncM(rsz.elem, rsz.item, rsz.item.t || rsz.item.type);
+      draw();
     }
     return;
   }
-  if(!drg) return;
-  let dx = e.clientX - sx;
-  let dy = e.clientY - sy;
 
-  if(Math.sqrt(dx * dx + dy * dy) > 5) shf = true;
+  if (!drg) return;
+  if (!shf && Math.hypot(e.clientX - sx, e.clientY - sy) > 5) {
+    shf = true;
+    const elem = $('c' + drg.id);
+    if (elem) {
+      elem.classList.add('drg');
+      if (elem.parentElement !== elB) {
+        const r = elem.getBoundingClientRect();
+        ox = sx - (r.left + elB.scrollLeft);
+        oy = sy - (r.top + elB.scrollTop);
+        drg.prn = null;
+        elB.appendChild(elem);
+      }
+    }
+  }
 
-  if(shf){
+  if (shf) {
     drg.prn = null;
-    drg.x = e.clientX - ox;
-    drg.y = e.clientY - oy;
+    drg.x = Math.max(0, Math.round(e.clientX + elB.scrollLeft - ox));
+    drg.y = Math.max(0, Math.round(e.clientY + elB.scrollTop - oy));
 
-    let elem = document.getElementById('c' + drg.id);
-    if(elem){
+    const elem = $('c' + drg.id);
+    if (elem) {
       elem.style.left = drg.x + 'px';
       elem.style.top = drg.y + 'px';
-      if(elem.parentElement !== elB) elB.appendChild(elem);
+      const vx = Math.max(-2.5, Math.min(2.5, (e.clientX - lx) * 0.14));
+      elem.style.transform = noa ? '' : `scale(1.025) rotate(${vx.toFixed(2)}deg)`;
     }
+    lx = e.clientX;
+
+    if (drg.t !== 'col' && drg.type !== 'column') {
+      document.querySelectorAll('.cd.col').forEach(el => el.classList.remove('drop-hov'));
+      cds.filter(c => (c.t === 'col' || c.type === 'column') && c.id !== drg.id).forEach(c => {
+        const el = $('c' + c.id);
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && !nest(drg.id, c.id)) {
+          el.classList.add('drop-hov');
+        }
+      });
+    }
+
     draw();
   }
-};
+}
 
-window.onmouseup = (e) => {
-  if(rsz){
+function onPu(e) {
+  if (rsz) {
+    rsz.elem?.classList.remove('rsz-act');
     save();
     rsz = null;
     return;
   }
-  if(!drg) return;
+  if (!drg) return;
 
-  if(shf && (drg.t !== 'col' && drg.type !== 'column')){
-    let cols = cds.filter(c => (c.t === 'col' || c.type === 'column') && c.id !== drg.id);
+  const cur = drg;
+  const openDoc = e.type === 'pointerup' && !shf && (cur.t === 'doc' || cur.type === 'doc');
+
+  const elem = $('c' + cur.id);
+  if (elem) {
+    elem.classList.remove('drg');
+    elem.style.transform = '';
+  }
+  document.querySelectorAll('.cd.col').forEach(el => el.classList.remove('drop-hov'));
+
+  if (shf && cur.t !== 'col' && cur.type !== 'column') {
     let hit = null;
-
-    cols.forEach(c => {
-      let el = document.getElementById('c' + c.id);
-      if(!el) return;
-      let r = el.getBoundingClientRect();
-      if(e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom){
-        if(!nest(drg.id, c.id)) hit = c.id;
+    cds.filter(c => (c.t === 'col' || c.type === 'column') && c.id !== cur.id).forEach(c => {
+      const el = $('c' + c.id);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && !nest(cur.id, c.id)) {
+        hit = c.id;
       }
     });
 
-    if(hit){
-      drg.prn = hit;
-      rndr();
+    if (hit) {
+      cur.prn = hit;
+      cur.ord = Date.now();
+      rndr(cur.id);
     }
   }
 
   drg = null;
   shf = false;
   save();
-};
+  if (openDoc) opnD(cur);
+}
 
-window.onresize = () => draw();
-window.onload = () => load();
+window.addEventListener('pointermove', onPm);
+window.addEventListener('pointerup', onPu);
+window.addEventListener('pointercancel', onPu);
+elB.addEventListener('scroll', draw, { passive: true });
+window.addEventListener('resize', draw);
+
+window.addEventListener('storage', e => {
+  if (e.key === kCst) { cst = JSON.parse(e.newValue || '{}'); opts(); aply(thm); }
+  else if (e.key === kThm && e.newValue) aply(e.newValue);
+  else if (e.key === kAni && e.newValue !== null) setA(e.newValue === 'true');
+  else if (e.key === kDot && e.newValue !== null) setD(e.newValue === 'true');
+  else if (e.key === kLng && e.newValue) setL(e.newValue);
+});
+
+window.onload = load;
 </script>
 </body>
 </html>
