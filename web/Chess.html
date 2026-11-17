@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chess</title>
+  <title>Chess &amp; Checkers</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♟️</text></svg>">
   <style>
     :root {
@@ -59,15 +59,15 @@
       mask-image: radial-gradient(circle at 85% 15%, #000 0%, transparent 68%);
     }
     .hero { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.65rem; }
-    .brnd { margin: 0 0 .5rem; font-size: clamp(2.1rem, 7vw, 3.15rem); letter-spacing: -.03em; line-height: 1; }
-    .sub { margin: 0; color: var(--mut); font-size: .93rem; line-height: 1.5; max-width: 30ch; }
+    .brnd { margin: 0 0 .5rem; font-size: clamp(1.75rem, 5.8vw, 2.55rem); letter-spacing: -.03em; line-height: 1.08; }
+    .sub { margin: 0; color: var(--mut); font-size: .93rem; line-height: 1.5; max-width: 32ch; }
     .crest {
-      position: relative; width: 5.4rem; height: 5.4rem; flex-shrink: 0; border-radius: 26px;
+      position: relative; width: 5.2rem; height: 5.2rem; flex-shrink: 0; border-radius: 26px;
       border: 1px solid var(--line); background: linear-gradient(145deg, var(--str), var(--src));
       box-shadow: var(--shd), inset 0 1px 0 #ffffff40; display: grid; place-items: center;
       transform: rotate(6deg); animation: bob 4.5s ease-in-out infinite;
     }
-    .crest span { font-size: 2.55rem; filter: drop-shadow(0 6px 12px #0000004d); }
+    .crest span { font-size: 2.45rem; filter: drop-shadow(0 6px 12px #0000004d); }
     .mbtns { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
     .shll .mbtns .pri { grid-column: 1 / -1; }
     .mbtn {
@@ -79,6 +79,18 @@
     .mbtn.pri { background: var(--acc); color: #17231b; border-color: var(--acc); font-weight: 800; }
     .mbtn:hover:not(:disabled), .mbtn:focus-visible:not(:disabled) { border-color: var(--acc); transform: translateY(-2px); outline: none; }
     .mbtn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .ggrid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; padding-top: .25rem; }
+    .gopt {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem;
+      padding: 1.25rem .8rem; border: 1px solid var(--line); border-radius: 20px;
+      background: var(--src); color: var(--txt); font-weight: 800; font-size: 1.02rem; cursor: pointer;
+      box-shadow: inset 0 1px 0 #ffffff24;
+      transition: transform .18s ease-in-out, border-color .18s ease-in-out, background .18s ease-in-out;
+    }
+    .gopt:hover, .gopt:focus-visible { border-color: var(--acc); transform: translateY(-3px); outline: none; }
+    .gico { width: 3.1rem; height: 3.1rem; display: grid; place-items: center; filter: drop-shadow(0 4px 8px #0000004d); }
+    .gico svg { width: 100%; height: 100%; display: block; overflow: visible; }
 
     .wrap {
       position: relative; z-index: 2; width: min(560px, calc(100vw - 1.2rem), calc(100dvh - 1.5rem));
@@ -168,12 +180,17 @@
     .pc.anim { z-index: 12; }
 
     .mod { position: fixed; inset: 0; z-index: 50; background: #00000099; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fade .2s ease-in-out; }
-    .mbox { width: min(400px, 100%); max-height: 90dvh; overflow-y: auto; padding: 1.45rem; border: 1px solid var(--line); border-radius: 26px; background: var(--str); box-shadow: var(--shd); animation: pop .24s cubic-bezier(.2, .8, .2, 1); }
-    .mhd { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+    .mbox { width: min(410px, 100%); max-height: 90dvh; overflow-y: auto; padding: 1.45rem; border: 1px solid var(--line); border-radius: 26px; background: var(--str); box-shadow: var(--shd); animation: pop .24s cubic-bezier(.2, .8, .2, 1); }
+    .mhd { display: flex; align-items: center; justify-content: space-between; margin-bottom: .85rem; }
     .mhd h2 { margin: 0; font-size: 1.15rem; }
+
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: .38rem; margin-bottom: .75rem; padding: .28rem; border: 1px solid var(--line); border-radius: 14px; background: var(--src); }
+    .tbtn { padding: .48rem .7rem; border: none; border-radius: 10px; background: transparent; color: var(--mut); font-weight: 800; font-size: .86rem; cursor: pointer; transition: background .18s ease-in-out, color .18s ease-in-out; }
+    .tbtn.act { background: var(--acc); color: #17231b; }
+
     .set { display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .72rem 0; border-top: 1px solid var(--line); }
     .set label, .set span { font-size: .88rem; }
-    select { max-width: 11.5rem; color: var(--txt); border: 1px solid var(--line); border-radius: 10px; padding: .42rem .55rem; background: var(--src); cursor: pointer; }
+    select { max-width: 12rem; color: var(--txt); border: 1px solid var(--line); border-radius: 10px; padding: .42rem .55rem; background: var(--src); cursor: pointer; }
     .seg { display: flex; gap: .35rem; flex-shrink: 0; }
     .sbtn { min-width: 2.3rem; padding: .38rem .58rem; border: 1px solid var(--line); border-radius: 10px; background: var(--src); color: var(--txt); font-weight: 700; font-size: .8rem; cursor: pointer; transition: border-color .15s ease-in-out, background .15s ease-in-out, color .15s ease-in-out; }
     .sbtn.act { background: var(--acc); color: #17231b; border-color: var(--acc); }
@@ -232,8 +249,8 @@
   <main class="shll" id="menu">
     <div class="hero">
       <div>
-        <h1 class="brnd" data-i="ttl">Chess</h1>
-        <p class="sub" data-i="sub">Crisp strategy crafted to glide on any worthy machine.</p>
+        <h1 class="brnd" data-i="ttl">Chess &amp; Checkers</h1>
+        <p class="sub" data-i="sub">Crisp strategies crafted to glide on a worthy machine.</p>
       </div>
       <div class="crest" aria-hidden="true"><span>♞</span></div>
     </div>
@@ -244,7 +261,7 @@
     </div>
   </main>
 
-  <section class="wrap hide" id="game" aria-label="Chess arena">
+  <section class="wrap hide" id="game" aria-label="Game arena">
     <header class="hbar">
       <div class="tchip">
         <span class="tdot w" id="tdot"></span>
@@ -262,52 +279,96 @@
     <div class="tray" id="botb"></div>
   </section>
 
+  <div class="mod hide" id="gamem" role="dialog" aria-modal="true">
+    <div class="mbox">
+      <div class="mhd"><h2 data-i="chg">Choose a Game</h2><button class="ibtn" id="clsg" type="button">✕</button></div>
+      <div class="ggrid">
+        <button class="gopt" data-m="chess" type="button"><span class="gico" id="ichs"></span><span data-i="chs">Chess</span></button>
+        <button class="gopt" data-m="checkers" type="button"><span class="gico" id="ichk"></span><span data-i="chk">Checkers</span></button>
+      </div>
+    </div>
+  </div>
+
   <div class="mod hide" id="setm" role="dialog" aria-modal="true">
     <div class="mbox">
       <div class="mhd"><h2 data-i="set">Settings</h2><button class="ibtn" id="clss" type="button">✕</button></div>
-      <div class="set">
-        <label for="sthm" data-i="thm">Theme</label>
-        <select id="sthm">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="mlt">Melon Light</option>
-          <option value="mdk">Melon Dark</option>
-          <option value="crim">Crimson</option>
-          <option value="nebu">Nebula</option>
-          <option value="burn">Eyeburn</option>
-        </select>
+      <div class="tabs" id="stabs" role="tablist">
+        <button class="tbtn act" data-tab="gen" type="button" role="tab" aria-selected="true" data-i="tgen">General</button>
+        <button class="tbtn" data-tab="chk" type="button" role="tab" aria-selected="false" data-i="tchk">Checkers</button>
       </div>
-      <div class="set">
-        <label for="slng" data-i="lng">Language</label>
-        <select id="slng">
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="pt-BR">Português</option>
-        </select>
-      </div>
-      <div class="set">
-        <span data-i="frs">Who Goes First</span>
-        <div class="seg" id="wfrs">
-          <button class="sbtn act" data-v="w" type="button" data-i="wht">White</button>
-          <button class="sbtn" data-v="b" type="button" data-i="blk">Black</button>
-          <button class="sbtn" data-v="r" type="button" data-i="rnd">Random</button>
+
+      <div id="tab-gen">
+        <div class="set">
+          <label for="sthm" data-i="thm">Theme</label>
+          <select id="sthm">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="mlt">Melon Light</option>
+            <option value="mdk">Melon Dark</option>
+            <option value="crim">Crimson</option>
+            <option value="nebu">Nebula</option>
+            <option value="burn">Eyeburn</option>
+          </select>
+        </div>
+        <div class="set">
+          <label for="slng" data-i="lng">Language</label>
+          <select id="slng">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="pt-BR">Português</option>
+          </select>
+        </div>
+        <div class="set">
+          <span data-i="frs">Who Goes First</span>
+          <div class="seg" id="wfrs">
+            <button class="sbtn act" data-v="w" type="button" data-i="wht">White</button>
+            <button class="sbtn" data-v="b" type="button" data-i="blk">Black</button>
+            <button class="sbtn" data-v="r" type="button" data-i="rnd">Random</button>
+          </div>
+        </div>
+        <div class="set">
+          <span data-i="flp">Flip Board on Turn Swap</span>
+          <label class="swch"><input id="sfrp" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="fw">Free Will</span>
+          <label class="swch"><input id="sfw" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="aur">Aura Guardians</span>
+          <label class="swch"><input id="saur" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="noa">Disable Animations</span>
+          <label class="swch"><input id="snoa" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="npt">Disable Background Particles</span>
+          <label class="swch"><input id="sptc" type="checkbox"><span class="slid"></span></label>
         </div>
       </div>
-      <div class="set">
-        <span data-i="flp">Flip Board on Turn Swap</span>
-        <label class="swch"><input id="sfrp" type="checkbox"><span class="slid"></span></label>
-      </div>
-      <div class="set">
-        <span data-i="aur">Aura Guardians</span>
-        <label class="swch"><input id="saur" type="checkbox"><span class="slid"></span></label>
-      </div>
-      <div class="set">
-        <span data-i="noa">Disable Animations</span>
-        <label class="swch"><input id="snoa" type="checkbox"><span class="slid"></span></label>
-      </div>
-      <div class="set">
-        <span data-i="npt">Disable Background Particles</span>
-        <label class="swch"><input id="sptc" type="checkbox"><span class="slid"></span></label>
+
+      <div id="tab-chk" class="hide">
+        <div class="set">
+          <label for="sckp" data-i="pre">Rules Preset</label>
+          <select id="sckp">
+            <option value="es" data-i="pes">Spanish Checkers</option>
+            <option value="en" data-i="pen">English Checkers</option>
+            <option value="cst" data-i="pcst">Custom</option>
+          </select>
+        </div>
+        <div class="set">
+          <span data-i="rfly">Flying King</span>
+          <label class="swch"><input id="cfly" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="rbwd">Men Capture Backward</span>
+          <label class="swch"><input id="cbwd" type="checkbox"><span class="slid"></span></label>
+        </div>
+        <div class="set">
+          <span data-i="rprm">Crowning Ends Turn</span>
+          <label class="swch"><input id="cprm" type="checkbox"><span class="slid"></span></label>
+        </div>
       </div>
     </div>
   </div>
@@ -323,7 +384,7 @@
     <div class="mbox" style="text-align:center">
       <div class="wico" id="wico">🏆</div>
       <h2 id="wtxt" style="margin:0 0 .45rem;font-size:1.5rem">White Wins!</h2>
-      <p id="wsub" style="margin:0 0 1.35rem;color:var(--mut);font-size:.92rem">Checkmate on the board.</p>
+      <p id="wsub" style="margin:0 0 1.35rem;color:var(--mut);font-size:.92rem">Checkmate!</p>
       <div class="mbtns">
         <button class="mbtn pri" id="agn" type="button" data-i="agn">Play Again</button>
         <button class="mbtn" id="wmnu" type="button" data-i="mnu">Menu</button>
@@ -334,23 +395,68 @@
   <script>
     const kThm = "melon-theme", kLng = "melon-language", kAur = "melon-aura", kNoa = "melon-disable-animations", kCst = "themeditor-themes", kSav = "melon_chess_save", kCfg = "melon_chess_cfg";
     const b = document.body, $ = (id) => document.getElementById(id);
-    let cst = JSON.parse(localStorage.getItem(kCst) || "{}"), cfg = Object.assign({ f: "w", flp: false, npt: false }, JSON.parse(localStorage.getItem(kCfg) || "{}"));
-    let st = null, sel = null, mvs = [], pnd = null, actx = null, wKey = "wwin", sKey = "chkM";
 
-    const tr = {
-      en: { ttl: "Chess", sub: "Crisp strategies crafted to glide on any worthy machine.", new: "New Game", cnt: "Continue", set: "Settings", wtrn: "White's Turn", btrn: "Black's Turn", thm: "Theme", lng: "Language", frs: "Who Goes First", wht: "White", blk: "Black", rnd: "Random", flp: "Flip Board on Turn Swap", aur: "Aura Guardians", noa: "Disable Animations", npt: "Disable Background Particles", prm: "Promote Pawn", wwin: "White Wins!", bwin: "Black Wins!", drw: "Draw!", chkM: "Checkmate!", stlM: "Stalemate. Damn it.", insM: "Insufficient material to checkmate.", agn: "Play Again", mnu: "Menu" },
-      es: { ttl: "Ajedrez", sub: "Estrategias ligeras hechas para correr fino en cualquier máquina.", new: "Nueva Partida", cnt: "Continuar", set: "Ajustes", wtrn: "Turno del Blanco", btrn: "Turno del Negro", thm: "Tema", lng: "Idioma", frs: "Quién empieza", wht: "Blanco", blk: "Negro", rnd: "Al azar", flp: "Voltear el tablero al cambiar turno", aur: "Guardianes del Aura", noa: "Desactivar animaciones", npt: "Desactivar partículas", prm: "¿Con quién voy a coronar?", wwin: "¡Blanco gana!", bwin: "¡Negro gana!", drw: "¡Tablas!", chkM: "¡Jaque mate!", stlM: "Se ahogó el juego.", insM: "No hay yerba para el mate.", agn: "Jugar de nuevo", mnu: "Menú" },
-      "pt-BR": { ttl: "Xadrez", sub: "Estratégia leve e afiada, feita para rodar liso em qualquer máquina.", new: "Novo Jogo", cnt: "Continuar", set: "Configurações", wtrn: "Vez das Brancas", btrn: "Vez das Pretas", thm: "Tema", lng: "Idioma", frs: "Quem começa", wht: "Brancas", blk: "Pretas", rnd: "Aleatório", flp: "Virar tabuleiro ao trocar turno", aur: "Guardiões da Aura", noa: "Desativar animações", npt: "Desativar partículas de fundo", prm: "Promover peão", wwin: "Brancas Venceram!", bwin: "Pretas Venceram!", drw: "Empate!", chkM: "Xeque-mate no tabuleiro.", stlM: "Afogamento — sem lances legais.", insM: "Material insuficiente para dar mate.", agn: "Jogar Novamente", mnu: "Menu" }
+    const ckPre = {
+      es: { fly: true, bwd: false, prmS: true },
+      en: { fly: false, bwd: false, prmS: true }
     };
 
-    const valM = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+    let cst = JSON.parse(localStorage.getItem(kCst) || "{}");
+    const rawCfg = JSON.parse(localStorage.getItem(kCfg) || "{}");
+    let cfg = Object.assign({ f: "w", flp: false, npt: false, fw: false }, rawCfg);
+    cfg.ck = {
+      fly: rawCfg.ck?.fly !== undefined ? Boolean(rawCfg.ck.fly) : ckPre.es.fly,
+      bwd: rawCfg.ck?.bwd !== undefined ? Boolean(rawCfg.ck.bwd) : ckPre.es.bwd,
+      prmS: rawCfg.ck?.prmS !== undefined ? Boolean(rawCfg.ck.prmS) : ckPre.es.prmS
+    };
+
+    let st = null, sel = null, mvs = [], pnd = null, actx = null, wKey = "wwin", sKey = "chkM", lMode = "chess";
+
+    const tr = {
+      en: {
+        ttl: "Chess & Checkers", sub: "Crisp strategies crafted to glide on any worthy machine.",
+        new: "New Game", cnt: "Continue", set: "Settings", chg: "Choose a Game", chs: "Chess", chk: "Checkers",
+        tgen: "General", tchk: "Checkers", pre: "Rules Preset", pes: "Spanish Checkers", pen: "English Checkers", pcst: "Custom",
+        rfly: "Flying King", rbwd: "Men Capture Backward", rprm: "Crowning Ends Turn",
+        wtrn: "White's Turn", btrn: "Black's Turn", thm: "Theme", lng: "Language", frs: "Who Goes First", wht: "White", blk: "Black", rnd: "Random",
+        flp: "Flip Board on Turn Swap", fw: "Free Will", aur: "Aura Guardians", noa: "Disable Animations", npt: "Disable Background Particles",
+        prm: "Promote Pawn", wwin: "White Wins!", bwin: "Black Wins!", drw: "Draw!", chkM: "Checkmate!", stlM: "Stalemate. Damn it.", insM: "Insufficient material to checkmate.",
+        ckW: "Never seen that before", ckB: "Game's stuck", agn: "Play Again", mnu: "Menu"
+      },
+      es: {
+        ttl: "Ajedrez y Damas", sub: "Estrategias ligeras hechas para correr fino en cualquier máquina. (que valga la pena)",
+        new: "Nueva Partida", cnt: "Continuar", set: "Ajustes", chg: "Elige un juego", chs: "Ajedrez", chk: "Damas",
+        tgen: "General", tchk: "Damas", pre: "Preset de reglas", pes: "Damas Españolas", pen: "Damas Inglesas", pcst: "Personalizado",
+        rfly: "Dama voladora", rbwd: "Peones comen hacia atrás", rprm: "Coronar frena el turno",
+        wtrn: "Turno del Blanco", btrn: "Turno del Negro", thm: "Tema", lng: "Idioma", frs: "Quién empieza", wht: "Blanco", blk: "Negro", rnd: "Al azar",
+        flp: "Voltear el tablero al cambiar turno", fw: "Libre albedrío", aur: "Guardianes del Aura", noa: "Desactivar animaciones", npt: "Desactivar partículas",
+        prm: "¿Con quién voy a coronar?", wwin: "¡Blanco gana!", bwin: "¡Negro gana!", drw: "¡Tablas!", chkM: "¡Jaque mate!", stlM: "Se ahogó el juego.", insM: "No hay yerba para el mate.",
+        ckW: "Qué pro", ckB: "Se trancó el juego", agn: "Jugar de nuevo", mnu: "Menú"
+      },
+      "pt-BR": {
+        ttl: "Xadrez e Damas", sub: "Estratégia leve e afiada, feita para rodar liso em qualquer máquina.",
+        new: "Novo Jogo", cnt: "Continuar", set: "Configurações", chg: "Escolha um jogo", chs: "Xadrez", chk: "Damas",
+        tgen: "Geral", tchk: "Damas", pre: "Predefinição de regras", pes: "Damas Espanholas", pen: "Damas Inglesas", pcst: "Personalizado",
+        rfly: "Dama voadora", rbwd: "Peões capturam para trás", rprm: "Coroar encerra o turno",
+        wtrn: "Vez das Brancas", btrn: "Vez das Pretas", thm: "Tema", lng: "Idioma", frs: "Quem começa", wht: "Brancas", blk: "Pretas", rnd: "Aleatório",
+        flp: "Virar tabuleiro ao trocar turno", fw: "Livre-arbítrio", aur: "Guardiões da Aura", noa: "Desativar animações", npt: "Desativar partículas de fundo",
+        prm: "Promover peão", wwin: "Branca Vence!", bwin: "Preta Vence!", drw: "Empate!", chkM: "Xeque-mate!", stlM: "Sem lances legais.", insM: "Material insuficiente para dar mate.",
+        ckW: "That's it!", ckB: "Sem lances legais restantes!", agn: "Jogar Novamente", mnu: "Menu"
+      }
+    };
+
+    const valM = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 2, m: 1 };
     const kPts = [[-2, -1], [-2, 1], [-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1]];
     const nPts = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
     const dPts = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
     const oPts = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-    function svgP(col, typ) {
+    function svgPc(mode, col, typ) {
       const f = col === "w" ? "#fffdf9" : "#1c2226", s = col === "w" ? "#1c2226" : "#f4f6f8", d = col === "w" ? "#1c2226" : "#fffdf9";
+      if (mode === "checkers") {
+        const crw = typ === "k" ? `<path d="M10.5 19l1.3-5.5 4.2 3 4.2-3 1.3 5.5z" fill="${d}" stroke="none"/>` : "";
+        return `<svg viewBox="0 0 32 32" aria-hidden="true"><g fill="${f}" stroke="${s}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><circle cx="16" cy="17.5" r="10.5"/><circle cx="16" cy="15.5" r="10.5"/><circle cx="16" cy="15.5" r="6.8" fill="none" stroke="${d}" stroke-width="1.2" opacity=".55"/>${crw}</g></svg>`;
+      }
       const g = {
         p: `<path d="M16 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-5 11h10l2 6H9l2-6zm-4 8h18v3H7v-3z"/>`,
         r: `<path d="M8 6h3v3h3V6h4v3h3V6h3v5l-2 2v11l2 2v3H8v-3l2-2V13l-2-2V6z"/>`,
@@ -454,18 +560,30 @@
     }
 
     function apBg(chk = false) {
-      if (!$("game").classList.contains("hide") && st && chk) {
+      if (!$("game").classList.contains("hide") && st && st.mode === "chess" && !cfg.fw && chk) {
         b.style.background = st.tn === "w" ? "#c92a2a" : "#660f16";
       } else {
         b.style.removeProperty("background");
       }
     }
 
+    function getCkPre() {
+      const k = Object.keys(ckPre.es);
+      if (k.every((p) => Boolean(cfg.ck[p]) === ckPre.es[p])) return "es";
+      if (k.every((p) => Boolean(cfg.ck[p]) === ckPre.en[p])) return "en";
+      return "cst";
+    }
+
     function svCfg() {
       localStorage.setItem(kCfg, JSON.stringify(cfg));
       $("wfrs").querySelectorAll(".sbtn").forEach((el) => el.classList.toggle("act", el.dataset.v === cfg.f));
       $("sfrp").checked = cfg.flp;
+      $("sfw").checked = cfg.fw;
       $("sptc").checked = cfg.npt;
+      $("sckp").value = getCkPre();
+      $("cfly").checked = cfg.ck.fly;
+      $("cbwd").checked = cfg.ck.bwd;
+      $("cprm").checked = cfg.ck.prmS;
     }
 
     const onBd = (r, c) => r >= 0 && r < 8 && c >= 0 && c < 8;
@@ -478,6 +596,16 @@
         if (r === 1) return { c: "b", t: "p", m: false };
         if (r === 6) return { c: "w", t: "p", m: false };
         if (r === 7) return { c: "w", t: bk[c], m: false };
+        return null;
+      }));
+    }
+
+    function mkCkBd() {
+      return Array.from({ length: 8 }, (_, r) => Array.from({ length: 8 }, (__, c) => {
+        if ((r + c) % 2 === 1) {
+          if (r < 3) return { c: "b", t: "m" };
+          if (r > 4) return { c: "w", t: "m" };
+        }
         return null;
       }));
     }
@@ -632,17 +760,104 @@
       return false;
     }
 
+    function ckOneJmp(bd, r, c, jSet, rls) {
+      const p = bd[r][c];
+      if (!p) return [];
+      const res = [], opp = p.c === "w" ? "b" : "w";
+      if (p.t === "k" && rls.fly) {
+        for (const [dr, dc] of dPts) {
+          let nr = r + dr, nc = c + dc;
+          while (onBd(nr, nc) && !bd[nr][nc] && !jSet.has(`${nr}-${nc}`)) {
+            nr += dr; nc += dc;
+          }
+          if (onBd(nr, nc) && bd[nr][nc]?.c === opp && !jSet.has(`${nr}-${nc}`)) {
+            let lr = nr + dr, lc = nc + dc;
+            while (onBd(lr, lc) && !bd[lr][lc] && !jSet.has(`${lr}-${lc}`)) {
+              res.push({ fr: r, fc: c, tr: lr, tc: lc, jp: [nr, nc] });
+              lr += dr; lc += dc;
+            }
+          }
+        }
+        return res;
+      }
+      const drs = (p.t === "k" || rls.bwd) ? [-1, 1] : (p.c === "w" ? [-1] : [1]);
+      for (const dr of drs) {
+        for (const dc of [-1, 1]) {
+          const mr = r + dr, mc = c + dc, tr = r + dr * 2, tc = c + dc * 2;
+          if (onBd(tr, tc) && bd[mr][mc]?.c === opp && !jSet.has(`${mr}-${mc}`) && !bd[tr][tc] && !jSet.has(`${tr}-${tc}`)) {
+            res.push({ fr: r, fc: c, tr, tc, jp: [mr, mc] });
+          }
+        }
+      }
+      return res;
+    }
+
+    function ckStp(bd, r, c, aur, rls) {
+      const p = bd[r][c];
+      if (!p) return [];
+      const res = [];
+      if (aur) {
+        for (const [dr, dc] of kPts) {
+          if (p.t === "m" && !rls.bwd && (p.c === "w" ? dr > 0 : dr < 0)) continue;
+          const nr = r + dr, nc = c + dc;
+          if (onBd(nr, nc) && bd[nr][nc]?.c !== p.c) res.push({ fr: r, fc: c, tr: nr, tc: nc });
+        }
+        return res;
+      }
+      if (p.t === "k" && rls.fly) {
+        for (const [dr, dc] of dPts) {
+          let nr = r + dr, nc = c + dc;
+          while (onBd(nr, nc) && !bd[nr][nc]) {
+            res.push({ fr: r, fc: c, tr: nr, tc: nc });
+            nr += dr; nc += dc;
+          }
+        }
+        return res;
+      }
+      const drs = p.t === "k" ? [-1, 1] : (p.c === "w" ? [-1] : [1]);
+      for (const dr of drs) {
+        for (const dc of [-1, 1]) {
+          const tr = r + dr, tc = c + dc;
+          if (onBd(tr, tc) && !bd[tr][tc]) res.push({ fr: r, fc: c, tr, tc });
+        }
+      }
+      return res;
+    }
+
+    function ckAll(bd, col, aur, chn = null, jmpd = null) {
+      const rls = cfg.ck;
+      if (aur) {
+        const res = [];
+        for (let r = 0; r < 8; r += 1) {
+          for (let c = 0; c < 8; c += 1) {
+            if (bd[r][c]?.c === col) res.push(...ckStp(bd, r, c, true, rls));
+          }
+        }
+        return res;
+      }
+      const jSet = new Set(jmpd || []);
+      if (chn) return ckOneJmp(bd, chn[0], chn[1], jSet, rls);
+      const res = [];
+      for (let r = 0; r < 8; r += 1) {
+        for (let c = 0; c < 8; c += 1) {
+          if (bd[r][c]?.c === col) res.push(...ckOneJmp(bd, r, c, jSet, rls), ...ckStp(bd, r, c, false, rls));
+        }
+      }
+      return res;
+    }
+
     function svG() {
       if (st) localStorage.setItem(kSav, JSON.stringify(st));
       else localStorage.removeItem(kSav);
       $("bcnt").disabled = !localStorage.getItem(kSav);
     }
 
-    function initG() {
+    function initG(mode = lMode) {
+      lMode = mode;
       const fst = cfg.f === "r" ? (Math.random() < 0.5 ? "w" : "b") : cfg.f;
-      st = { bd: mkBd(), tn: fst, ep: null, lst: null, cap: { w: [], b: [] }, his: [] };
+      st = { mode, bd: mode === "checkers" ? mkCkBd() : mkBd(), tn: fst, ep: null, lst: null, chn: null, jmpd: [], cap: { w: [], b: [] }, his: [] };
       sel = null; mvs = []; pnd = null;
-      svG(); showG();
+      apBg(false); svG(); showG();
     }
 
     function showG() { $("menu").classList.add("hide"); $("game").classList.remove("hide"); draw(); }
@@ -651,12 +866,15 @@
     function rTray(el, col) {
       const opp = col === "w" ? "b" : "w";
       const list = [...st.cap[col]].sort((a, z) => valM[z] - valM[a]);
-      el.innerHTML = `<div class="caps">${list.map((t) => `<span class="mcp">${svgP(opp, t)}</span>`).join("")}</div>`;
+      el.innerHTML = `<div class="caps">${list.map((t) => `<span class="mcp">${svgPc(st.mode, opp, t)}</span>`).join("")}</div>`;
     }
 
     function draw(ani = null) {
       if (!st) return;
-      const t = tr[lng()], aur = isAur(), chk = inChk(st.bd, st.tn, aur), flp = cfg.flp && st.tn === "b";
+      const t = tr[lng()], aur = isAur(), isCk = st.mode === "checkers", fw = cfg.fw;
+      const chk = !isCk && !fw && inChk(st.bd, st.tn, aur), flp = cfg.flp && st.tn === "b";
+      const allCk = isCk && !fw ? ckAll(st.bd, st.tn, aur, st.chn, st.jmpd) : [];
+
       apBg(chk);
       $("tdot").className = `tdot ${st.tn}`;
       $("tmsg").textContent = st.tn === "w" ? t.wtrn : t.btrn;
@@ -676,13 +894,14 @@
           const sq = document.createElement("div");
           const isL = (r + c) % 2 === 0;
           const p = st.bd[r][c];
-          const mv = mvs.find((m) => m.tr === r && m.tc === c);
+          const mv = fw ? null : mvs.find((m) => m.tr === r && m.tc === c);
           const isS = sel && sel[0] === r && sel[1] === c;
           const isLst = st.lst && ((st.lst[0] === r && st.lst[1] === c) || (st.lst[2] === r && st.lst[3] === c));
           const isKck = chk && p?.c === st.tn && p.t === "k";
-          const canM = p?.c === st.tn;
+          const canM = p?.c === st.tn && (fw || !isCk || allCk.some((m) => m.fr === r && m.fc === c));
+          const isCap = Boolean(mv && (p || mv.ep || mv.jp));
 
-          sq.className = `sq ${isL ? "lite" : "dark"}${isLst ? " lst" : ""}${isS ? " sel" : ""}${isKck ? " chk" : ""}${canM ? " mov" : ""}${mv ? ` dst${p || mv.ep ? " cap" : ""}` : ""}`;
+          sq.className = `sq ${isL ? "lite" : "dark"}${isLst ? " lst" : ""}${isS ? " sel" : ""}${isKck ? " chk" : ""}${canM ? " mov" : ""}${mv ? ` dst${isCap ? " cap" : ""}` : ""}`;
           sq.dataset.p = `${r}-${c}`;
 
           const shRk = flp ? c === 7 : c === 0;
@@ -699,7 +918,7 @@
           if (p) {
             const pw = document.createElement("span");
             pw.className = "pc"; pw.dataset.pc = `${r}-${c}`;
-            pw.innerHTML = svgP(p.c, p.t);
+            pw.innerHTML = svgPc(st.mode, p.c, p.t);
             sq.appendChild(pw);
           }
 
@@ -725,28 +944,192 @@
       }
     }
 
+    function showWin(wK, sK, ico = "🏆") {
+      const t = tr[lng()];
+      wKey = wK; sKey = sK;
+      st = null; svG(); apBg(false);
+      if (wK !== "drw") { mldy(); cfti(); }
+      else sfx(420, 0.2, "triangle");
+      $("wico").textContent = ico;
+      $("wtxt").textContent = t[wK];
+      $("wsub").textContent = t[sK];
+      $("winm").classList.remove("hide");
+    }
+
     function tapSq(r, c) {
       if (!st || pnd) return;
+      const p = st.bd[r][c];
+
+      if (cfg.fw) {
+        if (sel) {
+          if (sel[0] === r && sel[1] === c) { sel = null; mvs = []; draw(); return; }
+          if (p?.c === st.tn) { sel = [r, c]; mvs = []; sfx(580, 0.05); draw(); return; }
+          const sp = st.bd[sel[0]][sel[1]];
+          if (st.mode === "chess" && sp?.t === "p" && (r === 0 || r === 7)) {
+            pnd = { fr: sel[0], fc: sel[1], tr: r, tc: c, pr: true, fw: true };
+            $("pbox").innerHTML = ["q", "r", "b", "n"].map((t) => `<button class="ppic" data-t="${t}" type="button">${svgPc("chess", st.tn, t)}</button>`).join("");
+            $("prom").classList.remove("hide");
+            return;
+          }
+          doFwMv(sel[0], sel[1], r, c, null);
+          return;
+        }
+        if (p?.c === st.tn) { sel = [r, c]; mvs = []; sfx(580, 0.05); draw(); }
+        return;
+      }
+
       const mv = mvs.find((m) => m.tr === r && m.tc === c);
       if (mv) {
+        if (st.mode === "checkers") {
+          doCkMv(mv);
+          return;
+        }
         if (mv.pr) {
           pnd = mv;
-          const box = $("pbox");
-          box.innerHTML = ["q", "r", "b", "n"].map((t) => `<button class="ppic" data-t="${t}" type="button">${svgP(st.tn, t)}</button>`).join("");
+          $("pbox").innerHTML = ["q", "r", "b", "n"].map((t) => `<button class="ppic" data-t="${t}" type="button">${svgPc("chess", st.tn, t)}</button>`).join("");
           $("prom").classList.remove("hide");
           return;
         }
         doMv(mv, null);
         return;
       }
-      const p = st.bd[r][c];
+      if (st.mode === "checkers" && st.chn) {
+        sfx(480, 0.06);
+        endCkTn(null);
+        return;
+      }
       if (p?.c === st.tn) {
-        if (sel && sel[0] === r && sel[1] === c) { sel = null; mvs = []; }
-        else { sel = [r, c]; mvs = lglMs(st.bd, r, c, st.ep, isAur()); sfx(580, 0.05); }
+        if (sel && sel[0] === r && sel[1] === c) { sel = null; mvs = []; draw(); return; }
+        const cand = st.mode === "checkers"
+          ? ckAll(st.bd, st.tn, isAur(), null, null).filter((m) => m.fr === r && m.fc === c)
+          : lglMs(st.bd, r, c, st.ep, isAur());
+        if (st.mode === "checkers" && !cand.length) {
+          sfx(240, 0.06, "triangle");
+          return;
+        }
+        sel = [r, c]; mvs = cand; sfx(580, 0.05);
         draw();
       } else if (sel) {
         sel = null; mvs = []; draw();
       }
+    }
+
+    function doFwMv(fr, fc, trR, tc, pTyp) {
+      const fEl = document.querySelector(`.pc[data-pc="${fr}-${fc}"]`);
+      const r0 = fEl ? fEl.getBoundingClientRect() : null;
+      const opp = st.tn === "w" ? "b" : "w";
+
+      st.his.push(JSON.stringify({ bd: st.bd, tn: st.tn, ep: st.ep, lst: st.lst, cap: st.cap }));
+      if (st.his.length > 60) st.his.shift();
+
+      const nb = st.bd.map((row) => row.map((cell) => (cell ? { ...cell } : null)));
+      const p = nb[fr][fc];
+      let cPc = nb[trR][tc]?.c === opp ? nb[trR][tc] : null;
+
+      if (st.mode === "checkers" && !cPc && Math.abs(trR - fr) === 2 && Math.abs(tc - fc) === 2) {
+        const mr = (fr + trR) / 2, mc = (fc + tc) / 2;
+        if (nb[mr][mc]?.c === opp) {
+          cPc = nb[mr][mc];
+          nb[mr][mc] = null;
+        }
+      }
+
+      if (cPc) st.cap[st.tn].push(cPc.t);
+      nb[fr][fc] = null;
+      p.m = true;
+      if (st.mode === "chess" && p.t === "p" && (trR === 0 || trR === 7)) p.t = pTyp || "q";
+      if (st.mode === "checkers" && p.t === "m" && ((p.c === "w" && trR === 0) || (p.c === "b" && trR === 7))) p.t = "k";
+      nb[trR][tc] = p;
+
+      st.bd = nb;
+      st.ep = null;
+      st.chn = null;
+      st.jmpd = [];
+      st.lst = [fr, fc, trR, tc];
+      const winner = st.tn;
+      st.tn = opp;
+      sel = null; mvs = []; pnd = null;
+
+      sfx(cPc ? 300 : 520, cPc ? 0.12 : 0.07, cPc ? "triangle" : "sine");
+      draw({ to: `${trR}-${tc}`, r0, cap: Boolean(cPc) });
+
+      if (st.mode === "chess" && cPc?.t === "k") {
+        showWin(winner === "w" ? "wwin" : "bwin", "chkM");
+        return;
+      }
+      if (st.mode === "checkers") {
+        let rem = 0;
+        for (let r = 0; r < 8; r += 1) for (let c = 0; c < 8; c += 1) if (st.bd[r][c]?.c === opp) rem += 1;
+        if (rem === 0) {
+          showWin(winner === "w" ? "wwin" : "bwin", "ckW");
+          return;
+        }
+      }
+      svG();
+    }
+
+    function endCkTn(ani) {
+      st.chn = null;
+      st.jmpd = [];
+      st.tn = st.tn === "w" ? "b" : "w";
+      sel = null; mvs = [];
+      draw(ani);
+
+      const aur = isAur(), oppMvs = ckAll(st.bd, st.tn, aur, null, null);
+      if (!oppMvs.length) {
+        let rem = 0;
+        for (let r = 0; r < 8; r += 1) for (let c = 0; c < 8; c += 1) if (st.bd[r][c]?.c === st.tn) rem += 1;
+        showWin(st.tn === "w" ? "bwin" : "wwin", rem === 0 ? "ckW" : "ckB");
+        return;
+      }
+      svG();
+    }
+
+    function doCkMv(mv) {
+      const fEl = document.querySelector(`.pc[data-pc="${mv.fr}-${mv.fc}"]`);
+      const r0 = fEl ? fEl.getBoundingClientRect() : null;
+      const aur = isAur();
+
+      if (!st.chn) {
+        st.his.push(JSON.stringify({ bd: st.bd, tn: st.tn, lst: st.lst, cap: st.cap }));
+        if (st.his.length > 60) st.his.shift();
+        st.jmpd = [];
+      }
+
+      const nb = st.bd.map((row) => row.map((cell) => (cell ? { ...cell } : null)));
+      const p = nb[mv.fr][mv.fc];
+      let cPc = null;
+
+      if (mv.jp) {
+        cPc = nb[mv.jp[0]][mv.jp[1]];
+        nb[mv.jp[0]][mv.jp[1]] = null;
+        st.jmpd.push(`${mv.jp[0]}-${mv.jp[1]}`);
+      } else if (aur && nb[mv.tr][mv.tc]) {
+        cPc = nb[mv.tr][mv.tc];
+      }
+
+      if (cPc) st.cap[st.tn].push(cPc.t);
+      nb[mv.fr][mv.fc] = null;
+      const prom = p.t === "m" && ((p.c === "w" && mv.tr === 0) || (p.c === "b" && mv.tr === 7));
+      if (prom) p.t = "k";
+      nb[mv.tr][mv.tc] = p;
+      st.bd = nb;
+      st.lst = [mv.fr, mv.fc, mv.tr, mv.tc];
+
+      const canCont = !aur && mv.jp && !(prom && cfg.ck.prmS);
+      const nxt = canCont ? ckAll(st.bd, st.tn, false, [mv.tr, mv.tc], st.jmpd) : [];
+      if (nxt.length) {
+        st.chn = [mv.tr, mv.tc];
+        sel = [mv.tr, mv.tc];
+        mvs = nxt;
+        sfx(320, 0.11, "triangle");
+        draw({ to: `${mv.tr}-${mv.tc}`, r0, cap: true });
+        svG();
+        return;
+      }
+
+      sfx(cPc ? 300 : 520, cPc ? 0.12 : 0.07, cPc ? "triangle" : "sine");
+      endCkTn({ to: `${mv.tr}-${mv.tc}`, r0, cap: Boolean(cPc) });
     }
 
     function doMv(mv, pTyp) {
@@ -767,21 +1150,11 @@
       sfx(cPc ? 300 : 520, cPc ? 0.12 : 0.07, cPc ? "triangle" : "sine");
       draw({ to: `${mv.tr}-${mv.tc}`, r0, cap: Boolean(cPc) });
 
-      const t = tr[lng()], aur = isAur(), chk = inChk(st.bd, st.tn, aur), any = hasMv(st.bd, st.tn, st.ep, aur);
+      const aur = isAur(), chk = inChk(st.bd, st.tn, aur), any = hasMv(st.bd, st.tn, st.ep, aur);
       if (!any || insf(st.bd, aur)) {
-        wKey = !any && chk ? (st.tn === "w" ? "bwin" : "wwin") : "drw";
-        sKey = !any && chk ? "chkM" : !any ? "stlM" : "insM";
-        st = null; svG(); apBg(false);
-        if (wKey !== "drw") {
-          mldy(); cfti();
-          $("wico").textContent = "🏆";
-        } else {
-          sfx(420, 0.2, "triangle");
-          $("wico").textContent = "🤝";
-        }
-        $("wtxt").textContent = t[wKey];
-        $("wsub").textContent = t[sKey];
-        $("winm").classList.remove("hide");
+        const wK = !any && chk ? (st.tn === "w" ? "bwin" : "wwin") : "drw";
+        const sK = !any && chk ? "chkM" : !any ? "stlM" : "insM";
+        showWin(wK, sK, wK !== "drw" ? "🏆" : "🤝");
         return;
       }
       svG();
@@ -791,22 +1164,79 @@
       const btn = e.target.closest(".ppic");
       if (!btn || !pnd) return;
       $("prom").classList.add("hide");
-      doMv(pnd, btn.dataset.t);
+      if (pnd.fw) doFwMv(pnd.fr, pnd.fc, pnd.tr, pnd.tc, btn.dataset.t);
+      else doMv(pnd, btn.dataset.t);
     });
 
-    $("bnew").addEventListener("click", () => { sfx(660, 0.09); initG(); });
-    $("agn").addEventListener("click", () => { $("winm").classList.add("hide"); sfx(660, 0.09); initG(); });
+    $("ichs").innerHTML = svgPc("chess", "w", "n");
+    $("ichk").innerHTML = svgPc("checkers", "w", "k");
+
+    $("bnew").addEventListener("click", () => { sfx(580, 0.07); $("gamem").classList.remove("hide"); });
+    $("clsg").addEventListener("click", () => $("gamem").classList.add("hide"));
+    $("gamem").addEventListener("click", (e) => {
+      const btn = e.target.closest(".gopt");
+      if (!btn) return;
+      $("gamem").classList.add("hide");
+      sfx(660, 0.09); initG(btn.dataset.m);
+    });
+    $("agn").addEventListener("click", () => { $("winm").classList.add("hide"); sfx(660, 0.09); initG(lMode); });
     $("wmnu").addEventListener("click", () => { $("winm").classList.add("hide"); showM(); });
     $("bcnt").addEventListener("click", () => {
       const raw = localStorage.getItem(kSav);
       if (!raw) return;
-      st = JSON.parse(raw); sel = null; mvs = []; pnd = null; sfx(640, 0.08); showG();
+      st = JSON.parse(raw);
+      if (!st.mode) st.mode = "chess";
+      if (!st.jmpd) st.jmpd = [];
+      lMode = st.mode;
+      sel = !cfg.fw && st.chn ? [...st.chn] : null;
+      mvs = !cfg.fw && st.chn ? ckAll(st.bd, st.tn, isAur(), st.chn, st.jmpd) : [];
+      pnd = null; sfx(640, 0.08); showG();
     });
     $("budo").addEventListener("click", () => {
       if (!st || !st.his.length || pnd) return;
       const prv = JSON.parse(st.his.pop());
-      st.bd = prv.bd; st.tn = prv.tn; st.ep = prv.ep; st.lst = prv.lst; st.cap = prv.cap;
+      st.bd = prv.bd; st.tn = prv.tn; st.ep = prv.ep || null; st.lst = prv.lst; st.cap = prv.cap; st.chn = null; st.jmpd = [];
       sel = null; mvs = []; sfx(440, 0.07); svG(); draw();
+    });
+
+    $("stabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".tbtn");
+      if (!btn) return;
+      const tb = btn.dataset.tab;
+      $("stabs").querySelectorAll(".tbtn").forEach((el) => {
+        const act = el.dataset.tab === tb;
+        el.classList.toggle("act", act);
+        el.setAttribute("aria-selected", String(act));
+      });
+      $("tab-gen").classList.toggle("hide", tb !== "gen");
+      $("tab-chk").classList.toggle("hide", tb !== "chk");
+      sfx(540, 0.05);
+    });
+
+    function onCkRuleChange() {
+      svCfg();
+      if (st && st.mode === "checkers") {
+        sel = null; mvs = []; st.chn = null; st.jmpd = [];
+        svG(); draw();
+      }
+    }
+
+    $("sckp").addEventListener("change", (e) => {
+      const v = e.target.value;
+      if (ckPre[v]) Object.assign(cfg.ck, ckPre[v]);
+      sfx(560, 0.06);
+      onCkRuleChange();
+    });
+
+    [
+      ["cfly", "fly"],
+      ["cbwd", "bwd"],
+      ["cprm", "prmS"]
+    ].forEach(([id, key]) => {
+      $(id).addEventListener("change", (e) => {
+        cfg.ck[key] = e.target.checked;
+        onCkRuleChange();
+      });
     });
 
     $("bset").addEventListener("click", () => { sfx(580, 0.07); $("setm").classList.remove("hide"); });
@@ -820,6 +1250,12 @@
       cfg.f = btn.dataset.v; sfx(540, 0.06); svCfg();
     });
     $("sfrp").addEventListener("change", (e) => { cfg.flp = e.target.checked; svCfg(); if (st) draw(); });
+    $("sfw").addEventListener("change", (e) => {
+      cfg.fw = e.target.checked;
+      svCfg();
+      sel = null; mvs = [];
+      if (st) { st.chn = null; st.jmpd = []; svG(); draw(); }
+    });
     $("sptc").addEventListener("change", (e) => { cfg.npt = e.target.checked; svCfg(); ptcs(); });
     $("sthm").addEventListener("change", () => setT($("sthm").value));
     $("slng").addEventListener("change", () => setL($("slng").value));
@@ -827,7 +1263,7 @@
       b.classList.toggle("aur", e.target.checked);
       localStorage.setItem(kAur, String(e.target.checked));
       sel = null; mvs = [];
-      if (st) draw();
+      if (st) { st.chn = null; st.jmpd = []; draw(); }
     });
     $("snoa").addEventListener("change", (e) => {
       b.classList.toggle("noa", e.target.checked);
