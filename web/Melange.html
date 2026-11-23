@@ -673,13 +673,28 @@ mark:active { transform: scale(.9); }
   padding: 1.3rem;
   border-radius: var(--rad);
   box-shadow: var(--shd);
-  width: min(330px, 100%);
+  width: min(350px, 100%);
 }
 
 #mdl h3 { margin-bottom: .9rem; font-size: 1.1rem; color: var(--txt); }
 .mset { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-top: 1px solid var(--line); }
 .mset label, .mset span { font-size: .88rem; color: var(--txt); }
-#mdl select { color: var(--txt); border: 1px solid var(--line); border-radius: 9px; padding: .45rem .55rem; background: var(--src); outline: none; cursor: pointer; max-width: 11rem; }
+.ctl { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+.ctl select, .mbtn {
+  color: var(--txt);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: .45rem .55rem;
+  background: var(--src);
+  outline: none;
+  cursor: pointer;
+}
+.ctl select { min-width: 0; max-width: 135px; }
+select option { background: var(--src); color: var(--txt); }
+.mbtn { padding: .45rem .6rem; line-height: 1; transition: color .2s ease, border-color .2s ease; }
+.mbtn:hover, .mbtn:focus-visible { color: var(--acc); border-color: var(--acc); }
+.ctl select:hover, .ctl select:focus-visible { border-color: var(--acc); }
+.mbtn[hidden] { display: none; }
 
 .swch { position: relative; width: 2.8rem; height: 1.55rem; flex-shrink: 0; }
 .swch input { width: 0; height: 0; opacity: 0; }
@@ -796,15 +811,24 @@ mark:active { transform: scale(.9); }
     <h3 data-i="set">Settings</h3>
     <div class="mset">
       <label for="slc" data-i="thmL">Theme</label>
-      <select id="slc" onchange="aply(this.value)"></select>
+      <div class="ctl">
+        <select id="slc" onchange="aply(this.value)"></select>
+        <button class="mbtn" id="addT" type="button" onclick="elM.click()" aria-label="Import .melon">+</button>
+        <button class="mbtn" id="delT" type="button" onclick="remT()" aria-label="Remove .melon" hidden>×</button>
+        <input id="mln" type="file" accept=".melon" onchange="impT(event)" hidden>
+      </div>
     </div>
     <div class="mset">
       <label for="lng" data-i="lngL">Language</label>
-      <select id="lng" onchange="setL(this.value)">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="pt-BR">Português</option>
-      </select>
+      <div class="ctl">
+        <select id="lng" onchange="setL(this.value)">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+        <button class="mbtn" id="addL" type="button" onclick="elW.click()" aria-label="Import .mlg">+</button>
+        <button class="mbtn" id="delL" type="button" onclick="remL()" aria-label="Remove .mlg" hidden>×</button>
+        <input id="mlg" type="file" accept=".mlg" onchange="impL(event)" hidden>
+      </div>
     </div>
     <div class="mset">
       <span data-i="dotL">Background Dots</span>
@@ -844,15 +868,18 @@ mark:active { transform: scale(.9); }
 
 <script>
 const $ = id => document.getElementById(id);
+const app = 'melange';
+const ls = localStorage;
 const elB = $('bd'), elS = $('svg'), elF = $('fl'), elO = $('mdl-ov'), elC = $('slc');
 const elD = $('dmd'), elI = $('dti'), elT = $('dtx'), elN = $('anm'), elL = $('lng'), elG = $('dot');
+const elM = $('mln'), elW = $('mlg'), delT = $('delT'), delL = $('delL');
 
-const kThm = 'melon-theme', kAni = 'melon-disable-animations', kLng = 'melon-language', kCst = 'themeditor-themes', kDot = 'melange-dots';
-
+const tok = ['bg', 'src', 'str', 'txt', 'mut', 'line', 'acc'];
 let aid = null, cds = [], lks = [], drg = null, rsz = null, src = null;
 let ox = 0, oy = 0, sx = 0, sy = 0, lx = 0, shf = false;
 let thm = 'mdk', noa = false, lng = 'en', dot = false;
-let cst = JSON.parse(localStorage.getItem(kCst) || '{}');
+let cst = JSON.parse(ls.getItem('thm') || '{}');
+let langs = JSON.parse(ls.getItem('lang') || '{}');
 
 const pre = [
   ['light', 'Light'], ['dark', 'Dark'], ['mlt', 'Melon Light'], ['mdk', 'Melon Dark'],
@@ -884,29 +911,84 @@ const tr = {
     defN: 'La nota', defC: 'Columna', defD: 'Nuevo documento', defT: 'Tabla', wrd: 'palabras',
     rows: 'Filas', cols: 'Columnas', aply: 'Aplicar', cClr: 'Cambiar color', lnk: 'Conectar enlace',
     del: 'Eliminar', tSz: 'Tamaño de tabla', addT: 'Añadir tarea', nTsk: 'Nueva tarea', cCel: 'Color de Zelda'
-  },
-  'pt-BR': {
-    set: 'Configurações', thmL: 'Tema', lngL: 'Idioma', dotL: 'Pontos de fundo', noaL: 'Desativar animações', cls: 'Fechar',
-    nTxt: 'Novo cartão', nCol: 'Nova coluna', nDoc: 'Novo documento', nTdo: 'Nova lista',
-    nTbl: 'Nova tabela', nClr: 'Novo cor', imp: 'Importar JSON', exp: 'Exportar JSON',
-    wip: 'Limpar quadro', dlMd: 'Baixar .md', docT: 'Título', docB: 'Escreva seus self-inserts em Markdown aqui...',
-    defN: 'Nota', defC: 'Coluna', defD: 'Novo documento', defT: 'Tabela', wrd: 'palavras',
-    rows: 'Linhas', cols: 'Colunas', aply: 'Aplicar', cClr: 'Mudar cor', lnk: 'Conectar link',
-    del: 'Excluir', tSz: 'Tamanho da tabela', addT: 'Adicionar tarefa', nTsk: 'Nova tarefa', cCel: 'Cor da célula'
   }
 };
 
-const t = k => (tr[lng] || tr.en)[k] || tr.en[k] || k;
+function t(k) {
+  const own = lng.startsWith('own:') ? langs[app]?.[lng.slice(4)]?.tr : tr[lng];
+  return own?.[k] ?? tr.en[k] ?? k;
+}
 
-function setL(v) {
-  lng = tr[v] ? v : 'en';
-  document.documentElement.lang = lng;
-  localStorage.setItem(kLng, lng);
+function pMlg(raw) {
+  const out = { name: '', tr: {} };
+  for (const line of raw.split(/\r?\n/)) {
+    const m = line.trim().match(/^(@?[a-zA-Z0-9_-]+)\s+"((?:\\"|[^"])*)"$/);
+    if (!m) continue;
+    const val = m[2].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+    if (m[1] === '@name') out.name = val;
+    else if (!m[1].startsWith('@')) out.tr[m[1]] = val;
+  }
+  return out;
+}
+
+function pThm(raw) {
+  const v = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (v.length < 7 || v.length > 8) return null;
+  const got = {};
+  for (let i = 0; i < 7; i += 1) {
+    if (!/^[0-9a-f]{6}$/i.test(v[i])) return null;
+    got[tok[i]] = `#${v[i]}`;
+  }
+  if (v[7]) {
+    if (!/^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(v[7])) return null;
+    got.shd = v[7].replace(/([0-9a-f]{8})$/i, '#$1');
+  }
+  return got;
+}
+
+function norm(list) {
+  const tMap = { column: 'col', table: 'tbl', color: 'clr', todo: 'tdo' };
+  return (list || []).map(c => {
+    const tp = tMap[c.t || c.type] || c.t || c.type || 'text';
+    let val = c.val;
+    if (tp === 'tdo' && Array.isArray(val)) {
+      val = val.map(tk => ({ txt: tk.txt ?? tk.text ?? '', dn: tk.dn ?? !!tk.done }));
+    } else if ((tp === 'doc' || tp === 'col') && val && typeof val === 'object') {
+      val = { ...val, ttl: val.ttl ?? val.title ?? '' };
+      if (tp === 'doc') val.cnt = val.cnt ?? val.content ?? '';
+    }
+    return { ...c, t: tp, clr: c.clr || c.color || 'default', prn: c.prn ?? c.parent ?? null, ord: c.ord ?? c.order ?? 0, val };
+  }).sort((a, b) => a.ord - b.ord);
+}
+
+function tint(el, c) {
+  el.style.background = clrs[c] || clrs.default;
+  if (['white', 'yellow', 'lime'].includes(c)) el.style.color = '#000';
+  else if (c !== 'default') el.style.color = '#fff';
+}
+
+function lOpts() {
+  elL.querySelectorAll('option[value^="own:"]').forEach(el => el.remove());
+  Object.entries(langs[app] || {}).forEach(([k, item]) => {
+    const o = document.createElement('option');
+    o.value = `own:${k}`;
+    o.textContent = item.name;
+    elL.appendChild(o);
+  });
+}
+
+function setL(v, init = false) {
+  const own = v.startsWith('own:') ? langs[app]?.[v.slice(4)] : null;
+  const code = own ? v.slice(4) : (tr[v] ? v : 'en');
+  lng = own ? v : code;
+  document.documentElement.lang = code;
+  ls.setItem('lng', lng);
   elL.value = lng;
+  delL.hidden = !own;
   document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
   document.querySelectorAll('[data-t]').forEach(el => { el.title = t(el.dataset.t); });
   document.querySelectorAll('[data-p]').forEach(el => { el.placeholder = t(el.dataset.p); });
-  rndr();
+  rndr(null, init);
 }
 
 function opts() {
@@ -927,41 +1009,83 @@ function opts() {
 
 function aply(n) {
   const mapT = { 'melon-light': 'mlt', 'melon-dark': 'mdk', crimson: 'crim', nebula: 'nebu', eyeburn: 'burn', melonlight: 'mlt', melon: 'mdk', redspace: 'crim', purplespace: 'nebu' };
-  const map = { bg: 'bg', src: 'surface', str: 'surface-strong', txt: 'text', mut: 'muted', line: 'line', acc: 'accent', shd: 'shadow' };
   const rK = mapT[n] || n || 'mdk';
   const own = rK.startsWith('own:') ? cst[rK.slice(4)] : null;
   thm = own || pre.some(([k]) => k === rK) ? rK : 'mdk';
 
   document.body.dataset.t = own ? 'cst' : thm;
-  ['bg', 'src', 'str', 'txt', 'mut', 'line', 'acc'].forEach(k => {
+  tok.forEach(k => {
     document.body.style.removeProperty(`--${k}`);
-    const val = own?.values[k] || own?.values[map[k]];
-    if (val) document.body.style.setProperty(`--${k}`, val);
+    if (own?.values?.[k]) document.body.style.setProperty(`--${k}`, own.values[k]);
   });
   document.body.style.removeProperty('--shd');
   if (own) {
-    const s = own.values.shd || own.values.shadow;
+    const s = own.values?.shd;
     document.body.style.setProperty('--shd', s
       ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, '$1px $2px $3px #$4')
       : '10px 20px 60px #0000004d');
   }
 
   elC.value = thm;
-  localStorage.setItem(kThm, thm);
+  delT.hidden = !own;
+  ls.setItem('t', thm);
+}
+
+async function impT(e) {
+  const f = e.target.files?.[0];
+  if (!f) return;
+  const vals = pThm(await f.text());
+  e.target.value = '';
+  if (!vals) return;
+  const name = f.name.replace(/\.melon$/i, '') || 'Theme';
+  const id = name.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-|-$/g, '').slice(0, 32) || 'cst';
+  cst[id] = { name, values: vals };
+  ls.setItem('thm', JSON.stringify(cst));
+  opts();
+  aply(`own:${id}`);
+}
+
+function remT() {
+  if (!thm.startsWith('own:')) return;
+  delete cst[thm.slice(4)];
+  ls.setItem('thm', JSON.stringify(cst));
+  opts();
+  aply('mdk');
+}
+
+async function impL(e) {
+  const f = e.target.files?.[0];
+  if (!f) return;
+  const data = pMlg(await f.text());
+  e.target.value = '';
+  const id = f.name.replace(/\.mlg$/i, '').replace(new RegExp(`^${app}-`, 'i'), '') || 'custom';
+  langs[app] = langs[app] || {};
+  langs[app][id] = { name: data.name || id, tr: data.tr };
+  ls.setItem('lang', JSON.stringify(langs));
+  lOpts();
+  setL(`own:${id}`);
+}
+
+function remL() {
+  if (!lng.startsWith('own:')) return;
+  delete langs[app]?.[lng.slice(4)];
+  ls.setItem('lang', JSON.stringify(langs));
+  lOpts();
+  setL('en');
 }
 
 function setA(off) {
   noa = !!off;
   document.documentElement.classList.toggle('noa', noa);
   elN.checked = noa;
-  localStorage.setItem(kAni, String(noa));
+  ls.setItem('noa', String(noa));
 }
 
 function setD(on) {
   dot = !!on;
   elB.classList.toggle('dots', dot);
   elG.checked = dot;
-  localStorage.setItem(kDot, String(dot));
+  ls.setItem('melange-dots', String(dot));
 }
 
 function pop() {
@@ -981,23 +1105,22 @@ function pop() {
 
 function load() {
   let d = {};
-  try { d = JSON.parse(localStorage.getItem('melange') || '{}'); } catch (e) {}
-  cds = d.cds || [];
-  cds.sort((a, b) => (a.ord || 0) - (b.ord || 0));
-  lks = d.lks || [];
+  try { d = JSON.parse(ls.getItem('melange') || '{}'); } catch (e) {}
+  cds = norm(d.cds || d.cards);
+  lks = d.lks || d.links || [];
 
   opts();
+  lOpts();
 
-  const rawA = localStorage.getItem(kAni);
+  const rawA = ls.getItem('noa');
   setA(rawA !== null ? rawA === 'true' : !!d.noa);
-  setD(localStorage.getItem(kDot) === 'true');
-  aply(localStorage.getItem(kThm) || d.thm || 'mdk');
-  setL(localStorage.getItem(kLng) || 'en');
-  rndr(null, true);
+  setD(ls.getItem('melange-dots') === 'true');
+  aply(ls.getItem('t') || d.thm || 'mdk');
+  setL(ls.getItem('lng') || 'en', true);
 }
 
 function save(reDrw = true) {
-  localStorage.setItem('melange', JSON.stringify({ cds, lks }));
+  ls.setItem('melange', JSON.stringify({ cds, lks }));
   if (reDrw) draw();
 }
 
@@ -1007,7 +1130,7 @@ function wipe() {
     cds = [];
     lks = [];
     elB.innerHTML = '';
-    localStorage.removeItem('melange');
+    ls.removeItem('melange');
     draw();
   };
   if (!items.length || noa) return clear();
@@ -1033,8 +1156,7 @@ function read(e) {
   r.onload = res => {
     try {
       const d = JSON.parse(res.target.result);
-      cds = d.cds || d.cards || [];
-      cds.sort((a, b) => (a.ord || a.order || 0) - (b.ord || b.order || 0));
+      cds = norm(d.cds || d.cards);
       lks = d.lks || d.links || [];
       if (d.thm || d.theme) aply(d.thm || d.theme);
       rndr(null, true);
@@ -1080,6 +1202,14 @@ function nest(p, c) {
   return false;
 }
 
+function hitC(id, x, y) {
+  return cds.find(c => {
+    if (c.t !== 'col' || c.id === id || nest(id, c.id)) return false;
+    const r = $('c' + c.id)?.getBoundingClientRect();
+    return r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }) || null;
+}
+
 const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
 function pars(txt) {
@@ -1093,29 +1223,24 @@ function pars(txt) {
     .replace(/\n/g, '<br>');
 }
 
-function minS(item, tp) {
-  if (tp === 'col' || tp === 'column') return { w: 240, h: 160 };
-  if (tp === 'tbl' || tp === 'table') return { w: Math.max(240, Math.max(1, Number(item.val?.cols) || 3) * 72 + 28), h: 130 };
-  if (tp === 'doc' || tp === 'clr' || tp === 'color') return { w: 140, h: 110 };
-  if (tp === 'tdo' || tp === 'todo') return { w: 200, h: 90 };
-  if (tp === 'img') return { w: 120, h: 90 };
+function minS(item) {
+  if (item.t === 'col') return { w: 240, h: 160 };
+  if (item.t === 'tbl') return { w: Math.max(240, Math.max(1, Number(item.val?.cols) || 3) * 72 + 28), h: 130 };
+  if (item.t === 'doc' || item.t === 'clr') return { w: 140, h: 110 };
+  if (item.t === 'tdo') return { w: 200, h: 90 };
+  if (item.t === 'img') return { w: 120, h: 90 };
   return { w: 180, h: 84 };
 }
 
 function rndr(frs, init = false) {
   elB.innerHTML = '';
 
-  const bse = cds.filter(c => c.t === 'col' || c.type === 'column');
-  const rst = cds.filter(c => c.t !== 'col' && c.type !== 'column');
+  const bse = cds.filter(c => c.t === 'col');
+  const rst = cds.filter(c => c.t !== 'col');
 
   [...bse, ...rst].forEach((item, idx) => {
-    const tp = item.t || item.type;
     const elem = document.createElement('div');
-    elem.className = 'cd'
-      + (tp === 'col' || tp === 'column' ? ' col' : '')
-      + (tp === 'doc' ? ' doc' : '')
-      + (tp === 'clr' || tp === 'color' ? ' clr' : '')
-      + (tp === 'tbl' || tp === 'table' ? ' tbl' : '');
+    elem.className = 'cd' + (['col', 'doc', 'clr', 'tbl'].includes(item.t) ? ' ' + item.t : '');
 
     if (frs === item.id) elem.classList.add('ppi');
     else if (init) {
@@ -1125,22 +1250,18 @@ function rndr(frs, init = false) {
 
     elem.id = 'c' + item.id;
 
-    const prn = item.prn || item.parent;
-    if (!prn) {
+    if (!item.prn) {
       elem.style.left = item.x + 'px';
       elem.style.top = item.y + 'px';
     }
 
-    const m = minS(item, tp);
+    const m = minS(item);
     elem.style.minWidth = m.w + 'px';
     elem.style.minHeight = (item.h ? Math.max(m.h, item.h) : m.h) + 'px';
     if (item.w) elem.style.width = Math.max(m.w, item.w) + 'px';
-    if (tp === 'img' && item.h) elem.style.height = Math.max(m.h, item.h) + 'px';
+    if (item.t === 'img' && item.h) elem.style.height = Math.max(m.h, item.h) + 'px';
 
-    const cNam = item.clr || item.color || 'default';
-    elem.style.background = clrs[cNam] || clrs.default;
-    if (['white', 'yellow', 'lime'].includes(cNam)) elem.style.color = '#000000';
-    else if (cNam !== 'default') elem.style.color = '#ffffff';
+    tint(elem, item.clr);
 
     const bts = document.createElement('div');
     bts.className = 'bts';
@@ -1155,13 +1276,13 @@ function rndr(frs, init = false) {
 
     bts.appendChild(mkBtn(t('cClr'), `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>`, e => clrM(c => { item.clr = c; }, e)));
 
-    if (tp === 'tbl' || tp === 'table') {
+    if (item.t === 'tbl') {
       bts.appendChild(mkBtn(t('tSz'), `<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg>`, e => popT(item, e)));
     }
 
     bts.appendChild(mkBtn(t('lnk'), '➔', () => conn(item.id)));
 
-    if (tp === 'tdo' || tp === 'todo') {
+    if (item.t === 'tdo') {
       bts.appendChild(mkBtn(t('addT'), `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`, () => {
         if (!Array.isArray(item.val)) item.val = [];
         item.val.push({ txt: t('nTsk'), dn: false });
@@ -1174,15 +1295,15 @@ function rndr(frs, init = false) {
 
     const bdy = document.createElement('content');
 
-    if (tp === 'img') {
+    if (item.t === 'img') {
       const img = document.createElement('img');
       img.src = item.val;
       bdy.appendChild(img);
-    } else if (tp === 'tdo' || tp === 'todo') todo(bdy, item);
-    else if (tp === 'clr' || tp === 'color') swch(bdy, item);
-    else if (tp === 'col' || tp === 'column') colC(bdy, item);
-    else if (tp === 'doc') docC(bdy, item);
-    else if (tp === 'tbl' || tp === 'table') tabl(bdy, item);
+    } else if (item.t === 'tdo') todo(bdy, item);
+    else if (item.t === 'clr') swch(bdy, item);
+    else if (item.t === 'col') colC(bdy, item);
+    else if (item.t === 'doc') docC(bdy, item);
+    else if (item.t === 'tbl') tabl(bdy, item);
     else {
       bdy.contentEditable = 'true';
       bdy.innerHTML = pars(typeof item.val === 'string' ? item.val : '');
@@ -1195,9 +1316,9 @@ function rndr(frs, init = false) {
       e.preventDefault();
       e.stopPropagation();
       const rect = elem.getBoundingClientRect();
-      const bm = minS(item, tp);
+      const bm = minS(item);
       elem.classList.add('rsz-act');
-      rsz = { kind: 'card', item, tp, elem, sX: e.clientX, sY: e.clientY, sW: rect.width, sH: rect.height, sL: item.x, sT: item.y, mW: bm.w, mH: bm.h, left, right, top, btm };
+      rsz = { kind: 'card', item, elem, sX: e.clientX, sY: e.clientY, sW: rect.width, sH: rect.height, sL: item.x, sT: item.y, mW: bm.w, mH: bm.h, left, right, top, btm };
       cap.setPointerCapture(e.pointerId);
     };
 
@@ -1207,9 +1328,9 @@ function rndr(frs, init = false) {
 
       const rect = elem.getBoundingClientRect();
       const edge = e.pointerType === 'touch' ? 14 : 10;
-      const left = !prn && e.clientX <= rect.left + edge;
+      const left = !item.prn && e.clientX <= rect.left + edge;
       const right = e.clientX >= rect.right - edge;
-      const top = !prn && e.clientY <= rect.top + edge;
+      const top = !item.prn && e.clientY <= rect.top + edge;
       const btm = e.clientY >= rect.bottom - edge;
 
       if (left || right || top || btm) return startRsz(e, left, right, top, btm, elem);
@@ -1231,9 +1352,7 @@ function rndr(frs, init = false) {
     };
 
     elem.append(bts, bdy, grip);
-
-    const node = prn ? $('l' + prn) : null;
-    (node || elB).appendChild(elem);
+    ((item.prn ? $('l' + item.prn) : null) || elB).appendChild(elem);
   });
 
   draw();
@@ -1243,16 +1362,16 @@ function opnD(item) {
   if (!item || elD.style.display === 'flex') return;
   aid = item.id;
   const v = item.val && typeof item.val === 'object' ? item.val : {};
-  elI.value = v.ttl || v.title || '';
-  elT.value = v.cnt || v.content || '';
+  elI.value = v.ttl || '';
+  elT.value = v.cnt || '';
   elD.style.display = 'flex';
   elD.querySelector('.ddg').classList.add('ppi');
 }
 
 function docC(ctr, item) {
   const v = item.val && typeof item.val === 'object' ? item.val : {};
-  const tit = v.ttl || v.title || t('docT');
-  const cnt = v.cnt || v.content || '';
+  const tit = v.ttl || t('docT');
+  const cnt = v.cnt || '';
   const wrd = cnt.trim() ? cnt.trim().split(/\s+/).length : 0;
 
   const prv = document.createElement('div');
@@ -1303,28 +1422,21 @@ function todo(ctr, item) {
   lst.forEach((tk, i) => {
     const row = document.createElement('div');
     row.className = 'tdo';
-    const txt = tk.txt ?? tk.text ?? '';
-    const dn = tk.dn ?? !!tk.done;
 
     const chk = document.createElement('input');
     chk.type = 'checkbox';
-    chk.checked = dn;
+    chk.checked = !!tk.dn;
     chk.onchange = () => {
       tk.dn = chk.checked;
-      if (tk.done !== undefined) tk.done = chk.checked;
       lbl.className = tk.dn ? 'dn' : '';
       save(false);
     };
 
     const lbl = document.createElement('span');
     lbl.contentEditable = 'true';
-    lbl.className = dn ? 'dn' : '';
-    lbl.innerText = txt;
-    lbl.oninput = () => {
-      tk.txt = lbl.innerText;
-      if (tk.text !== undefined) tk.text = lbl.innerText;
-      save(false);
-    };
+    lbl.className = tk.dn ? 'dn' : '';
+    lbl.innerText = tk.txt || '';
+    lbl.oninput = () => { tk.txt = lbl.innerText; save(false); };
     lbl.onblur = () => draw();
 
     const dBtn = document.createElement('del');
@@ -1392,9 +1504,7 @@ function tabl(ctr, item) {
   cells.forEach((cell, idx) => {
     const tile = document.createElement('div');
     tile.className = 'tcl';
-    tile.style.background = clrs[cell.color] || clrs.default;
-    if (['white', 'yellow', 'lime'].includes(cell.color)) tile.style.color = '#000';
-    else if (cell.color !== 'default') tile.style.color = '#fff';
+    tint(tile, cell.color);
 
     const txt = document.createElement('span');
     txt.className = 'tctx';
@@ -1496,7 +1606,7 @@ function colC(ctr, item) {
   const ttl = document.createElement('div');
   ttl.className = 'ttl';
   ttl.contentEditable = 'true';
-  ttl.innerText = v.ttl || v.title || t('defC');
+  ttl.innerText = v.ttl || t('defC');
   ttl.oninput = () => {
     if (typeof item.val !== 'object') item.val = {};
     item.val.ttl = ttl.innerText;
@@ -1599,11 +1709,11 @@ function onPm(e) {
         rsz.item.y = Math.round(rsz.sT + (rsz.sH - rsz.item.h));
         rsz.elem.style.top = rsz.item.y + 'px';
         rsz.elem.style.minHeight = rsz.item.h + 'px';
-        if (rsz.tp === 'img') rsz.elem.style.height = rsz.item.h + 'px';
+        if (rsz.item.t === 'img') rsz.elem.style.height = rsz.item.h + 'px';
       } else if (rsz.btm) {
         rsz.item.h = Math.max(rsz.mH, Math.round(rsz.sH + dy));
         rsz.elem.style.minHeight = rsz.item.h + 'px';
-        if (rsz.tp === 'img') rsz.elem.style.height = rsz.item.h + 'px';
+        if (rsz.item.t === 'img') rsz.elem.style.height = rsz.item.h + 'px';
       }
       draw();
     } else if (rsz.kind === 'row') {
@@ -1645,16 +1755,10 @@ function onPm(e) {
     }
     lx = e.clientX;
 
-    if (drg.t !== 'col' && drg.type !== 'column') {
+    if (drg.t !== 'col') {
       document.querySelectorAll('.cd.col').forEach(el => el.classList.remove('drop-hov'));
-      cds.filter(c => (c.t === 'col' || c.type === 'column') && c.id !== drg.id).forEach(c => {
-        const el = $('c' + c.id);
-        if (!el) return;
-        const r = el.getBoundingClientRect();
-        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && !nest(drg.id, c.id)) {
-          el.classList.add('drop-hov');
-        }
-      });
+      const hov = hitC(drg.id, e.clientX, e.clientY);
+      if (hov) $('c' + hov.id)?.classList.add('drop-hov');
     }
 
     draw();
@@ -1671,7 +1775,7 @@ function onPu(e) {
   if (!drg) return;
 
   const cur = drg;
-  const openDoc = e.type === 'pointerup' && !shf && (cur.t === 'doc' || cur.type === 'doc');
+  const openDoc = e.type === 'pointerup' && !shf && cur.t === 'doc';
 
   const elem = $('c' + cur.id);
   if (elem) {
@@ -1680,19 +1784,10 @@ function onPu(e) {
   }
   document.querySelectorAll('.cd.col').forEach(el => el.classList.remove('drop-hov'));
 
-  if (shf && cur.t !== 'col' && cur.type !== 'column') {
-    let hit = null;
-    cds.filter(c => (c.t === 'col' || c.type === 'column') && c.id !== cur.id).forEach(c => {
-      const el = $('c' + c.id);
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && !nest(cur.id, c.id)) {
-        hit = c.id;
-      }
-    });
-
+  if (shf && cur.t !== 'col') {
+    const hit = hitC(cur.id, e.clientX, e.clientY);
     if (hit) {
-      cur.prn = hit;
+      cur.prn = hit.id;
       cur.ord = Date.now();
       rndr(cur.id);
     }
@@ -1711,11 +1806,12 @@ elB.addEventListener('scroll', draw, { passive: true });
 window.addEventListener('resize', draw);
 
 window.addEventListener('storage', e => {
-  if (e.key === kCst) { cst = JSON.parse(e.newValue || '{}'); opts(); aply(thm); }
-  else if (e.key === kThm && e.newValue) aply(e.newValue);
-  else if (e.key === kAni && e.newValue !== null) setA(e.newValue === 'true');
-  else if (e.key === kDot && e.newValue !== null) setD(e.newValue === 'true');
-  else if (e.key === kLng && e.newValue) setL(e.newValue);
+  if (e.key === 'thm') { cst = JSON.parse(e.newValue || '{}'); opts(); aply(thm); }
+  else if (e.key === 't' && e.newValue) aply(e.newValue);
+  else if (e.key === 'noa' && e.newValue !== null) setA(e.newValue === 'true');
+  else if (e.key === 'melange-dots' && e.newValue !== null) setD(e.newValue === 'true');
+  else if (e.key === 'lang') { langs = JSON.parse(e.newValue || '{}'); lOpts(); setL(lng); }
+  else if (e.key === 'lng' && e.newValue) setL(e.newValue);
 });
 
 window.onload = load;

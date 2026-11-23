@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tamer</title>
+  <link rel="icon" href="i.png">
   <style>
     :root {
       --bg: #203b40;
@@ -17,7 +18,7 @@
       --rad: 24px;
     }
 
-    html { font-size: 110%; }
+    html { font-size: 110%; min-height: 100%; }
 
     [data-t="light"] {
       --bg: #e9eee7;
@@ -108,8 +109,6 @@
     }
 
     * { box-sizing: border-box; }
-
-    html { min-height: 100%; }
 
     body {
       position: relative;
@@ -250,7 +249,6 @@
     }
 
     .dot:hover { transform: scale(1.18); }
-
     .dot.act { border-color: var(--txt); }
 
     .cpk {
@@ -422,7 +420,7 @@
       position: absolute;
       right: 0;
       top: calc(100% + .5rem);
-      width: min(300px, calc(100vw - 3rem));
+      width: min(315px, calc(100vw - 3rem));
       padding: 1.2rem;
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -451,7 +449,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
+      gap: .75rem;
       padding: .65rem 0;
       border-top: 1px solid var(--line);
     }
@@ -459,6 +457,12 @@
     .set span, .set label {
       font-size: .85rem;
       color: var(--txt);
+    }
+
+    .ctl {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
     }
 
     select.ssel {
@@ -470,7 +474,26 @@
       font-size: .85rem;
       outline: none;
       cursor: pointer;
+      max-width: 145px;
     }
+
+    .mbtn {
+      background: var(--src);
+      color: var(--txt);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: .35rem .55rem;
+      font-size: .9rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .mbtn:hover {
+      color: var(--acc);
+      border-color: var(--acc);
+    }
+
+    .mbtn[hidden] { display: none; }
 
     .swch {
       position: relative;
@@ -507,7 +530,6 @@
     }
 
     .swch input:checked + .sld { background: var(--acc); }
-
     .swch input:checked + .sld::before { transform: translateX(1.15rem); }
 
     .mod {
@@ -863,23 +885,32 @@
           <h3 data-i="set">Settings</h3>
           <div class="set">
             <label for="thms" data-i="thm">Theme</label>
-            <select class="ssel" id="thms">
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-              <option value="mlt">Melon Light</option>
-              <option value="mdk">Melon Dark</option>
-              <option value="crim">Crimson</option>
-              <option value="nebu">Nebula</option>
-              <option value="burn">Eyeburn</option>
-            </select>
+            <div class="ctl">
+              <select class="ssel" id="thms">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="mlt">Melon Light</option>
+                <option value="mdk">Melon Dark</option>
+                <option value="crim">Crimson</option>
+                <option value="nebu">Nebula</option>
+                <option value="burn">Eyeburn</option>
+              </select>
+              <button class="mbtn" id="addT" type="button" onclick="elM.click()" aria-label="Import .melon">+</button>
+              <button class="mbtn" id="delT" type="button" onclick="remT()" aria-label="Remove .melon" hidden>×</button>
+              <input id="fthm" type="file" accept=".melon" onchange="impT(event)" hidden>
+            </div>
           </div>
           <div class="set">
             <label for="lang" data-i="lng">Language</label>
-            <select class="ssel" id="lang">
-              <option value="en">English</option>
-              <option value="es">Español</option>
-              <option value="pt-BR">Português (Brasil)</option>
-            </select>
+            <div class="ctl">
+              <select class="ssel" id="lang">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+              </select>
+              <button class="mbtn" id="addL" type="button" onclick="elW.click()" aria-label="Import .mlg">+</button>
+              <button class="mbtn" id="delL" type="button" onclick="remL()" aria-label="Remove .mlg" hidden>×</button>
+              <input id="flng" type="file" accept=".mlg" onchange="impL(event)" hidden>
+            </div>
           </div>
           <div class="set">
             <span data-i="aur">Aura Guardians</span>
@@ -1049,30 +1080,29 @@
   <input type="file" id="fin" accept=".mln" style="display:none">
 
   <script>
+    const app = 'tamer';
+    const ls = localStorage;
+    const tok = ['bg', 'src', 'str', 'txt', 'mut', 'line', 'acc'];
     const kCur = 'melon_timer_segs';
     const kPre = 'melon_timer_presets';
-    const kThm = 'melon-theme';
-    const kAni = 'melon-disable-animations';
     const kChe = 'melon_timer_cheers';
     const kSec = 'melon_timer_last_seconds';
-    const kCst = 'themeditor-themes';
-    const kLng = 'melon-language';
     const kAur = 'melon-aura';
     const kBfr = 'melon-theme-before-aura';
     const b = document.body;
+    const $ = id => document.getElementById(id);
+    const elM = $('fthm');
+    const elW = $('flng');
+    const delT = $('delT');
+    const delL = $('delL');
+
     let segs = [];
     let psets = {};
-    let cst = JSON.parse(localStorage.getItem(kCst) || '{}');
-    let idx = 0;
-    let rem = 0;
-    let tot = 0;
-    let run = false;
-    let tmr = null;
-    let actx = null;
-    let col = '#ff974b';
-    let scol = '#ff974b';
-    let eIdx = null;
-    let ecol = '#ff974b';
+    let cst = JSON.parse(ls.getItem('thm') || ls.getItem('themeditor-themes') || '{}');
+    let langs = JSON.parse(ls.getItem('lang') || '{}');
+    let idx = 0, rem = 0, tot = 0, run = false, tmr = null, actx = null;
+    let col = '#ff974b', scol = '#ff974b', eIdx = null, ecol = '#ff974b';
+    let thm = 'mdk', lng = 'en', noa = false;
 
     const tr = {
       en: {
@@ -1094,16 +1124,6 @@
         svP: 'Guardar preset', pNm: 'Nombre del preset', tCl: 'Color de etiqueta',
         ldP: 'Cargar preset', suc: '🎉 ¡Listo!', bak: 'Volver',
         emp: 'No has escrito nada todavía', noP: 'Aún no hay presets guardados', seg: 'tramos'
-      },
-      'pt-BR': {
-        imp: 'Importar', exp: 'Exportar', sav: 'Salvar', lod: 'Carregar',
-        set: 'Configurações', thm: 'Tema', lng: 'Idioma', aur: 'Guardiões da Aura',
-        noa: 'Desativar animações', nch: 'Desativar incentivos',
-        nam: 'Nome', tim: 'Tempo', col: 'Cor', snd: 'Som',
-        add: '+ Adicionar', go: 'INICIAR', edT: 'Editar etapa', apA: 'Aplicar a todos',
-        svP: 'Salvar preset', pNm: 'Nome do preset', tCl: 'Cor da etiqueta',
-        ldP: 'Carregar preset', suc: '🎉 Sucesso!', bak: 'Voltar',
-        emp: 'Você ainda não escreveu nada', noP: 'Nenhum preset salvo ainda', seg: 'etapas'
       }
     };
 
@@ -1132,7 +1152,37 @@
       "Chi", "Psi", "Omega"
     ];
 
-    const $ = id => document.getElementById(id);
+    function t(k) {
+      const own = lng.startsWith('own:') ? langs[app]?.[lng.slice(4)]?.tr : tr[lng];
+      return own?.[k] ?? tr.en[k] ?? k;
+    }
+
+    function pMlg(raw) {
+      const out = { name: '', tr: {} };
+      for (const line of raw.split(/\r?\n/)) {
+        const m = line.trim().match(/^(@?[a-zA-Z0-9_-]+)\s+"((?:\\"|[^"])*)"$/);
+        if (!m) continue;
+        const val = m[2].replace(/\\"/g, '"').replace(/\\n/g, '\n');
+        if (m[1] === '@name') out.name = val;
+        else if (!m[1].startsWith('@')) out.tr[m[1]] = val;
+      }
+      return out;
+    }
+
+    function pThm(raw) {
+      const v = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      if (v.length < 7 || v.length > 8) return null;
+      const got = {};
+      for (let i = 0; i < 7; i += 1) {
+        if (!/^[0-9a-f]{6}$/i.test(v[i])) return null;
+        got[tok[i]] = `#${v[i]}`;
+      }
+      if (v[7]) {
+        if (!/^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(v[7])) return null;
+        got.shd = v[7].replace(/([0-9a-f]{8})$/i, '#$1');
+      }
+      return got;
+    }
 
     function iAud() {
       if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1156,14 +1206,13 @@
 
     function mldy() {
       if (!actx) return;
-      const nts = [523.25, 659.25, 783.99, 1046.50];
-      nts.forEach((frq, i) => {
+      [523.25, 659.25, 783.99, 1046.50].forEach((frq, i) => {
         setTimeout(() => sfx(frq, 0.18, 'triangle'), i * 120);
       });
     }
 
     function cfti() {
-      if (b.classList.contains('noa')) return;
+      if (noa) return;
       const cbx = $('cbx');
       cbx.innerHTML = '';
       const cols = ['#ff974b', '#63bd46', '#ff4f7b', '#c783ff', '#4b97ff', '#ffd166'];
@@ -1179,7 +1228,7 @@
     }
 
     function drop() {
-      if (!$('aura').checked || $('noa').checked) return;
+      if (!$('aura').checked || noa) return;
       const p = document.createElement('span');
       p.className = 'prt';
       p.textContent = ['✦', '✧', '·', '🍈', '!', '◌'][Math.floor(Math.random() * 6)];
@@ -1194,27 +1243,18 @@
       iAud();
       const el = e.target.closest('button, .dot, input[type="checkbox"]');
       if (!el) return;
-      if (el.id === 'go' || el.id === 'gus' || el.id === 'esav' || el.id === 'eall') {
-        sfx(750, 0.12);
-      } else if (el.classList.contains('ibtn') || el.classList.contains('sbtn')) {
-        sfx(420, 0.06);
-      } else {
-        sfx(580, 0.06);
-      }
+      if (el.id === 'go' || el.id === 'gus' || el.id === 'esav' || el.id === 'eall') sfx(750, 0.12);
+      else if (el.classList.contains('ibtn') || el.classList.contains('sbtn') || el.classList.contains('mbtn')) sfx(420, 0.06);
+      else sfx(580, 0.06);
     });
 
-    $('sbtn').addEventListener('click', () => {
-      $('pnl').classList.toggle('open');
-    });
-
+    $('sbtn').addEventListener('click', () => $('pnl').classList.toggle('open'));
     document.addEventListener('click', e => {
-      if (!e.target.closest('.tbar')) {
-        $('pnl').classList.remove('open');
-      }
+      if (!e.target.closest('.tbar')) $('pnl').classList.remove('open');
     });
 
     function ptcs() {
-      if (b.classList.contains('noa')) return;
+      if (noa) return;
       const pbx = $('pbx');
       pbx.innerHTML = '';
       const shps = ['scir', 'ssqr', 'stri', 'spnt', 'shex', 'sdia', 'sstr'];
@@ -1254,8 +1294,7 @@
       let out = '';
       for (const k in dct) {
         out += `${k}{\n`;
-        const lst = dct[k].s || dct[k];
-        lst.forEach(itm => {
+        (dct[k].s || dct[k]).forEach(itm => {
           const hex = itm.c.replace('#', '').toUpperCase().padStart(6, '0');
           out += `${itm.t}|${itm.d}|${hex}|${itm.s ? 1 : 0}\n`;
         });
@@ -1266,30 +1305,22 @@
 
     function pMln(str) {
       const res = {};
-      const lns = str.split(/\r?\n/);
-      let cur = null;
-      let lst = [];
-      let ccol = '#ff974b';
-
-      for (let ln of lns) {
+      let cur = null, lst = [];
+      for (let ln of str.split(/\r?\n/)) {
         ln = ln.trim();
         if (!ln) continue;
         if (ln.endsWith('{')) {
           cur = ln.slice(0, -1).trim();
           lst = [];
         } else if (ln === '}') {
-          if (cur) res[cur] = { c: ccol, s: lst };
+          if (cur) res[cur] = { c: '#ff974b', s: lst };
           cur = null;
         } else if (cur) {
           const p = ln.split('|');
           if (p.length >= 4) {
-            const t = p[0];
-            const d = pSec(p[1]);
             let hex = p[2].trim().replace('#', '');
             if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-            const c = '#' + hex.padStart(6, '0');
-            const s = p[3].trim() === '1';
-            lst.push({ t, d, c, s });
+            lst.push({ t: p[0], d: pSec(p[1]), c: '#' + hex.padStart(6, '0'), s: p[3].trim() === '1' });
           }
         }
       }
@@ -1307,11 +1338,22 @@
       });
     }
 
+    function lOpts() {
+      const elL = $('lang');
+      elL.querySelectorAll('option[value^="own:"]').forEach(el => el.remove());
+      Object.entries(langs[app] || {}).forEach(([k, itm]) => {
+        const opt = document.createElement('option');
+        opt.value = `own:${k}`;
+        opt.textContent = itm.name;
+        elL.appendChild(opt);
+      });
+    }
+
     function setT(v) {
       const map = { bg: 'bg', src: 'surface', str: 'surface-strong', txt: 'text', mut: 'muted', line: 'line', acc: 'accent', shd: 'shadow' };
       const own = v.startsWith('own:') ? cst[v.slice(4)] : null;
       b.dataset.t = own ? 'cst' : v;
-      ['bg', 'src', 'str', 'txt', 'mut', 'line', 'acc'].forEach(k => {
+      tok.forEach(k => {
         b.style.removeProperty(`--${k}`);
         const val = own?.values[k] || own?.values[map[k]];
         if (val) b.style.setProperty(`--${k}`, val);
@@ -1322,112 +1364,157 @@
         b.style.setProperty('--shd', s
           ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, '$1px $2px $3px #$4')
           : '10px 20px 60px #0000004d');
+      }
+      if (v !== 'aura') {
+        thm = v;
         $('thms').value = v;
-        localStorage.setItem(kThm, v);
-      } else if (v !== 'aura') {
-        $('thms').value = v;
-        localStorage.setItem(kThm, v);
+        delT.hidden = !own;
+        ls.setItem('t', v);
       }
     }
 
+    async function impT(e) {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const vals = pThm(await f.text());
+      e.target.value = '';
+      if (!vals) return;
+      const name = f.name.replace(/\.melon$/i, '') || 'Theme';
+      const id = name.toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-|-$/g, '').slice(0, 32) || 'cst';
+      cst[id] = { name, values: vals };
+      ls.setItem('thm', JSON.stringify(cst));
+      opts();
+      if ($('aura').checked) { $('aura').checked = false; ls.setItem(kAur, 'false'); }
+      setT(`own:${id}`);
+    }
+
+    function remT() {
+      if (!thm.startsWith('own:')) return;
+      delete cst[thm.slice(4)];
+      ls.setItem('thm', JSON.stringify(cst));
+      opts();
+      if ($('aura').checked) { $('aura').checked = false; ls.setItem(kAur, 'false'); }
+      setT('mdk');
+    }
+
     function setL(v) {
-      const cur = tr[v] ? v : 'en';
-      document.querySelectorAll('[data-i]').forEach(el => {
-        el.textContent = tr[cur][el.dataset.i];
-      });
-      document.documentElement.lang = cur;
-      localStorage.setItem(kLng, cur);
+      const own = v.startsWith('own:') ? langs[app]?.[v.slice(4)] : null;
+      const code = own ? v.slice(4) : (tr[v] ? v : 'en');
+      lng = own ? v : code;
+      document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
+      document.documentElement.lang = code;
+      $('lang').value = lng;
+      delL.hidden = !own;
+      ls.setItem('lng', lng);
       rndr();
     }
 
+    async function impL(e) {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const data = pMlg(await f.text());
+      e.target.value = '';
+      const id = f.name.replace(/\.mlg$/i, '').replace(new RegExp(`^${app}-`, 'i'), '') || 'custom';
+      langs[app] = langs[app] || {};
+      langs[app][id] = { name: data.name || id, tr: data.tr };
+      ls.setItem('lang', JSON.stringify(langs));
+      lOpts();
+      setL(`own:${id}`);
+    }
+
+    function remL() {
+      if (!lng.startsWith('own:')) return;
+      delete langs[app]?.[lng.slice(4)];
+      ls.setItem('lang', JSON.stringify(langs));
+      lOpts();
+      setL('en');
+    }
+
+    function setA(off) {
+      noa = !!off;
+      b.classList.toggle('noa', noa);
+      $('noa').checked = noa;
+      ls.setItem('noa', String(noa));
+    }
+
     function load() {
-      const rawC = localStorage.getItem(kCur);
+      const rawC = ls.getItem(kCur);
       segs = rawC ? JSON.parse(rawC) : [
         { t: 'Get Ready', d: 5, c: '#37636a', s: true },
         { t: 'High Intensity', d: 30, c: '#ff4f7b', s: true },
         { t: 'Rest', d: 15, c: '#63bd46', s: false }
       ];
-
-      const rawP = localStorage.getItem(kPre);
-      psets = rawP ? JSON.parse(rawP) : {
-        'preset': { c: '#ff974b', s: [...segs] }
-      };
+      const rawP = ls.getItem(kPre);
+      psets = rawP ? JSON.parse(rawP) : { 'preset': { c: '#ff974b', s: [...segs] } };
 
       opts();
+      lOpts();
 
       const mapT = { 'melon-light': 'mlt', 'melon-dark': 'mdk', 'crimson': 'crim', 'nebula': 'nebu', 'eyeburn': 'burn' };
-      const rawT = localStorage.getItem(kThm) || localStorage.getItem('melon_timer_theme');
+      const rawT = ls.getItem('t') || ls.getItem('melon-theme');
       const sThm = mapT[rawT] || rawT;
       const aThm = ['light', 'dark', 'mlt', 'mdk', 'crim', 'nebu', 'burn'];
-      const vThm = !sThm
-        ? 'mdk'
-        : (!aThm.includes(sThm) && !cst[sThm.slice(4)])
-          ? 'dark'
-          : sThm;
-
-      const vLng = localStorage.getItem(kLng) || 'en';
-      const vAur = localStorage.getItem(kAur) === 'true';
-      const sAni = (localStorage.getItem(kAni) ?? localStorage.getItem('melon_timer_anim')) === 'true';
-      const sChe = localStorage.getItem(kChe) === 'true';
-      const lSec = localStorage.getItem(kSec);
+      const vThm = !sThm ? 'mdk' : (!aThm.includes(sThm) && !cst[sThm.slice(4)]) ? 'mdk' : sThm;
+      const vLng = ls.getItem('lng') || ls.getItem('melon-language') || 'en';
+      const vAur = ls.getItem(kAur) === 'true';
+      const sAni = (ls.getItem('noa') ?? ls.getItem('melon-disable-animations')) === 'true';
+      const sChe = ls.getItem(kChe) === 'true';
+      const lSec = ls.getItem(kSec);
 
       $('thms').value = vThm;
+      thm = vThm;
+      delT.hidden = !vThm.startsWith('own:');
       setT(vAur ? 'aura' : vThm);
-      $('lang').value = vLng;
       $('aura').checked = vAur;
-      $('noa').checked = sAni;
-      b.classList.toggle('noa', sAni);
+      setA(sAni);
       $('chr').checked = sChe;
       $('din').value = lSec !== null ? lSec : '10';
-
       setL(vLng);
     }
 
     function save() {
-      localStorage.setItem(kCur, JSON.stringify(segs));
-      localStorage.setItem(kPre, JSON.stringify(psets));
+      ls.setItem(kCur, JSON.stringify(segs));
+      ls.setItem(kPre, JSON.stringify(psets));
     }
 
-    $('thms').addEventListener('change', e => setT(e.target.value));
+    $('thms').addEventListener('change', e => {
+      if ($('aura').checked) { $('aura').checked = false; ls.setItem(kAur, 'false'); }
+      setT(e.target.value);
+    });
     $('lang').addEventListener('change', e => setL(e.target.value));
 
     $('aura').addEventListener('change', e => {
       if (e.target.checked) {
-        localStorage.setItem(kBfr, $('thms').value);
+        ls.setItem(kBfr, $('thms').value);
         setT('aura');
         for (let i = 0; i < 24; i++) setTimeout(drop, i * 55);
       } else {
-        setT(localStorage.getItem(kBfr) || $('thms').value);
+        setT(ls.getItem(kBfr) || $('thms').value);
       }
-      localStorage.setItem(kAur, String(e.target.checked));
+      ls.setItem(kAur, String(e.target.checked));
     });
 
-    $('noa').addEventListener('change', e => {
-      const val = e.target.checked;
-      b.classList.toggle('noa', val);
-      localStorage.setItem(kAni, String(val));
-    });
-
-    $('chr').addEventListener('change', e => {
-      localStorage.setItem(kChe, String(e.target.checked));
-    });
+    $('noa').addEventListener('change', e => setA(e.target.checked));
+    $('chr').addEventListener('change', e => ls.setItem(kChe, String(e.target.checked)));
 
     window.addEventListener('storage', e => {
-      if (e.key === kCst) {
+      if (e.key === 'thm') {
         cst = JSON.parse(e.newValue || '{}');
         const cur = $('thms').value;
         opts();
         if (cur.startsWith('own:') && !cst[cur.slice(4)]) setT('mdk');
         else if (!$('aura').checked) setT(cur);
-      }
+      } else if (e.key === 't' && e.newValue && !$('aura').checked) setT(e.newValue);
+      else if (e.key === 'noa' && e.newValue !== null) setA(e.newValue === 'true');
+      else if (e.key === 'lang') { langs = JSON.parse(e.newValue || '{}'); lOpts(); setL(lng); }
+      else if (e.key === 'lng' && e.newValue) setL(e.newValue);
     });
 
     function rndr() {
       const lst = $('lst');
-      const curL = tr[$('lang').value] ? $('lang').value : 'en';
       lst.innerHTML = '';
       if (!segs.length) {
-        lst.innerHTML = `<div class="empty">${tr[curL].emp}</div>`;
+        lst.innerHTML = `<div class="empty">${t('emp')}</div>`;
         return;
       }
       segs.forEach((s, i) => {
@@ -1454,11 +1541,10 @@
 
     function rPre() {
       const plst = $('plst');
-      const curL = tr[$('lang').value] ? $('lang').value : 'en';
       plst.innerHTML = '';
       const keys = Object.keys(psets);
       if (!keys.length) {
-        plst.innerHTML = `<div class="empty">${tr[curL].noP}</div>`;
+        plst.innerHTML = `<div class="empty">${t('noP')}</div>`;
         return;
       }
       keys.forEach(k => {
@@ -1470,7 +1556,7 @@
             <div class="pdot" style="background:${p.c || '#ff974b'}"></div>
             <div>
               <div class="titl">${k}</div>
-              <div class="sub">${(p.s || p).length} ${tr[curL].seg}</div>
+              <div class="sub">${(p.s || p).length} ${t('seg')}</div>
             </div>
           </div>
           <button class="ibtn pdel" data-k="${k}" title="Delete preset">✕</button>
@@ -1488,45 +1574,21 @@
 
     document.addEventListener('click', e => {
       const pDel = e.target.closest('.pdel');
-      if (pDel) {
-        delete psets[pDel.dataset.k];
-        save();
-        rPre();
-        return;
-      }
-
+      if (pDel) { delete psets[pDel.dataset.k]; save(); rPre(); return; }
       const eBtn = e.target.closest('.ebtn');
-      if (eBtn) {
-        opEd(parseInt(eBtn.dataset.i, 10));
-        return;
-      }
-
+      if (eBtn) { opEd(parseInt(eBtn.dataset.i, 10)); return; }
       const uBtn = e.target.closest('.ubtn');
-      if (uBtn) {
-        mv(parseInt(uBtn.dataset.i, 10), -1);
-        return;
-      }
-
+      if (uBtn) { mv(parseInt(uBtn.dataset.i, 10), -1); return; }
       const dBtn = e.target.closest('.dbtn');
-      if (dBtn) {
-        mv(parseInt(dBtn.dataset.i, 10), 1);
-        return;
-      }
-
+      if (dBtn) { mv(parseInt(dBtn.dataset.i, 10), 1); return; }
       const xBtn = e.target.closest('.xbtn');
-      if (xBtn) {
-        segs.splice(parseInt(xBtn.dataset.i, 10), 1);
-        save();
-        rndr();
-      }
+      if (xBtn) { segs.splice(parseInt(xBtn.dataset.i, 10), 1); save(); rndr(); }
     });
 
     function mv(i, dir) {
       const tgt = i + dir;
       if (tgt < 0 || tgt >= segs.length) return;
-      const tmp = segs[i];
-      segs[i] = segs[tgt];
-      segs[tgt] = tmp;
+      [segs[i], segs[tgt]] = [segs[tgt], segs[i]];
       save();
       rndr();
     }
@@ -1539,13 +1601,8 @@
       $('esin').checked = s.s;
       ecol = s.c;
       $('ecpk').value = ecol;
-
-      document.querySelectorAll('#epal .edot').forEach(d => {
-        d.classList.toggle('act', d.dataset.c === ecol);
-      });
-
-      const cnt = segs.filter(itm => itm.t === s.t).length;
-      $('eall').classList.toggle('off', cnt <= 1);
+      document.querySelectorAll('#epal .edot').forEach(d => d.classList.toggle('act', d.dataset.c === ecol));
+      $('eall').classList.toggle('off', segs.filter(itm => itm.t === s.t).length <= 1);
       $('emod').classList.remove('off');
     }
 
@@ -1567,10 +1624,10 @@
 
     $('esav').addEventListener('click', () => {
       if (eIdx === null) return;
-      const t = $('etin').value.trim() || 'Segment';
+      const nam = $('etin').value.trim() || 'Segment';
       const d = pSec($('edin').value);
       if (d <= 0) return;
-      segs[eIdx] = { t, d, c: ecol, s: $('esin').checked };
+      segs[eIdx] = { t: nam, d, c: ecol, s: $('esin').checked };
       save();
       rndr();
       $('emod').classList.add('off');
@@ -1579,10 +1636,10 @@
     $('eall').addEventListener('click', () => {
       if (eIdx === null) return;
       const oNam = segs[eIdx].t;
-      const t = $('etin').value.trim() || 'Segment';
+      const nam = $('etin').value.trim() || 'Segment';
       const d = pSec($('edin').value);
       if (d <= 0) return;
-      const nSeg = { t, d, c: ecol, s: $('esin').checked };
+      const nSeg = { t: nam, d, c: ecol, s: $('esin').checked };
       segs = segs.map(itm => itm.t === oNam ? { ...nSeg } : itm);
       save();
       rndr();
@@ -1611,34 +1668,22 @@
       document.querySelectorAll('#pal .dot').forEach(x => x.classList.remove('act'));
     });
 
-    $('din').addEventListener('input', e => {
-      localStorage.setItem(kSec, e.target.value);
-    });
+    $('din').addEventListener('input', e => ls.setItem(kSec, e.target.value));
 
     $('add').addEventListener('click', () => {
-      const t = $('tin').value.trim() || 'Segment';
+      const nam = $('tin').value.trim() || 'Segment';
       const rawS = $('din').value;
       const d = pSec(rawS);
       if (d <= 0) return;
-      localStorage.setItem(kSec, rawS);
-      segs.push({ t, d, c: col, s: $('sin').checked });
+      ls.setItem(kSec, rawS);
+      segs.push({ t: nam, d, c: col, s: $('sin').checked });
       save();
       rndr();
       $('tin').value = '';
     });
 
-    $('clr').addEventListener('click', () => {
-      segs = [];
-      save();
-      rndr();
-    });
-
-    $('sav').addEventListener('click', () => {
-      if (!segs.length) return;
-      $('pnam').value = '';
-      $('smod').classList.remove('off');
-    });
-
+    $('clr').addEventListener('click', () => { segs = []; save(); rndr(); });
+    $('sav').addEventListener('click', () => { if (!segs.length) return; $('pnam').value = ''; $('smod').classList.remove('off'); });
     $('clss').addEventListener('click', () => $('smod').classList.add('off'));
 
     $('gus').addEventListener('click', () => {
@@ -1648,16 +1693,11 @@
       $('smod').classList.add('off');
     });
 
-    $('lod').addEventListener('click', () => {
-      rPre();
-      $('lmod').classList.remove('off');
-    });
-
+    $('lod').addEventListener('click', () => { rPre(); $('lmod').classList.remove('off'); });
     $('clsl').addEventListener('click', () => $('lmod').classList.add('off'));
 
     $('exp').addEventListener('click', () => {
-      const data = toMln(psets);
-      const blob = new Blob([data], { type: 'text/plain' });
+      const blob = new Blob([toMln(psets)], { type: 'text/plain' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'presets.mln';
@@ -1675,8 +1715,7 @@
         const psd = pMln(ev.target.result);
         if (Object.keys(psd).length) {
           psets = { ...psets, ...psd };
-          const fKey = Object.keys(psd)[0];
-          segs = JSON.parse(JSON.stringify(psd[fKey].s));
+          segs = JSON.parse(JSON.stringify(psd[Object.keys(psd)[0]].s));
           save();
           rndr();
         }
@@ -1700,28 +1739,18 @@
 
     function lSeg() {
       const cur = segs[idx];
-      rem = cur.d;
-      tot = cur.d;
+      rem = tot = cur.d;
       $('stg').style.backgroundColor = cur.c;
       $('stt').textContent = cur.t;
       $('stc').textContent = `${idx + 1} / ${segs.length}`;
-
-      const noCh = $('chr').checked;
-      if (noCh) {
-        $('nxt').textContent = '';
-      } else {
-        const q = qts[Math.floor(Math.random() * qts.length)];
-        $('nxt').textContent = q;
-      }
-
+      $('nxt').textContent = $('chr').checked ? '' : qts[Math.floor(Math.random() * qts.length)];
       ptcs();
       uUI();
     }
 
     function uUI() {
       $('num').textContent = fTim(rem);
-      const pct = ((tot - rem) / tot) * 100;
-      $('fil').style.width = `${pct}%`;
+      $('fil').style.width = `${((tot - rem) / tot) * 100}%`;
     }
 
     function tick() {
@@ -1730,8 +1759,7 @@
         if (!run) return;
         rem--;
         if (rem > 0) {
-          const cur = segs[idx];
-          if (cur.s && rem <= 3) sfx(440, 0.1);
+          if (segs[idx].s && rem <= 3) sfx(440, 0.1);
           uUI();
         } else {
           uUI();
@@ -1750,10 +1778,7 @@
       }, 1000);
     }
 
-    $('pau').addEventListener('click', () => {
-      run = !run;
-      $('pau').textContent = run ? '⏸' : '▶';
-    });
+    $('pau').addEventListener('click', () => { run = !run; $('pau').textContent = run ? '⏸' : '▶'; });
 
     $('skp').addEventListener('click', () => {
       idx++;
@@ -1763,9 +1788,7 @@
         mldy();
         $('ovr').classList.remove('off');
         cfti();
-      } else {
-        lSeg();
-      }
+      } else lSeg();
     });
 
     function exit() {

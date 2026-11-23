@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Themeditor</title>
+  <link rel="icon" href="themeditor.png">
   <style>
     :root {
       --bg: #203b40;
@@ -25,7 +26,7 @@
     [data-t="dark"] {
       --bg: #111318; --src: #1c1f28; --str: #202430;
       --txt: #f4f5f7; --mut: #a5aab7; --line: #3f424b;
-      --acc: #62c7b2;
+      --acc: #62c7b2; --shd: 10px 20px 60px #1113184d;
     }
     [data-t="mlt"] {
       --bg: #cfe9e5; --src: #fff8ee; --str: #fff;
@@ -35,7 +36,7 @@
     [data-t="mdk"] {
       --bg: #203b40; --src: #2f4e53; --str: #37636a;
       --txt: #fff8ef; --mut: #d3e1df; --line: #50605f;
-      --acc: #ff974b;
+      --acc: #ff974b; --shd: 10px 20px 60px #0716194d;
     }
     [data-t="crim"] {
       --bg: #17090f; --src: #340d1d; --str: #671b37;
@@ -73,10 +74,10 @@
     }
     button, input, select { font: inherit; }
     button { color: inherit; }
+    select option { background: var(--src); color: var(--txt); }
     .shll {
-      position: relative; z-index: 2; width: min(1220px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0;
+      position: relative; z-index: 2; width: min(1220px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0 5.5rem;
     }
-    .shll > * { position: relative; z-index: 1; }
     .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
     .brnd { display: inline-flex; align-items: center; gap: .65rem; margin: 0; font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -.02em; }
     .mln {
@@ -100,8 +101,6 @@
       box-shadow: var(--shd); backdrop-filter: blur(18px);
     }
     .pnl { padding: 1.25rem; }
-    .pnl + .pnl { margin-top: 1.2rem; }
-    .col2 .pnl { margin-top: 0; }
     .pnl h2 { margin: 0 0 1rem; font-size: 1.05rem; }
     .hdg { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
     .hdg small, .hint { color: var(--mut); font-size: .78rem; }
@@ -138,8 +137,46 @@
     .mapp h3 { margin: 0 0 .2rem; font-size: .9rem; }
     .mapp p { margin: 0; color: var(--mut); font-size: .73rem; line-height: 1.35; }
     .marw { color: var(--acc); }
-    [data-t="aura"] .pnl, [data-t="aura"] .card, [data-t="aura"] .mhero, [data-t="aura"] .mapp { border-color: #000; box-shadow: 0 0 8px #000; text-shadow: 0 0 8px #000; }
+
+    .wrap { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 5; }
+    .gear {
+      display: grid; width: 3.18rem; height: 3.18rem; place-items: center; font-size: 1.18rem;
+      color: var(--txt); border: 1px solid var(--line); border-radius: 14px; background: var(--src);
+      box-shadow: 0 10px 28px #0000002e; cursor: pointer; backdrop-filter: blur(12px);
+      transition: transform .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .gear:hover, .gear:focus-visible { color: var(--acc); border-color: var(--acc); outline: none; transform: translateY(-3px); }
+    .menu {
+      position: absolute; right: 0; bottom: 3.6rem; width: min(330px, calc(100vw - 2.5rem)); padding: 1.2rem;
+      border: 1px solid var(--line); border-radius: 20px; background: var(--str); box-shadow: var(--shd);
+      opacity: 0; pointer-events: none; transform: translateY(8px) scale(.97); transform-origin: bottom right;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .menu.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+    .menu h2 { margin: 0 0 1rem; font-size: 1.1rem; }
+    .set { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-top: 1px solid var(--line); }
+    .set label, .set span { font-size: .88rem; }
+    .ctl { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+    .ctl select, .mbtn {
+      color: var(--txt); border: 1px solid var(--line); border-radius: 9px; padding: .45rem .55rem; background: var(--src);
+    }
+    .ctl select { min-width: 0; max-width: 140px; }
+    .mbtn { padding: .45rem .6rem; line-height: 1; cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+    .mbtn:hover, .mbtn:focus-visible { color: var(--acc); border-color: var(--acc); outline: none; }
+    .mbtn[hidden] { display: none; }
+    .swch { position: relative; width: 2.8rem; height: 1.55rem; }
+    .swch input { width: 0; height: 0; opacity: 0; }
+    .sld { position: absolute; inset: 0; border-radius: 2rem; background: var(--mut); cursor: pointer; transition: .25s; }
+    .sld::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s; }
+    .swch input:checked + .sld { background: var(--acc); }
+    .swch input:checked + .sld::before { transform: translateX(1.25rem); }
+
+    body[data-t="aura"], [data-t="aura"] .pnl, [data-t="aura"] .card, [data-t="aura"] .mhero, [data-t="aura"] .mapp, [data-t="aura"] .gear, [data-t="aura"] .menu {
+      border-color: #000; box-shadow: 0 0 8px #000; text-shadow: 0 0 8px #000;
+    }
     .noa *, .noa *::before, .noa *::after { animation: none !important; transition: none !important; }
+    .noa .btn:hover, .noa .btn:focus-visible, .noa .gear:hover, .noa .gear:focus-visible { transform: none; }
+
     @media (max-width: 820px) {
       .grid { grid-template-columns: 1fr; }
       .card { min-height: auto; }
@@ -164,29 +201,29 @@
       <aside>
         <section class="pnl">
           <div class="hdg">
-            <h2>Color palette</h2>
+            <h2 data-i="pal">Color palette</h2>
             <small id="stat">Dark</small>
           </div>
           <div class="acts">
-            <button class="btn" id="load" type="button">Load theme</button>
-            <button class="btn" id="save" type="button">Save theme</button>
+            <button class="btn" id="load" type="button" data-i="load">Load theme</button>
+            <button class="btn" id="save" type="button" data-i="save">Save theme</button>
             <input id="file" type="file" accept=".melon,text/plain" hidden>
           </div>
-          <label class="hint" for="sel">Preset</label>
+          <label class="hint" for="sel" data-i="pre">Preset</label>
           <div class="hdg">
             <select class="sel" id="sel"></select>
             <button class="del" id="drop" type="button" aria-label="Delete custom theme" hidden>×</button>
           </div>
           <div class="pal" id="pal"></div>
           <div class="shad">
-            <h3>Shadow</h3>
-            <p class="hint">X and Y move the shadow. Blur controls softness.</p>
+            <h3 data-i="shd">Shadow</h3>
+            <p class="hint" data-i="shdP">X and Y move the shadow. Blur controls softness.</p>
             <div class="sgrid">
               <label>X<input id="sx" type="number" min="-100" max="100" step="1"></label>
               <label>Y<input id="sy" type="number" min="-100" max="100" step="1"></label>
-              <label>Blur<input id="sb" type="number" min="0" max="200" step="1"></label>
+              <label><span data-i="blur">Blur</span><input id="sb" type="number" min="0" max="200" step="1"></label>
               <div class="row scol">
-                <label>Color<input id="sc" type="text" maxlength="7" spellcheck="false"></label>
+                <label><span data-i="col">Color</span><input id="sc" type="text" maxlength="7" spellcheck="false"></label>
                 <input id="scc" type="color" value="#000000" aria-label="Shadow color picker">
               </div>
             </div>
@@ -198,146 +235,230 @@
         <section class="card" aria-label="Theme preview">
           <div class="phd">
             <div>
-              <h2>Preview your flavor of Melon</h2>
-              <p>What you see here is just a download away of being yours, or maybe a pull request.</p>
+              <h2 data-i="prv">Preview your flavor of Melon</h2>
+              <p data-i="prvP">What you see here is just a download away of being yours, or maybe a pull request.</p>
             </div>
           </div>
           <div class="mhero">
             <h3 class="mtit"><span class="mln" aria-hidden="true">🍈</span><span>The Melon Project</span></h3>
-            <p class="mcopy">Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.</p>
+            <p class="mcopy" data-i="copy">Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.</p>
           </div>
           <div class="mapps">
-            <article class="mapp"><span class="micn">🖼️</span><span><h3>Melange</h3><p>Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.</p></span><span class="marw">↗</span></article>
-            <article class="mapp"><span class="micn">💡</span><span><h3>Memory</h3><p>Keep important things somewhere your brain can find them.</p></span><span class="marw">↗</span></article>
-            <article class="mapp"><span class="micn">🎨</span><span><h3>Themeditor</h3><p>Basically what you're doing right now.</p></span><span class="marw">↗</span></article>
-            <article class="mapp"><span class="micn">🍈</span><span><h3>More</h3><p>You'll never see it coming.</p></span><span class="marw">→</span></article>
+            <article class="mapp"><span class="micn">🖼️</span><span><h3>Melange</h3><p data-i="mel">Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">💡</span><span><h3>Memory</h3><p data-i="mem">Keep important things somewhere your brain can find them.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">🎨</span><span><h3>Themeditor</h3><p data-i="thm">Basically what you're doing right now.</p></span><span class="marw">↗</span></article>
+            <article class="mapp"><span class="micn">🍈</span><span><h3 data-i="moreT">More</h3><p data-i="more">You'll never see it coming.</p></span><span class="marw">→</span></article>
           </div>
         </section>
       </div>
     </div>
   </main>
+
+  <div class="wrap">
+    <section class="menu" id="menu" aria-label="Settings">
+      <h2 data-i="set">Settings</h2>
+      <div class="set">
+        <label for="lang" data-i="langL">Language</label>
+        <div class="ctl">
+          <select id="lang">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+          <button class="mbtn" id="addL" type="button" aria-label="Import .mlg">+</button>
+          <button class="mbtn" id="delL" type="button" aria-label="Remove .mlg" hidden>×</button>
+          <input id="mlg" type="file" accept=".mlg" hidden>
+        </div>
+      </div>
+      <div class="set">
+        <span data-i="noaL">Disable Animations</span>
+        <label class="swch">
+          <input id="noa" type="checkbox">
+          <span class="sld"></span>
+        </label>
+      </div>
+    </section>
+    <button class="gear" id="gear" type="button" aria-label="Open settings" aria-expanded="false">⚙</button>
+  </div>
+
   <script>
-    const tok = [
-      ["bg", "Background"], ["src", "Surface"], ["str", "Raised surface"],
-      ["txt", "Primary text"], ["mut", "Secondary text"], ["line", "Borders"],
-      ["acc", "Accent"]
-    ];
+    const $ = id => document.getElementById(id);
+    const app = "themeditor";
+    const ls = localStorage;
+    const tok = ["bg", "src", "str", "txt", "mut", "line", "acc"];
     const pre = {
-      light: { label: "Light", type: "Light", values: { bg: "#e9eee7", src: "#f5f8f3", str: "#ffffff", txt: "#17231b", mut: "#607064", line: "#c7d0c8", acc: "#63bd46", shd: "10 20 60 #28582a4d" } },
-      dark: { label: "Dark", type: "Dark", values: { bg: "#111318", src: "#1c1f28", str: "#202430", txt: "#f4f5f7", mut: "#a5aab7", line: "#3f424b", acc: "#62c7b2", shd: "10 20 60 #1113184d" } },
-      mlt: { label: "Melon Light", type: "Light", values: { bg: "#cfe9e5", src: "#fff8ee", str: "#ffffff", txt: "#3d2920", mut: "#866b5d", line: "#cdbeb5", acc: "#f28a3d", shd: "10 20 60 #974f204d" } },
-      mdk: { label: "Melon Dark", type: "Dark", values: { bg: "#203b40", src: "#2f4e53", str: "#37636a", txt: "#fff8ef", mut: "#d3e1df", line: "#50605f", acc: "#ff974b", shd: "10 20 60 #0716194d" } },
-      crim: { label: "Crimson", type: "Dark", values: { bg: "#17090f", src: "#340d1d", str: "#671b37", txt: "#fff3f6", mut: "#d8a8b8", line: "#7f334d", acc: "#ff4f7b", shd: "10 20 60 #ff174f4d" } },
-      nebu: { label: "Nebula", type: "Dark", values: { bg: "#110d1f", src: "#261641", str: "#51318a", txt: "#f8f2ff", mut: "#c4aedc", line: "#765b99", acc: "#c783ff", shd: "10 20 60 #a94dff4d" } },
-      burn: { label: "Eyeburn", type: "Dark", values: { bg: "#000000", src: "#080808", str: "#111111", txt: "#ffffff", mut: "#bcbcbc", line: "#aaaaaa", acc: "#ffffff", shd: "10 20 60 #3333334d" } }
+      light: { bg: "#e9eee7", src: "#f5f8f3", str: "#ffffff", txt: "#17231b", mut: "#607064", line: "#c7d0c8", acc: "#63bd46", shd: "10 20 60 #28582a4d" },
+      dark: { bg: "#111318", src: "#1c1f28", str: "#202430", txt: "#f4f5f7", mut: "#a5aab7", line: "#3f424b", acc: "#62c7b2", shd: "10 20 60 #1113184d" },
+      mlt: { bg: "#cfe9e5", src: "#fff8ee", str: "#ffffff", txt: "#3d2920", mut: "#866b5d", line: "#cdbeb5", acc: "#f28a3d", shd: "10 20 60 #974f204d" },
+      mdk: { bg: "#203b40", src: "#2f4e53", str: "#37636a", txt: "#fff8ef", mut: "#d3e1df", line: "#50605f", acc: "#ff974b", shd: "10 20 60 #0716194d" },
+      crim: { bg: "#17090f", src: "#340d1d", str: "#671b37", txt: "#fff3f6", mut: "#d8a8b8", line: "#7f334d", acc: "#ff4f7b", shd: "10 20 60 #ff174f4d" },
+      nebu: { bg: "#110d1f", src: "#261641", str: "#51318a", txt: "#f8f2ff", mut: "#c4aedc", line: "#765b99", acc: "#c783ff", shd: "10 20 60 #a94dff4d" },
+      burn: { bg: "#000000", src: "#080808", str: "#111111", txt: "#ffffff", mut: "#bcbcbc", line: "#aaaaaa", acc: "#ffffff", shd: "10 20 60 #3333334d" }
     };
+    const tr = {
+      en: {
+        pal: "Color palette", load: "Load theme", save: "Save theme", pre: "Preset",
+        shd: "Shadow", shdP: "X and Y move the shadow. Blur controls softness.", blur: "Blur", col: "Color",
+        prv: "Preview your flavor of Melon", prvP: "What you see here is just a download away of being yours, or maybe a pull request.",
+        copy: "Lightweight and fast tools with clean experiences and enough personality to keep your computer from filing a complaint.",
+        mel: "Ideas, notes, tasks, and properly useful creativity. Better than a paid tool.",
+        mem: "Keep important things somewhere your brain can find them.",
+        thm: "Basically what you're doing right now.",
+        moreT: "More", more: "You'll never see it coming.",
+        set: "Settings", langL: "Language", noaL: "Disable Animations",
+        bg: "Background", src: "Surface", str: "Raised surface", txt: "Primary text", mut: "Secondary text", line: "Borders", acc: "Accent",
+        light: "Light", dark: "Dark", mlt: "Melon Light", mdk: "Melon Dark", crim: "Crimson", nebu: "Nebula", burn: "Eyeburn",
+        cst: "Custom", ok: "Theme loaded.", ask: "Name this theme:", def: "My theme", del: "Delete \"{name}\"?",
+        eLen: "A .melon file must contain 7 or 8 values.",
+        eHex: "Theme colors must be six-digit HEX values.",
+        eShd: "Shadow must be: X Y Blur RRGGBBAA HEX."
+      },
+      es: {
+        pal: "Paleta de colores", load: "Cargar tema", save: "Guardar tema", pre: "Preajuste",
+        shd: "Sombra", shdP: "X e Y mueven la sombra. El desenfoque controla la suavidad.", blur: "Desenfoque", col: "Color",
+        prv: "Previsualiza tu sabor de Melon", prvP: "Lo que ves aquí está a una descarga de ser tuyo, o tal vez a un pull request.",
+        copy: "Herramientas ligeras y rápidas con experiencias limpias y suficiente personalidad para que tu computadora no presente una queja.",
+        mel: "Ideas, notas, tareas y creatividad realmente útil. Mejor que una herramienta de pago.",
+        mem: "Guarda las cosas importantes donde tu cerebro pueda encontrarlas.",
+        thm: "Básicamente lo que estás haciendo ahora mismo.",
+        moreT: "Más", more: "Nunca lo verás venir.",
+        set: "Ajustes", langL: "Idioma", noaL: "Desactivar animaciones",
+        bg: "Fondo", src: "Superficie", str: "Superficie elevada", txt: "Texto principal", mut: "Texto secundario", line: "Bordes", acc: "Acento",
+        light: "Claro", dark: "Oscuro", mlt: "Melon Claro", mdk: "Melon Oscuro", crim: "Carmesí", nebu: "Nébula", burn: "Quemaojos",
+        cst: "Personalizado", ok: "Tema cargado.", ask: "Nombre de este tema:", def: "Mi tema", del: "¿Eliminar \"{name}\"?",
+        eLen: "Un archivo .melon debe contener 7 u 8 valores.",
+        eHex: "Los colores del tema deben ser valores HEX de seis dígitos.",
+        eShd: "La sombra debe ser: X Y Desenfoque RRGGBBAA HEX."
+      }
+    };
+
     const b = document.body;
-    const sel = document.querySelector("#sel");
-    const stat = document.querySelector("#stat");
-    const pal = document.querySelector("#pal");
-    const load = document.querySelector("#load");
-    const save = document.querySelector("#save");
-    const file = document.querySelector("#file");
-    const drop = document.querySelector("#drop");
-    const sx = document.querySelector("#sx");
-    const sy = document.querySelector("#sy");
-    const sb = document.querySelector("#sb");
-    const sc = document.querySelector("#sc");
-    const scc = document.querySelector("#scc");
+    const sel = $("sel"), stat = $("stat"), pal = $("pal"), load = $("load"), save = $("save"), file = $("file"), drop = $("drop");
+    const sx = $("sx"), sy = $("sy"), sb = $("sb"), sc = $("sc"), scc = $("scc");
+    const gear = $("gear"), menu = $("menu"), lang = $("lang"), addL = $("addL"), delL = $("delL"), mlg = $("mlg"), noa = $("noa");
     let act = "dark";
-    let cst = { ...pre[act].values };
-    let ths = JSON.parse(localStorage.getItem("themeditor-themes") || "{}");
+    let cst = { ...pre[act] };
+    let ths = JSON.parse(ls.getItem("thm") || "{}");
+    let langs = JSON.parse(ls.getItem("lang") || "{}");
+
+    const fmtS = s => s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4");
+
+    function t(k) {
+      const v = lang.value;
+      const dict = v.startsWith("own:") ? langs[app]?.[v.slice(4)]?.tr : tr[v];
+      return dict?.[k] ?? tr.en[k] ?? k;
+    }
+
+    function pMlg(raw) {
+      const out = { name: "", tr: {} };
+      for (const line of raw.split(/\r?\n/)) {
+        const m = line.trim().match(/^(@?[a-zA-Z0-9_-]+)\s+"((?:\\"|[^"])*)"$/);
+        if (!m) continue;
+        const val = m[2].replace(/\\"/g, '"').replace(/\\n/g, "\n");
+        if (m[1] === "@name") out.name = val;
+        else if (!m[1].startsWith("@")) out.tr[m[1]] = val;
+      }
+      return out;
+    }
 
     function dump() {
-      const out = tok.map(([key]) => (cst[key] || "#000000").slice(1));
-      const s = cst.shd || cst.shadow;
-      if (s) out.push(s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#([0-9a-f]{8})$/i, "$1 $2 $3 $4"));
+      const out = tok.map(k => (cst[k] || "#000000").slice(1));
+      if (cst.shd) out.push(cst.shd.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#([0-9a-f]{8})$/i, "$1 $2 $3 $4"));
       return `${out.join("\n")}\n`;
     }
 
     function parse(data) {
-      const vals = data.split(/\r?\n/).map((v) => v.trim()).filter(Boolean);
-      if (vals.length < 7 || vals.length > 8) throw new Error("A .melon file must contain 7 or 8 values.");
+      const vals = data.split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+      if (vals.length < 7 || vals.length > 8) throw new Error(t("eLen"));
       const got = {};
-      tok.forEach(([key], idx) => {
-        if (!/^[0-9a-f]{6}$/i.test(vals[idx])) throw new Error("Theme colors must be six-digit HEX values.");
-        got[key] = `#${vals[idx]}`;
+      tok.forEach((k, i) => {
+        if (!/^[0-9a-f]{6}$/i.test(vals[i])) throw new Error(t("eHex"));
+        got[k] = `#${vals[i]}`;
       });
-      if (vals[7] && /^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(vals[7])) got.shd = vals[7].replace(/(#[0-9a-f]+|[0-9a-f]{8})$/i, "#$1");
-      else if (vals[7]) throw new Error("Shadow must be: X Y Blur RRGGBBAA HEX.");
+      if (vals[7] && /^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(vals[7])) got.shd = vals[7].replace(/([0-9a-f]{8})$/i, "#$1");
+      else if (vals[7]) throw new Error(t("eShd"));
       return got;
     }
 
     function shad() {
-      const s = cst.shd || cst.shadow || "10 20 60 #0000004d";
-      const mat = s.match(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i);
+      const mat = (cst.shd || "10 20 60 #0000004d").match(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i);
       if (!mat) return;
       [sx.value, sy.value, sb.value] = mat.slice(1, 4);
-      sc.value = mat[4].slice(0, 7);
-      scc.value = sc.value;
+      sc.value = scc.value = mat[4].slice(0, 7);
     }
 
     function put(name, vals) {
       const key = name.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "theme";
       ths[key] = { name: name.trim() || "Theme", values: vals };
-      localStorage.setItem("themeditor-themes", JSON.stringify(ths));
+      ls.setItem("thm", JSON.stringify(ths));
       return key;
     }
 
     function opts() {
-      const base = Object.entries(pre).map(([key, preset]) => `<option value="${key}">${preset.label}</option>`);
-      const own = Object.entries(ths).map(([key, val]) => `<option value="own:${key}">${val.name}</option>`);
+      const base = Object.keys(pre).map(k => `<option value="${k}">${t(k)}</option>`);
+      const own = Object.entries(ths).map(([k, val]) => `<option value="own:${k}">${val.name}</option>`);
       sel.innerHTML = base.concat(own).join("");
+      sel.value = act;
+    }
+
+    function lOpts() {
+      lang.querySelectorAll('option[value^="own:"]').forEach(el => el.remove());
+      Object.entries(langs[app] || {}).forEach(([k, item]) => {
+        const opt = document.createElement("option");
+        opt.value = `own:${k}`;
+        opt.textContent = item.name;
+        lang.appendChild(opt);
+      });
+    }
+
+    function setL(v) {
+      const own = v.startsWith("own:") ? langs[app]?.[v.slice(4)] : null;
+      const code = own ? v.slice(4) : (tr[v] ? v : "en");
+      const val = own ? v : code;
+      lang.value = val;
+      document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t(el.dataset.i); });
+      document.documentElement.lang = code;
+      delL.hidden = !own;
+      ls.setItem("lng", val);
+      opts();
+      draw();
+      stat.textContent = act === "custom" ? t("cst") : (act.startsWith("own:") ? ths[act.slice(4)]?.name : t(act));
     }
 
     function draw() {
-      const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent" };
-      pal.innerHTML = tok.map(([key, label]) => {
-        const val = cst[key] || cst[map[key]] || "#000000";
+      pal.innerHTML = tok.map(k => {
+        const val = cst[k] || "#000000";
+        const lbl = t(k);
         return `
         <div class="row">
-          <label>${label}<input data-tok="${key}" type="text" value="${val}" spellcheck="false"></label>
-          <input data-col="${key}" type="color" value="${hex(val)}" aria-label="${label} color picker">
-        </div>
-      `;
+          <label>${lbl}<input data-tok="${k}" type="text" value="${val}" spellcheck="false"></label>
+          <input data-col="${k}" type="color" value="${/^#([0-9a-f]{6})$/i.test(val) ? val : "#888888"}" aria-label="${lbl}">
+        </div>`;
       }).join("");
-      pal.querySelectorAll("[data-tok]").forEach((input) => input.addEventListener("input", () => upd(input.dataset.tok, input.value, "text")));
-      pal.querySelectorAll("[data-col]").forEach((input) => input.addEventListener("input", () => upd(input.dataset.col, input.value, "color")));
-    }
-
-    function hex(value) {
-      const match = value.match(/^#([0-9a-f]{6})$/i);
-      return match ? value : "#888888";
+      pal.querySelectorAll("[data-tok]").forEach(el => el.addEventListener("input", () => upd(el.dataset.tok, el.value, "text")));
+      pal.querySelectorAll("[data-col]").forEach(el => el.addEventListener("input", () => upd(el.dataset.col, el.value, "color")));
     }
 
     function pick(key) {
       act = key;
-      const mapT = {"melon-light":"mlt", "melon-dark":"mdk", "crimson":"crim", "nebula":"nebu", "eyeburn":"burn"};
-      const realK = mapT[key] || key;
-      const src = realK.startsWith("own:") ? ths[realK.slice(4)] : pre[realK];
+      const src = key.startsWith("own:") ? ths[key.slice(4)]?.values : pre[key];
       if (!src) return;
-      cst = { ...src.values };
+      cst = { ...src };
       b.style.removeProperty("--shd");
-      b.dataset.t = realK;
-      tok.forEach(([k]) => b.style.removeProperty(`--${k}`));
+      b.dataset.t = key;
+      tok.forEach(k => b.style.removeProperty(`--${k}`));
       apply();
-      sel.value = realK;
-      stat.textContent = src.name || src.label;
-      drop.hidden = !realK.startsWith("own:");
+      sel.value = key;
+      stat.textContent = key.startsWith("own:") ? ths[key.slice(4)].name : t(key);
+      drop.hidden = !key.startsWith("own:");
       draw();
       shad();
-      localStorage.setItem("themeditor-preset", realK);
-      localStorage.removeItem("themeditor-custom");
+      ls.setItem("pre", key);
+      ls.removeItem("cst");
     }
 
     function apply() {
-      const map = { bg:"bg", src:"surface", str:"surface-strong", txt:"text", mut:"muted", line:"line", acc:"accent", shd:"shadow" };
-      tok.forEach(([k]) => {
-        const v = cst[k] || cst[map[k]];
-        if (v) b.style.setProperty(`--${k}`, v);
-      });
-      const s = cst.shd || cst.shadow;
-      if (s) b.style.setProperty("--shd", s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4"));
+      tok.forEach(k => { if (cst[k]) b.style.setProperty(`--${k}`, cst[k]); });
+      if (cst.shd) b.style.setProperty("--shd", fmtS(cst.shd));
     }
 
     function upd(key, value, source) {
@@ -345,27 +466,24 @@
       b.dataset.t = "custom";
       apply();
       act = "custom";
-      stat.textContent = "Custom";
+      stat.textContent = t("cst");
       drop.hidden = true;
-      const cp = source === "color"
-        ? pal.querySelector(`[data-tok="${key}"]`)
-        : pal.querySelector(`[data-col="${key}"]`);
-      if (cp && source === "color") cp.value = value;
-      if (cp && source === "text" && /^#[0-9a-f]{6}$/i.test(value)) cp.value = value;
-      localStorage.setItem("themeditor-custom", JSON.stringify(cst));
+      const cp = pal.querySelector(source === "color" ? `[data-tok="${key}"]` : `[data-col="${key}"]`);
+      if (cp && (source === "color" || /^#[0-9a-f]{6}$/i.test(value))) cp.value = value;
+      ls.setItem("cst", JSON.stringify(cst));
     }
 
     function uShad() {
       const col = /^#[0-9a-f]{6}$/i.test(sc.value) ? sc.value : "#000000";
       cst.shd = `${Number(sx.value) || 0} ${Number(sy.value) || 0} ${Math.max(0, Number(sb.value) || 0)} ${col}4d`;
-      sc.value = col;
-      scc.value = col;
-      b.style.setProperty("--shd", cst.shd.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+(#[0-9a-f]{8})$/i, "$1px $2px $3px $4"));
-      localStorage.setItem("themeditor-custom", JSON.stringify(cst));
+      sc.value = scc.value = col;
+      b.style.setProperty("--shd", fmtS(cst.shd));
+      ls.setItem("cst", JSON.stringify(cst));
     }
 
-    const sPre = localStorage.getItem("themeditor-preset");
-    const sCst = JSON.parse(localStorage.getItem("themeditor-custom") || "null");
+    lOpts();
+    const sPre = ls.getItem("pre");
+    const sCst = JSON.parse(ls.getItem("cst") || "null");
     opts();
     sel.addEventListener("change", () => {
       if (pre[sel.value] || sel.value.startsWith("own:")) pick(sel.value);
@@ -375,35 +493,64 @@
       act = "custom";
       b.dataset.t = "custom";
       apply();
-      stat.textContent = "Custom";
       drop.hidden = true;
+      shad();
     } else {
-      const mapT = {"melon-light":"mlt", "melon-dark":"mdk", "crimson":"crim", "nebula":"nebu", "eyeburn":"burn"};
-      const rPre = mapT[sPre] || sPre;
-      const old = rPre && (pre[rPre] || (rPre.startsWith("own:") && ths[rPre.slice(4)]));
-      pick(old ? rPre : "dark");
+      const old = sPre && (pre[sPre] || (sPre.startsWith("own:") && ths[sPre.slice(4)]));
+      pick(old ? sPre : "dark");
     }
-    load.addEventListener("click", () => file.click());
-    file.addEventListener("change", () => {
-      const item = file.files[0];
+    setL(ls.getItem("lng") || "en");
+    const vNoa = ls.getItem("noa") === "true";
+    noa.checked = vNoa;
+    b.classList.toggle("noa", vNoa);
+
+    gear.addEventListener("click", () => {
+      const open = menu.classList.toggle("open");
+      gear.setAttribute("aria-expanded", String(open));
+    });
+    noa.addEventListener("change", () => {
+      b.classList.toggle("noa", noa.checked);
+      ls.setItem("noa", String(noa.checked));
+    });
+    lang.addEventListener("change", () => setL(lang.value));
+    addL.addEventListener("click", () => mlg.click());
+    mlg.addEventListener("change", async () => {
+      const item = mlg.files?.[0];
       if (!item) return;
-      const read = new FileReader();
-      read.onload = () => {
-        try {
-          const vals = parse(read.result);
-          const key = put(item.name.replace(/\.melon$/i, ""), vals);
-          opts();
-          pick(`own:${key}`);
-          alert("Theme loaded.");
-        } catch (err) {
-          alert(err.message);
-        }
-        file.value = "";
-      };
-      read.readAsText(item);
+      const data = pMlg(await item.text());
+      const id = item.name.replace(/\.mlg$/i, "").replace(new RegExp(`^${app}-`, "i"), "") || "custom";
+      langs[app] = langs[app] || {};
+      langs[app][id] = { name: data.name || id, tr: data.tr };
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts();
+      setL(`own:${id}`);
+      mlg.value = "";
+    });
+    delL.addEventListener("click", () => {
+      if (!lang.value.startsWith("own:")) return;
+      delete langs[app]?.[lang.value.slice(4)];
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts();
+      setL("en");
+    });
+
+    load.addEventListener("click", () => file.click());
+    file.addEventListener("change", async () => {
+      const item = file.files?.[0];
+      if (!item) return;
+      try {
+        const vals = parse(await item.text());
+        const key = put(item.name.replace(/\.melon$/i, ""), vals);
+        opts();
+        pick(`own:${key}`);
+        alert(t("ok"));
+      } catch (err) {
+        alert(err.message);
+      }
+      file.value = "";
     });
     save.addEventListener("click", () => {
-      const name = prompt("Name this theme:", act.startsWith("own:") ? ths[act.slice(4)].name : "My theme");
+      const name = prompt(t("ask"), act.startsWith("own:") ? ths[act.slice(4)].name : t("def"));
       if (name === null) return;
       const key = put(name, { ...cst });
       opts();
@@ -418,18 +565,34 @@
     drop.addEventListener("click", () => {
       if (!act.startsWith("own:")) return;
       const key = act.slice(4);
-      if (!confirm(`Delete "${ths[key].name}"?`)) return;
+      if (!confirm(t("del").replace("{name}", ths[key].name))) return;
       delete ths[key];
-      localStorage.setItem("themeditor-themes", JSON.stringify(ths));
+      ls.setItem("thm", JSON.stringify(ths));
       opts();
       pick("dark");
     });
-    [sx, sy, sb, sc].forEach((el) => el.addEventListener("input", uShad));
+    [sx, sy, sb, sc].forEach(el => el.addEventListener("input", uShad));
     scc.addEventListener("input", () => {
       sc.value = scc.value;
       uShad();
     });
-    draw();
+    window.addEventListener("storage", e => {
+      if (e.key === "thm") {
+        ths = JSON.parse(e.newValue || "{}");
+        opts();
+        if (act.startsWith("own:") && !ths[act.slice(4)]) pick("dark");
+      }
+      if (e.key === "lang") {
+        langs = JSON.parse(e.newValue || "{}");
+        lOpts();
+        setL(lang.value);
+      }
+      if (e.key === "noa") {
+        const v = e.newValue === "true";
+        noa.checked = v;
+        b.classList.toggle("noa", v);
+      }
+    });
   </script>
 </body>
 </html>

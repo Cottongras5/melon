@@ -18,6 +18,7 @@
     [data-t="crim"] { --bg: #17090f; --src: #340d1d; --str: #671b37; --txt: #fff3f6; --mut: #d8a8b8; --line: #7f334d; --acc: #ff4f7b; --shd: 10px 20px 60px #ff174f4d; }
     [data-t="nebu"] { --bg: #110d1f; --src: #261641; --str: #51318a; --txt: #f8f2ff; --mut: #c4aedc; --line: #765b99; --acc: #c783ff; --shd: 10px 20px 60px #a94dff4d; }
     [data-t="burn"] { --bg: #000; --src: #080808; --str: #111; --txt: #fff; --mut: #bcbcbc; --line: #aaa; --acc: #fff; --shd: 10px 20px 60px #3333334d; }
+    [data-t="aura"] { --bg: #fff; --src: #f0f0f0; --str: #fff; --txt: #000; --mut: #888; --line: #000; --acc: #000; --shd: 10px 20px 60px #0000004d; }
 
     * { box-sizing: border-box; }
     html { min-height: 100%; font-size: 110%; }
@@ -26,7 +27,7 @@
       color: var(--txt); background: var(--bg);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       display: flex; align-items: center; justify-content: center;
-      transition: background .5s ease-in-out, color .4s ease-in-out;
+      transition: background .5s, color .4s;
     }
     body::before {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; content: "";
@@ -34,7 +35,8 @@
     }
     button, input, select { font: inherit; }
     button, .cell.dest, .pawn.mov { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-    .hide { display: none !important; }
+    select option { background: var(--src); color: var(--txt); }
+    .hide, [hidden] { display: none !important; }
 
     .pbox { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
     .ptc { position: absolute; background: #ffffff38; box-shadow: 0 0 14px #ffffff24; animation: flt linear infinite; }
@@ -67,7 +69,7 @@
     .mbtn {
       width: 100%; padding: .95rem 1.2rem; border: 1px solid var(--line); border-radius: 16px;
       background: var(--str); color: var(--txt); font-weight: 700; font-size: 1.02rem; cursor: pointer;
-      transition: transform .2s ease-in-out, border-color .2s ease-in-out, background .2s ease-in-out, opacity .2s ease-in-out;
+      transition: transform .2s, border-color .2s, background .2s, opacity .2s;
     }
     .mbtn.pri { background: var(--acc); color: #17231b; border-color: var(--acc); }
     .mbtn:hover:not(:disabled), .mbtn:focus-visible:not(:disabled) { border-color: var(--acc); transform: translateY(-2px); outline: none; }
@@ -75,12 +77,13 @@
 
     .hrail { position: fixed; left: .75rem; top: 50%; transform: translateY(-50%); z-index: 15; display: flex; flex-direction: column; gap: .5rem; }
     .hitem {
+      --hx: 3px; --hy: 0px; --hx2: 8px; --hy2: 0px;
       display: flex; align-items: center; gap: .5rem; padding: .48rem .72rem;
       border: 1px solid var(--line); border-radius: 16px; background: var(--src); color: var(--txt);
       box-shadow: var(--shd); backdrop-filter: blur(16px); font-weight: 800; font-size: .92rem;
-      transition: transform .2s ease-in-out, border-color .2s ease-in-out;
+      transition: transform .2s, border-color .2s;
     }
-    .hitem.act { border-color: var(--acc); transform: translateX(3px); }
+    .hitem.act { border-color: var(--acc); transform: translate(var(--hx), var(--hy)); }
     .hitem.hpop { animation: hpop .45s cubic-bezier(.2, .9, .3, 1); }
     .hpwn { display: grid; place-items: center; width: 1.25rem; height: 1.25rem; filter: drop-shadow(0 2px 4px #00000059); flex-shrink: 0; }
     .hpwn svg, .pdot svg, .sico svg, .pawn svg { width: 100%; height: 100%; display: block; overflow: visible; }
@@ -94,7 +97,7 @@
       display: grid; width: 2.6rem; height: 2.6rem; place-items: center;
       border: 1px solid var(--line); border-radius: 13px; background: var(--src); color: var(--txt);
       box-shadow: var(--shd); cursor: pointer; font-size: 1.08rem; backdrop-filter: blur(14px);
-      transition: transform .2s ease-in-out, border-color .2s ease-in-out, color .2s ease-in-out;
+      transition: transform .2s, border-color .2s, color .2s;
     }
     .ibtn:hover, .ibtn:focus-visible { color: var(--acc); border-color: var(--acc); transform: translateY(-2px); outline: none; }
 
@@ -103,12 +106,12 @@
     .cell {
       position: relative; border-radius: 8px; border: 1px solid #c2c2c2; background: #f5f5f5;
       display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2px; padding: 2px;
-      transition: transform .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, filter .2s ease-in-out; user-select: none;
+      transition: transform .15s, border-color .15s, box-shadow .15s, filter .2s; user-select: none;
     }
     .brd.dim .cell:not(.dest):not(.orig) { filter: brightness(.66); }
     .cell.orig { z-index: 3; box-shadow: 0 0 0 2px #17231b; }
-    .cell.safe { border-color: #00000026; }
-    .cell.hom { border-radius: 13px; border-color: #00000026; }
+    .cell.safe, .cell.hom { border-color: #00000026; }
+    .cell.hom { border-radius: 13px; }
     .cell.strt {
       border-radius: 14px; border-width: 2px;
       display: grid; grid-template-columns: repeat(2, auto); place-content: center; gap: 1px; padding: 1px;
@@ -121,8 +124,7 @@
     .pawn {
       position: relative; z-index: 2; display: grid; place-items: center;
       width: clamp(18.15px, 3.15vw, 27.83px); height: clamp(18.15px, 3.15vw, 27.83px);
-      filter: drop-shadow(0 2px 3px #00000066);
-      transition: transform .16s ease-in-out, filter .16s ease-in-out; flex-shrink: 0;
+      filter: drop-shadow(0 2px 3px #00000066); transition: transform .16s, filter .16s; flex-shrink: 0;
     }
     .pawn.anim { z-index: 9; }
     .pawn.sm { width: clamp(13.31px, 2.18vw, 19.36px); height: clamp(13.31px, 2.18vw, 19.36px); }
@@ -143,7 +145,7 @@
     .deck, .card {
       width: clamp(54px, 9vw, 76px); height: clamp(72px, 12vw, 102px); border-radius: 14px; border: 1px solid var(--line);
       display: flex; flex-direction: column; align-items: center; justify-content: center; padding: .25rem;
-      transition: transform .2s ease-in-out, border-color .2s ease-in-out, box-shadow .2s ease-in-out, opacity .2s ease-in-out;
+      transition: transform .2s, border-color .2s, box-shadow .2s, opacity .2s;
     }
     .card.sm3 { width: clamp(46px, 7.2vw, 64px); height: clamp(64px, 10vw, 88px); border-radius: 12px; }
     .cbtn { cursor: pointer; }
@@ -162,22 +164,26 @@
     .msg { font-size: clamp(.72rem, 1.5vw, .84rem); color: var(--mut); line-height: 1.3; min-height: 2.2em; display: flex; align-items: center; justify-content: center; max-width: 24ch; }
     .pbtn { padding: .32rem .75rem; border: 1px solid var(--acc); border-radius: 10px; background: var(--acc); color: #17231b; font-size: .76rem; font-weight: 800; cursor: pointer; }
 
-    .mod { position: fixed; inset: 0; z-index: 50; background: #00000099; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fade .2s ease-in-out; }
+    .mod { position: fixed; inset: 0; z-index: 50; background: #00000099; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 1rem; animation: fade .2s; }
     .mbox { width: min(390px, 100%); max-height: 90dvh; overflow-y: auto; padding: 1.45rem; border: 1px solid var(--line); border-radius: 24px; background: var(--str); box-shadow: var(--shd); animation: pop .25s cubic-bezier(.2, .8, .2, 1); }
     .mhd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .mhd h2 { margin: 0; font-size: 1.15rem; }
     .set { display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .7rem 0; border-top: 1px solid var(--line); }
     .set label, .set span { font-size: .88rem; }
-    select { max-width: 11.5rem; color: var(--txt); border: 1px solid var(--line); border-radius: 9px; padding: .42rem .55rem; background: var(--src); cursor: pointer; }
+    .ctl { display: flex; align-items: center; gap: .35rem; min-width: 0; }
+    select, .abtn { color: var(--txt); border: 1px solid var(--line); border-radius: 9px; padding: .42rem .55rem; background: var(--src); cursor: pointer; }
+    select { min-width: 0; max-width: 9.2rem; }
+    .abtn { padding: .42rem .58rem; line-height: 1; transition: color .15s, border-color .15s; }
+    .abtn:hover, .abtn:focus-visible { color: var(--acc); border-color: var(--acc); outline: none; }
     .seg { display: flex; gap: .4rem; }
-    .sbtn { min-width: 2.35rem; padding: .4rem .65rem; border: 1px solid var(--line); border-radius: 10px; background: var(--src); color: var(--txt); font-weight: 700; cursor: pointer; transition: border-color .15s ease-in-out, background .15s ease-in-out, color .15s ease-in-out; }
+    .sbtn { min-width: 2.35rem; padding: .4rem .65rem; border: 1px solid var(--line); border-radius: 10px; background: var(--src); color: var(--txt); font-weight: 700; cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
     .sbtn.act { background: var(--acc); color: #17231b; border-color: var(--acc); }
     .pill { display: inline-flex; align-items: center; gap: .45rem; padding: .3rem .6rem; border-radius: 12px; border: 1px solid var(--line); background: var(--src); font-weight: 700; font-size: .78rem; }
     .pdot { display: grid; place-items: center; width: .92rem; height: .92rem; filter: drop-shadow(0 1px 2px #00000059); flex-shrink: 0; }
     .cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; padding-top: .4rem; }
     .cbox { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .45rem; border: 1px solid var(--line); border-radius: 12px; background: var(--src); font-size: .75rem; color: var(--mut); }
     .cbox input[type="color"] { width: 2.2rem; height: 2.2rem; padding: 0; border: none; border-radius: 50%; background: transparent; cursor: pointer; }
-    .sbox { cursor: pointer; transition: transform .15s ease-in-out, border-color .15s ease-in-out; }
+    .sbox { cursor: pointer; transition: transform .15s, border-color .15s; }
     .sbox:hover, .sbox:focus-visible { border-color: var(--acc); transform: translateY(-2px); outline: none; }
     .sbox:active { transform: scale(.95); }
     .sico { width: 2rem; height: 2rem; display: grid; place-items: center; filter: drop-shadow(0 2px 4px #00000059); }
@@ -187,8 +193,8 @@
 
     .swch { position: relative; width: 2.8rem; height: 1.55rem; flex-shrink: 0; }
     .swch input { width: 0; height: 0; opacity: 0; }
-    .slid { position: absolute; inset: 0; border-radius: 2rem; background: var(--mut); cursor: pointer; transition: .25s ease-in-out; }
-    .slid::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s ease-in-out; }
+    .slid { position: absolute; inset: 0; border-radius: 2rem; background: var(--mut); cursor: pointer; transition: .25s; }
+    .slid::before { position: absolute; width: 1.15rem; height: 1.15rem; left: .2rem; bottom: .2rem; content: ""; border-radius: 50%; background: var(--bg); transition: .25s; }
     .swch input:checked + .slid { background: var(--acc); }
     .swch input:checked + .slid::before { transform: translateX(1.25rem); }
 
@@ -199,11 +205,14 @@
     .bmrg { position: fixed; width: 26px; height: 26px; border-radius: 50%; border: 3px solid #fff; z-index: 68; pointer-events: none; }
     .wico { width: 4rem; height: 4rem; margin: 0 auto .8rem; border-radius: 50%; display: grid; place-items: center; font-size: 2rem; border: 2px solid #ffffff80; box-shadow: var(--shd); }
 
+    body[data-t="aura"], [data-t="aura"] .shll, [data-t="aura"] .hitem, [data-t="aura"] .ibtn, [data-t="aura"] .hub, [data-t="aura"] .mbox {
+      border-color: #000; box-shadow: 0 0 8px #000; text-shadow: 0 0 8px #000;
+    }
     .aur { --txt: #0000ff; --mut: #0000ff; transition-duration: .25s; }
     .aur :not(.arw) { color: #0000ff !important; }
     .aur .shll { animation-duration: .325s; }
     .aur .mln { animation-duration: 2s; }
-    .aur .mbtn, .aur .hitem, .aur .ibtn, .aur .pawn, .aur .deck, .aur .card, .aur .slid, .aur .slid::before { transition-duration: .1s; }
+    .aur .mbtn, .aur .hitem, .aur .ibtn, .aur .pawn, .aur .deck, .aur .card, .aur .slid, .aur .slid::before, .aur .mod { transition-duration: .1s; animation-duration: .1s; }
     .aur .hitem.hpop { animation-duration: .225s; }
     .aur .wrap { animation-duration: .25s; }
     .aur .cell { transition-duration: .09s; }
@@ -211,7 +220,6 @@
     .aur .pawn.mov { animation-duration: .425s; }
     .aur .pawn.sel { animation-duration: .375s; }
     .aur .card.flip { animation-duration: .18s; }
-    .aur .mod { animation-duration: .1s; }
     .aur .mbox { animation-duration: .125s; }
     .aur .sbtn { transition-duration: .075s; }
 
@@ -219,7 +227,7 @@
 
     @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes pop { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
-    @keyframes hpop { 0% { transform: translateX(3px) scale(1); } 45% { transform: translateX(8px) scale(1.18); } 100% { transform: translateX(3px) scale(1); } }
+    @keyframes hpop { 0%, 100% { transform: translate(var(--hx), var(--hy)) scale(1); } 45% { transform: translate(var(--hx2), var(--hy2)) scale(1.18); } }
     @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
     @keyframes bob { 0%, 100% { transform: rotate(-10deg) translateY(0); } 50% { transform: rotate(-4deg) translateY(-5px); } }
     @keyframes bobp { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.16); } }
@@ -242,10 +250,8 @@
         position: static; transform: none; flex-direction: row; justify-content: center; flex-wrap: wrap;
         gap: .45rem; width: min(620px, 100%, calc(100dvh - 7.2rem));
       }
-      .hitem { padding: .42rem .72rem; font-size: .9rem; border-radius: 14px; gap: .4rem; }
-      .hitem.act { transform: translateY(-2px); }
+      .hitem { --hx: 0px; --hy: -2px; --hx2: 0px; --hy2: -6px; padding: .42rem .72rem; font-size: .9rem; border-radius: 14px; gap: .4rem; }
       .hpwn { width: 1.15rem; height: 1.15rem; }
-      @keyframes hpop { 0% { transform: translateY(-2px) scale(1); } 45% { transform: translateY(-6px) scale(1.16); } 100% { transform: translateY(-2px) scale(1); } }
       .wrap { width: min(620px, 100%, calc(100dvh - 7.2rem)); margin-left: 0; gap: .5rem; }
       .ibtn { width: 2.65rem; height: 2.65rem; border-radius: 12px; font-size: 1.12rem; }
       .bfr { padding: .3rem; border-radius: 18px; }
@@ -281,7 +287,7 @@
 
   <main class="shll" id="menu">
     <h1 class="brnd"><span class="mln" aria-hidden="true">♟️</span><span>Sorry!</span></h1>
-    <p class="sub" data-i="sub">.</p>
+    <p class="sub" data-i="sub">The classic game of sweet revenge, lightweight and ready for any machine.</p>
     <div class="mbtns">
       <button class="mbtn pri" id="bnew" type="button" data-i="new">New Game</button>
       <button class="mbtn" id="bcnt" type="button" data-i="cnt" disabled>Continue</button>
@@ -336,23 +342,32 @@
       <div class="mhd"><h2 data-i="set">Settings</h2><button class="ibtn" id="clss" type="button">✕</button></div>
       <div class="set">
         <label for="sthm" data-i="thm">Theme</label>
-        <select id="sthm">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="mlt">Melon Light</option>
-          <option value="mdk">Melon Dark</option>
-          <option value="crim">Crimson</option>
-          <option value="nebu">Nebula</option>
-          <option value="burn">Eyeburn</option>
-        </select>
+        <div class="ctl">
+          <select id="sthm">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="mlt">Melon Light</option>
+            <option value="mdk">Melon Dark</option>
+            <option value="crim">Crimson</option>
+            <option value="nebu">Nebula</option>
+            <option value="burn">Eyeburn</option>
+          </select>
+          <button class="abtn" id="addT" type="button" aria-label="Import .melon">+</button>
+          <button class="abtn" id="delT" type="button" aria-label="Remove .melon" hidden>×</button>
+          <input id="mln" type="file" accept=".melon" hidden>
+        </div>
       </div>
       <div class="set">
         <label for="slng" data-i="lng">Language</label>
-        <select id="slng">
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="pt-BR">Português (Brasil)</option>
-        </select>
+        <div class="ctl">
+          <select id="slng">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+          <button class="abtn" id="addL" type="button" aria-label="Import .mlg">+</button>
+          <button class="abtn" id="delL" type="button" aria-label="Remove .mlg" hidden>×</button>
+          <input id="mlg" type="file" accept=".mlg" hidden>
+        </div>
       </div>
       <div class="set">
         <span data-i="aur">Aura Guardians</span>
@@ -402,18 +417,19 @@
   </div>
 
   <script>
-    const kThm = "melon-theme", kLng = "melon-language", kAur = "melon-aura", kNoa = "melon-disable-animations", kCst = "themeditor-themes", kSav = "melon_sorry_save", kCol = "melon_sorry_cols", kShp = "melon_sorry_shps";
+    const app = "sorry", ls = localStorage, b = document.body, $ = id => document.getElementById(id);
+    const pEl = (i, j) => document.querySelector(`.pawn[data-k="${i}-${j}"]`);
+    const tok = ["bg", "src", "str", "txt", "mut", "line", "acc"];
     const defC = ["#ff4b4b", "#3b82f6", "#4cc95b", "#ffd166"], shpList = ["circle", "square", "triangle", "hexagon"], defS = ["circle", "circle", "circle", "circle"];
-    const b = document.body, $ = (id) => document.getElementById(id);
-    let cst = JSON.parse(localStorage.getItem(kCst) || "{}"), cols = JSON.parse(localStorage.getItem(kCol) || "null") || [...defC];
-    const rawS = JSON.parse(localStorage.getItem(kShp) || "null");
-    let shps = Array.isArray(rawS) && rawS.length === 4 ? rawS.map((s) => (shpList.includes(s) ? s : "circle")) : [...defS];
-    let nPlr = 2, nPwn = 4, gMd = "norm", st = null, selP = null, dsts = [], actx = null, busy = false;
+    let cst = JSON.parse(ls.getItem("thm") || "{}"), langs = JSON.parse(ls.getItem("lang") || "{}");
+    let cols = JSON.parse(ls.getItem("s_col") || "null") || [...defC];
+    const rawS = JSON.parse(ls.getItem("s_shp") || "null");
+    let shps = Array.isArray(rawS) && rawS.length === 4 ? rawS.map(s => (shpList.includes(s) ? s : "circle")) : [...defS];
+    let nPlr = 2, nPwn = 4, gMd = "norm", st = null, selP = null, dsts = [], actx = null, busy = false, curT = "mdk", curL = "en";
 
     const tr = {
       en: { sub: "The classic game of sweet revenge, lightweight and ready for any machine.", new: "New Game", cnt: "Continue", set: "Settings", mode: "Mode", norm: "Normal", ser: "Serious", plrs: "Players", pwns: "Pawns per player", strt: "Start", thm: "Theme", lng: "Language", aur: "Aura Guardians", noa: "Disable Animations", pcol: "Player Colors", pshp: "Pawn Shapes", cir: "Circle", sqr: "Square", tri: "Triangle", hex: "Hexagon", rst: "Reset", plr: "Player", pass: "Pass", tapD: "Draw a card", pick: "Pick a pawn to move", choi: "Make a choice.", nomv: "No valid moves", win: "Wins!", wsub: "Sweet revenge served fresh.", agn: "Play Again", mnu: "Menu" },
-      es: { sub: "El clásico juego de la dulce venganza, ligero y listo para cualquier PC.", new: "Nueva Partida", cnt: "Continuar", set: "Ajustes", mode: "Modo", norm: "Normal", ser: "Serio", plrs: "Jugadores", pwns: "Fichas por jugador", strt: "Comenzar", thm: "Tema", lng: "Idioma", aur: "Guardianes del Aura", noa: "Desactivar animaciones", pcol: "Colores de jugador", pshp: "Formas de fichas", cir: "Círculo", sqr: "Cuadrado", tri: "Triángulo", hex: "Hexágono", rst: "Restaurar", plr: "Jugador", pass: "Pasar", tapD: "Toma una carta", pick: "Elige una ficha", choi: "Decídete.", nomv: "Sin movimientos", win: "¡Gana!", wsub: "Dulce venganza recién servida.", agn: "Jugar de nuevo", mnu: "Menú" },
-      "pt-BR": { sub: "O clássico jogo da doce vingança, leve e pronto para qualquer máquina.", new: "Novo Jogo", cnt: "Continuar", set: "Configurações", mode: "Modo", norm: "Normal", ser: "Sério", plrs: "Jogadores", pwns: "Peões por jogador", strt: "Iniciar", thm: "Tema", lng: "Idioma", aur: "Guardiões da Aura", noa: "Desativar animações", pcol: "Cores dos jogadores", pshp: "Formas dos peões", cir: "Círculo", sqr: "Quadrado", tri: "Triângulo", hex: "Hexágono", rst: "Redefinir", plr: "Jogador", pass: "Passar", tapD: "Compre uma carta", pick: "Escolha um peão", choi: "Decida-se.", nomv: "Sem jogadas válidas", win: "Venceu!", wsub: "Doce vingança servida na hora.", agn: "Jogar Novamente", mnu: "Menu" }
+      es: { sub: "El clásico juego de la dulce venganza, ligero y listo para cualquier PC.", new: "Nueva Partida", cnt: "Continuar", set: "Ajustes", mode: "Modo", norm: "Normal", ser: "Serio", plrs: "Jugadores", pwns: "Fichas por jugador", strt: "Comenzar", thm: "Tema", lng: "Idioma", aur: "Guardianes del Aura", noa: "Desactivar animaciones", pcol: "Colores de jugador", pshp: "Formas de fichas", cir: "Círculo", sqr: "Cuadrado", tri: "Triángulo", hex: "Hexágono", rst: "Restaurar", plr: "Jugador", pass: "Pasar", tapD: "Toma una carta", pick: "Elige una ficha", choi: "Decídete.", nomv: "Sin movimientos", win: "¡Gana!", wsub: "Dulce venganza recién servida.", agn: "Jugar de nuevo", mnu: "Menú" }
     };
 
     const shpKey = { circle: "cir", square: "sqr", triangle: "tri", hexagon: "hex" };
@@ -426,17 +442,46 @@
     }
 
     const spd = () => (b.classList.contains("aur") ? 0.5 : 1);
-    const lng = () => (tr[$("slng").value] ? $("slng").value : "en");
-    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-    const invEase = (u) => (u < 0.5 ? Math.sqrt(u / 2) : 1 - Math.sqrt((1 - u) / 2));
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const invEase = u => (u < 0.5 ? Math.sqrt(u / 2) : 1 - Math.sqrt((1 - u) / 2));
+
+    function t(k) {
+      const own = curL.startsWith("own:") ? langs[app]?.[curL.slice(4)]?.tr : tr[curL];
+      return own?.[k] ?? tr.en[k] ?? k;
+    }
+
+    function pMlg(raw) {
+      const out = { name: "", tr: {} };
+      for (const line of raw.split(/\r?\n/)) {
+        const m = line.trim().match(/^(@?[a-zA-Z0-9_-]+)\s+"((?:\\"|[^"])*)"$/);
+        if (!m) continue;
+        const val = m[2].replace(/\\"/g, '"').replace(/\\n/g, "\n");
+        if (m[1] === "@name") out.name = val;
+        else if (!m[1].startsWith("@")) out.tr[m[1]] = val;
+      }
+      return out;
+    }
+
+    function pThm(raw) {
+      const v = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      if (v.length < 7 || v.length > 8) return null;
+      const got = {};
+      for (let i = 0; i < 7; i += 1) {
+        if (!/^[0-9a-f]{6}$/i.test(v[i])) return null;
+        got[tok[i]] = `#${v[i]}`;
+      }
+      if (v[7]) {
+        if (!/^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(v[7])) return null;
+        got.shd = v[7].replace(/([0-9a-f]{8})$/i, "#$1");
+      }
+      return got;
+    }
 
     function syncCfg(np, nw, md = gMd) {
-      nPlr = np;
-      nPwn = nw;
-      gMd = md === "ser" ? "ser" : "norm";
-      $("mcnt").querySelectorAll(".sbtn").forEach((el) => el.classList.toggle("act", el.dataset.v === gMd));
-      $("pcnt").querySelectorAll(".sbtn").forEach((el) => el.classList.toggle("act", Number(el.dataset.v) === nPlr));
-      $("wcnt").querySelectorAll(".sbtn").forEach((el) => el.classList.toggle("act", Number(el.dataset.v) === nPwn));
+      nPlr = np; nPwn = nw; gMd = md === "ser" ? "ser" : "norm";
+      $("mcnt").querySelectorAll(".sbtn").forEach(el => el.classList.toggle("act", el.dataset.v === gMd));
+      $("pcnt").querySelectorAll(".sbtn").forEach(el => el.classList.toggle("act", Number(el.dataset.v) === nPlr));
+      $("wcnt").querySelectorAll(".sbtn").forEach(el => el.classList.toggle("act", Number(el.dataset.v) === nPwn));
     }
 
     function sfx(frq = 520, dur = 0.08, typ = "sine") {
@@ -480,8 +525,7 @@
 
     function shake() {
       if (b.classList.contains("noa")) return;
-      const bfr = document.querySelector(".bfr");
-      if (bfr) bfr.animate([
+      document.querySelector(".bfr")?.animate([
         { transform: "translate(0,0) rotate(0deg)" },
         { transform: "translate(-7px,4px) rotate(-.8deg)" },
         { transform: "translate(7px,-4px) rotate(.8deg)" },
@@ -537,10 +581,10 @@
       const box = $("pbx");
       box.innerHTML = "";
       if (b.classList.contains("noa")) return;
-      const s = spd(), shps = ["scir", "ssqr", "stri"];
+      const s = spd(), cls = ["scir", "ssqr", "stri"];
       for (let i = 0; i < 16; i += 1) {
         const p = document.createElement("div"), sz = Math.floor(Math.random() * 17) + 32;
-        p.className = `ptc ${shps[Math.floor(Math.random() * 3)]}`;
+        p.className = `ptc ${cls[Math.floor(Math.random() * 3)]}`;
         p.style.width = `${sz}px`; p.style.height = `${sz}px`; p.style.left = `${Math.random() * 100}%`;
         p.style.animationDuration = `${(Math.random() * 9 + 9) * s}s`; p.style.animationDelay = `${Math.random() * -16 * s}s`;
         box.appendChild(p);
@@ -553,55 +597,78 @@
     }
 
     function apShp() {
-      const t = tr[lng()];
       shps.forEach((s, i) => {
-        const btn = $(`p${i + 1}s`);
+        const btn = $(`p${i + 1}s`), lbl = t(shpKey[s]);
         if (btn) {
-          btn.innerHTML = `<span>P${i + 1}</span><span class="sico">${shpSvg(s, `var(--p${i + 1})`)}</span><small>${t[shpKey[s]]}</small>`;
-          btn.setAttribute("aria-label", `P${i + 1}: ${t[shpKey[s]]}`);
+          btn.innerHTML = `<span>P${i + 1}</span><span class="sico">${shpSvg(s, `var(--p${i + 1})`)}</span><small>${lbl}</small>`;
+          btn.setAttribute("aria-label", `P${i + 1}: ${lbl}`);
         }
       });
-      localStorage.setItem(kShp, JSON.stringify(shps));
+      ls.setItem("s_shp", JSON.stringify(shps));
       rPrev();
       if (st) draw();
     }
 
     function apCol() {
       cols.forEach((c, i) => { b.style.setProperty(`--p${i + 1}`, c); $(`p${i + 1}c`).value = c; });
-      localStorage.setItem(kCol, JSON.stringify(cols));
+      ls.setItem("s_col", JSON.stringify(cols));
       apShp(); apBg();
     }
 
     function opts() {
       const sel = $("sthm");
-      sel.querySelectorAll('option[value^="own:"]').forEach((el) => el.remove());
+      sel.querySelectorAll('option[value^="own:"]').forEach(el => el.remove());
       Object.entries(cst).forEach(([k, itm]) => {
         const opt = document.createElement("option");
-        opt.value = `own:${k}`; opt.textContent = itm.name; sel.appendChild(opt);
+        opt.value = `own:${k}`; opt.textContent = itm.name || k; sel.appendChild(opt);
       });
     }
 
     function setT(v) {
-      const map = { bg: "bg", src: "surface", str: "surface-strong", txt: "text", mut: "muted", line: "line", acc: "accent" };
-      const own = v.startsWith("own:") ? cst[v.slice(4)] : null;
-      b.dataset.t = own ? "cst" : v;
-      ["bg", "src", "str", "txt", "mut", "line", "acc"].forEach((k) => {
+      const own = v?.startsWith("own:") ? cst[v.slice(4)] : null;
+      const ok = own || ["light", "dark", "mlt", "mdk", "crim", "nebu", "burn", "aura"].includes(v);
+      curT = ok ? v : "mdk";
+      b.dataset.t = own ? "cst" : curT;
+      tok.forEach(k => {
         b.style.removeProperty(`--${k}`);
-        const val = own?.values[k] || own?.values[map[k]];
-        if (val) b.style.setProperty(`--${k}`, val);
+        if (own?.values?.[k]) b.style.setProperty(`--${k}`, own.values[k]);
       });
       b.style.removeProperty("--shd");
       if (own) {
-        const s = own.values.shd || own.values.shadow;
+        const s = own.values?.shd;
         b.style.setProperty("--shd", s ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, "$1px $2px $3px #$4") : "10px 20px 60px #0000004d");
       }
-      $("sthm").value = v; localStorage.setItem(kThm, v); apBg();
+      $("sthm").value = curT; $("delT").hidden = !own;
+      ls.setItem("t", curT); apBg();
+    }
+
+    function lOpts() {
+      const sel = $("slng");
+      sel.querySelectorAll('option[value^="own:"]').forEach(el => el.remove());
+      Object.entries(langs[app] || {}).forEach(([k, item]) => {
+        const opt = document.createElement("option");
+        opt.value = `own:${k}`; opt.textContent = item.name; sel.appendChild(opt);
+      });
     }
 
     function setL(v) {
-      const cur = tr[v] ? v : "en";
-      document.querySelectorAll("[data-i]").forEach((el) => { el.textContent = tr[cur][el.dataset.i]; });
-      document.documentElement.lang = cur; localStorage.setItem(kLng, cur); apShp();
+      const own = v?.startsWith("own:") ? langs[app]?.[v.slice(4)] : null;
+      const code = own ? v.slice(4) : (tr[v] ? v : "en");
+      curL = own ? v : code;
+      $("slng").value = curL; $("delL").hidden = !own;
+      document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t(el.dataset.i); });
+      document.documentElement.lang = code; ls.setItem("lng", curL);
+      apShp();
+    }
+
+    function setA(off) {
+      const v = !!off;
+      $("snoa").checked = v; b.classList.toggle("noa", v); ls.setItem("noa", String(v)); ptcs();
+    }
+
+    function setAur(on) {
+      const v = !!on;
+      $("saur").checked = v; b.classList.toggle("aur", v); ls.setItem("aur", String(v)); ptcs();
     }
 
     function rPrev() {
@@ -615,11 +682,11 @@
       }
     }
 
-    const sides = (np) => (np === 2 ? [0, 2] : np === 3 ? [0, 1, 2] : [0, 1, 2, 3]);
+    const sides = np => (np === 2 ? [0, 2] : np === 3 ? [0, 1, 2] : [0, 1, 2, 3]);
 
     function rot(r, c, s) {
       let nr = r, nc = c;
-      for (let i = 0; i < s; i += 1) { const t = nr; nr = nc; nc = 10 - t; }
+      for (let i = 0; i < s; i += 1) { const tmp = nr; nr = nc; nc = 10 - tmp; }
       return [nr, nc];
     }
 
@@ -643,13 +710,13 @@
     }
 
     function saveG() {
-      if (st) localStorage.setItem(kSav, JSON.stringify(st));
-      else localStorage.removeItem(kSav);
-      $("bcnt").disabled = !localStorage.getItem(kSav);
+      if (st) ls.setItem("s_sav", JSON.stringify(st));
+      else ls.removeItem("s_sav");
+      $("bcnt").disabled = !ls.getItem("s_sav");
     }
 
     function showG() { $("menu").classList.add("hide"); $("game").classList.remove("hide"); $("hcnt").classList.remove("hide"); apBg(); draw(); }
-    function showM() { $("game").classList.add("hide"); $("hcnt").classList.add("hide"); $("menu").classList.remove("hide"); $("bcnt").disabled = !localStorage.getItem(kSav); apBg(); }
+    function showM() { $("game").classList.add("hide"); $("hcnt").classList.add("hide"); $("menu").classList.remove("hide"); $("bcnt").disabled = !ls.getItem("s_sav"); apBg(); }
 
     function sInfo(pi) {
       const sd = sides(st.np)[pi];
@@ -660,7 +727,7 @@
 
     function sldAt(pos) {
       for (let sd = 0; sd < 4; sd += 1) {
-        if (pos === (sd * 10 + 5) % 40) return { sd, seq: [5, 6, 7, 8].map((o) => (sd * 10 + o) % 40) };
+        if (pos === (sd * 10 + 5) % 40) return { sd, seq: [5, 6, 7, 8].map(o => (sd * 10 + o) % 40) };
       }
       return null;
     }
@@ -722,7 +789,7 @@
         if (i === skip) continue;
         for (let j = 0; j < st.nw; j += 1) {
           if (st.ps[i][j] === pos) {
-            const el = document.querySelector(`.pawn[data-k="${i}-${j}"]`);
+            const el = pEl(i, j);
             hits.push({ oi: i, oj: j, r0: el ? el.getBoundingClientRect() : null });
           }
         }
@@ -741,6 +808,19 @@
       ], { duration: dur, easing: "ease-in-out" }).onfinish = () => el.classList.remove("anim");
     }
 
+    async function bmpFx(pi, wi, hits, fbRect = null) {
+      hits.forEach(h => { st.ps[h.oi][h.oj] = -1; });
+      sfx(210, 0.22, "sawtooth");
+      draw();
+      if (b.classList.contains("noa")) return;
+      const bDur = 400 * spd(), curAfter = pEl(pi, wi), cRect = curAfter ? curAfter.getBoundingClientRect() : (fbRect || hits[0].r0);
+      if (cRect) boom(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2, cols[pi], cols[hits[0].oi]);
+      shake();
+      zmswp(curAfter, cRect, bDur);
+      hits.forEach(h => zmswp(pEl(h.oi, h.oj), h.r0, bDur));
+      await wait(bDur);
+    }
+
     async function dsh(pi, wi) {
       const pos = st.ps[pi][wi];
       if (pos < 0 || pos >= 40) return;
@@ -750,14 +830,14 @@
       const noA = b.classList.contains("noa"), s = spd(), steps = sld.seq.slice(1), L = steps.length, tot = 204 * s;
       for (let idx = 0; idx < L; idx += 1) {
         const sq = steps[idx], hits = fdBmp(sq, pi);
-        const pEl = document.querySelector(`.pawn[data-k="${pi}-${wi}"]`), r0 = pEl ? pEl.getBoundingClientRect() : null;
+        const r0 = pEl(pi, wi)?.getBoundingClientRect();
         const per = Math.max(20, (invEase((idx + 1) / L) - invEase(idx / L)) * tot);
         const ease = L === 1 ? "ease-in-out" : idx === 0 ? "ease-in" : idx === L - 1 ? "ease-out" : "linear";
 
         st.ps[pi][wi] = sq;
         if (!noA) {
           draw();
-          const curEl = document.querySelector(`.pawn[data-k="${pi}-${wi}"]`);
+          const curEl = pEl(pi, wi);
           if (r0 && curEl) {
             curEl.classList.add("anim");
             const r1 = curEl.getBoundingClientRect();
@@ -768,20 +848,7 @@
             await wait(per);
           }
         }
-
-        if (hits.length) {
-          hits.forEach((h) => { st.ps[h.oi][h.oj] = -1; });
-          sfx(210, 0.22, "sawtooth");
-          draw();
-          if (!noA) {
-            const bDur = 400 * s, curAfter = document.querySelector(`.pawn[data-k="${pi}-${wi}"]`), cRect = curAfter ? curAfter.getBoundingClientRect() : hits[0].r0;
-            if (cRect) boom(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2, cols[pi], cols[hits[0].oi]);
-            shake();
-            zmswp(curAfter, cRect, bDur);
-            hits.forEach((h) => zmswp(document.querySelector(`.pawn[data-k="${h.oi}-${h.oj}"]`), h.r0, bDur));
-            await wait(bDur);
-          }
-        }
+        if (hits.length) await bmpFx(pi, wi, hits);
       }
       draw();
     }
@@ -794,17 +861,17 @@
 
       if (mv.tp === "m") {
         const L = mv.path.length, tot = (Math.abs(cd) <= 5 ? 400 : 800) * s;
-        const sc = (p) => 1 + 0.1 * (1 - Math.abs(2 * p - 1));
+        const sc = p => 1 + 0.1 * (1 - Math.abs(2 * p - 1));
         for (let idx = 0; idx < L; idx += 1) {
           const sq = mv.path[idx], hits = idx === L - 1 && sq < 40 ? fdBmp(sq, pi) : [];
-          const pEl = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`), r0 = pEl ? pEl.getBoundingClientRect() : null;
+          const r0 = pEl(pi, mv.wi)?.getBoundingClientRect();
           const p0 = invEase(idx / L), p1 = invEase((idx + 1) / L), per = Math.max(20, (p1 - p0) * tot);
           const ease = L === 1 ? "ease-in-out" : idx === 0 ? "ease-in" : idx === L - 1 ? "ease-out" : "linear";
 
           st.ps[pi][mv.wi] = sq;
           draw(sq === 43 ? `${pi}-${mv.wi}` : null);
           if (!noA) {
-            const curEl = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`);
+            const curEl = pEl(pi, mv.wi);
             if (r0 && curEl) {
               curEl.classList.add("anim");
               const r1 = curEl.getBoundingClientRect(), dx = r0.left - r1.left, dy = r0.top - r1.top;
@@ -822,45 +889,30 @@
               await wait(per);
             }
           }
-
-          if (hits.length) {
-            hits.forEach((h) => { st.ps[h.oi][h.oj] = -1; });
-            sfx(210, 0.22, "sawtooth");
-            draw();
-            if (!noA) {
-              const bDur = 400 * s, curAfter = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`), cRect = curAfter ? curAfter.getBoundingClientRect() : hits[0].r0;
-              if (cRect) boom(cRect.left + cRect.width / 2, cRect.top + cRect.height / 2, cols[pi], cols[hits[0].oi]);
-              shake();
-              zmswp(curAfter, cRect, bDur);
-              hits.forEach((h) => zmswp(document.querySelector(`.pawn[data-k="${h.oi}-${h.oj}"]`), h.r0, bDur));
-              await wait(bDur);
-            }
-          }
+          if (hits.length) await bmpFx(pi, mv.wi, hits);
         }
         await dsh(pi, mv.wi);
       } else if (mv.tp === "w") {
-        const a0 = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`)?.getBoundingClientRect();
-        const b0 = document.querySelector(`.pawn[data-k="${mv.oi}-${mv.oj}"]`)?.getBoundingClientRect();
+        const a0 = pEl(pi, mv.wi)?.getBoundingClientRect(), b0 = pEl(mv.oi, mv.oj)?.getBoundingClientRect();
         const myP = st.ps[pi][mv.wi];
         st.ps[pi][mv.wi] = mv.to; st.ps[mv.oi][mv.oj] = myP;
         sfx(620, 0.16, "triangle");
         draw();
         if (!noA) {
           const wDur = 400 * s;
-          zmswp(document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`), a0, wDur);
-          zmswp(document.querySelector(`.pawn[data-k="${mv.oi}-${mv.oj}"]`), b0, wDur);
+          zmswp(pEl(pi, mv.wi), a0, wDur);
+          zmswp(pEl(mv.oi, mv.oj), b0, wDur);
           await wait(wDur);
         }
         await dsh(pi, mv.wi);
         await dsh(mv.oi, mv.oj);
       } else if (mv.tp === "s") {
-        const a0 = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`)?.getBoundingClientRect();
-        const b0 = document.querySelector(`.pawn[data-k="${mv.oi}-${mv.oj}"]`)?.getBoundingClientRect();
+        const a0 = pEl(pi, mv.wi)?.getBoundingClientRect(), b0 = pEl(mv.oi, mv.oj)?.getBoundingClientRect();
         st.ps[pi][mv.wi] = mv.to;
         sfx(540, 0.12, "triangle");
         draw();
         if (!noA) {
-          const flyDur = 320 * s, aFly = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`);
+          const flyDur = 320 * s, aFly = pEl(pi, mv.wi);
           if (a0 && aFly) {
             aFly.classList.add("anim");
             const r1 = aFly.getBoundingClientRect(), dx = a0.left - r1.left, dy = a0.top - r1.top;
@@ -874,24 +926,14 @@
             await wait(flyDur);
           }
         }
-        st.ps[mv.oi][mv.oj] = -1;
-        sfx(210, 0.22, "sawtooth");
-        draw();
-        if (!noA) {
-          const sDur = 400 * s, aAfter = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`), aRect = aAfter ? aAfter.getBoundingClientRect() : b0;
-          if (b0) boom(b0.left + b0.width / 2, b0.top + b0.height / 2, cols[pi], cols[mv.oi]);
-          shake();
-          zmswp(aAfter, aRect, sDur);
-          zmswp(document.querySelector(`.pawn[data-k="${mv.oi}-${mv.oj}"]`), b0, sDur);
-          await wait(sDur);
-        }
+        await bmpFx(pi, mv.wi, [{ oi: mv.oi, oj: mv.oj, r0: b0 }], b0);
         await dsh(pi, mv.wi);
       }
 
       if (st.ps[pi][mv.wi] === 43) {
         sfx(880, 0.18, "triangle");
         draw(`${pi}-${mv.wi}`);
-        const hEl = document.querySelector(`.pawn[data-k="${pi}-${mv.wi}"]`);
+        const hEl = pEl(pi, mv.wi);
         if (hEl && !noA) {
           const hr = hEl.getBoundingClientRect();
           spks(hr.left + hr.width / 2, hr.top + hr.height / 2, cols[pi]);
@@ -900,12 +942,12 @@
         draw(null, pi);
       }
 
-      if (st.ps[pi].every((p) => p === 43)) {
-        const w = pi, t = tr[lng()];
+      if (st.ps[pi].every(p => p === 43)) {
+        const w = pi;
         syncCfg(st.np, st.nw, st.md);
         st = null; busy = false; saveG(); apBg(); mldy(); cfti();
         $("wico").style.background = `var(--p${w + 1})`;
-        $("wtxt").textContent = `${t.plr} ${w + 1} ${t.win}`;
+        $("wtxt").textContent = `${t("plr")} ${w + 1} ${t("win")}`;
         $("winm").classList.remove("hide");
         return;
       }
@@ -920,21 +962,20 @@
       if (!mvs.length) return;
       if (snd) sfx(600, 0.06);
       st.ci = idx; st.cd = cd; selP = null; dsts = [];
-      const uniq = [...new Set(mvs.map((m) => m.wi))];
+      const uniq = [...new Set(mvs.map(m => m.wi))];
       if (uniq.length === 1) { selP = uniq[0]; dsts = mvs; }
       saveG(); draw();
     }
 
     function drwCd() {
       if (!st || st.cd !== null || st.cs.length || busy) return;
-      const inBeg = st.ps[st.tn].every((p) => p === -1 || p === 43);
+      const inBeg = st.ps[st.tn].every(p => p === -1 || p === 43);
       sfx(660, 0.09);
       if (st.md === "ser") {
-        const ok = (c) => getMs(st.tn, c).length > 0 && !st.cs.includes(c);
+        const ok = c => getMs(st.tn, c).length > 0 && !st.cs.includes(c);
         if (b.classList.contains("aur")) {
           const top = Math.random() < 0.5 ? [12, "W", "S"] : [12, "S", "W"];
-          const pool = [...new Set([...top, ...mkDck()])].filter((c) => getMs(st.tn, c).length > 0);
-          st.cs = pool.slice(0, 3);
+          st.cs = [...new Set([...top, ...mkDck()])].filter(c => getMs(st.tn, c).length > 0).slice(0, 3);
         } else {
           for (let k = 0; k < 3; k += 1) {
             if (!st.dk.some(ok)) {
@@ -957,14 +998,14 @@
         const r = Math.random();
         st.cd = inBeg ? 12 : r < 0.9 ? 12 : r < 0.95 ? "W" : "S";
       } else {
-        const ok = (c) => !inBeg || (typeof c === "number" && c > 0);
+        const ok = c => !inBeg || (typeof c === "number" && c > 0);
         if (!st.dk.some(ok)) st.dk = mkDck();
         let idx = st.dk.length - 1;
         while (idx >= 0 && !ok(st.dk[idx])) idx -= 1;
         st.cd = st.dk.splice(idx, 1)[0];
       }
       st.nwC = true; selP = null; dsts = [];
-      const mvs = getMs(st.tn, st.cd), uniq = [...new Set(mvs.map((m) => m.wi))];
+      const mvs = getMs(st.tn, st.cd), uniq = [...new Set(mvs.map(m => m.wi))];
       if (uniq.length === 1) { selP = uniq[0]; dsts = mvs; }
       saveG(); draw();
     }
@@ -975,15 +1016,15 @@
       el.dataset.k = `${pi}-${wi}`;
       el.innerHTML = shpSvg(shps[pi], `var(--p${pi + 1})`);
       if (mov) {
-        el.addEventListener("click", (e) => {
+        el.addEventListener("click", e => {
           e.stopPropagation();
           if (busy) return;
-          const tgt = dsts.find((m) => (m.tp === "w" || m.tp === "s") && m.oi === pi && m.oj === wi);
+          const tgt = dsts.find(m => (m.tp === "w" || m.tp === "s") && m.oi === pi && m.oj === wi);
           if (tgt) { execM(tgt); return; }
           if (pi === st.tn) {
             sfx(580, 0.06);
             selP = selP === wi ? null : wi;
-            dsts = selP === null ? [] : getMs(st.tn, st.cd).filter((m) => m.wi === selP);
+            dsts = selP === null ? [] : getMs(st.tn, st.cd).filter(m => m.wi === selP);
             st.nwC = false; draw();
           }
         });
@@ -998,7 +1039,7 @@
       for (let i = 0; i < st.np; i += 1) {
         const item = document.createElement("div");
         item.className = `hitem${i === st.tn ? " act" : ""}${popP === i ? " hpop" : ""}`;
-        item.innerHTML = `<span class="hpwn">${shpSvg(shps[i], `var(--p${i + 1})`)}</span><span>${st.ps[i].filter((p) => p === 43).length}</span>`;
+        item.innerHTML = `<span class="hpwn">${shpSvg(shps[i], `var(--p${i + 1})`)}</span><span>${st.ps[i].filter(p => p === 43).length}</span>`;
         rail.appendChild(item);
       }
     }
@@ -1006,9 +1047,9 @@
     function draw(showH = null, popP = null) {
       if (!st) return;
       rHom(popP);
-      const t = tr[lng()], pi = st.tn, brd = $("brd");
+      const pi = st.tn, brd = $("brd");
       brd.innerHTML = ""; brd.classList.toggle("dim", dsts.length > 0 && !busy);
-      const mvs = !busy && st.cd !== null ? getMs(pi, st.cd) : [], movW = new Set(mvs.map((m) => m.wi)), sds = sides(st.np);
+      const mvs = !busy && st.cd !== null ? getMs(pi, st.cd) : [], movW = new Set(mvs.map(m => m.wi)), sds = sides(st.np);
 
       const sldM = new Map();
       for (let sd = 0; sd < 4; sd += 1) {
@@ -1033,7 +1074,7 @@
           if (!sOwn.big) arw.style.transform = `rotate(${sOwn.d * 90}deg)`;
           arw.textContent = sOwn.k; el.appendChild(arw);
         }
-        const mv = dsts.find((m) => m.to === i);
+        const mv = dsts.find(m => m.to === i);
         if (mv) { el.classList.add("dest"); el.addEventListener("click", () => execM(mv)); }
       }
 
@@ -1041,11 +1082,11 @@
         const pNum = idx + 1;
         for (let k = 0; k < 3; k += 1) {
           const [r, c] = rot(1 + k, 1, sd), el = addC(r, c, "safe", `background:var(--p${pNum});`);
-          const mv = idx === pi ? dsts.find((m) => m.to === 40 + k) : null;
+          const mv = idx === pi ? dsts.find(m => m.to === 40 + k) : null;
           if (mv) { el.classList.add("dest"); el.addEventListener("click", () => execM(mv)); }
         }
         const [hr, hc] = rot(4, 1, sd), hel = addC(hr, hc, "hom", `background:var(--p${pNum});`);
-        const hMv = idx === pi ? dsts.find((m) => m.to === 43) : null;
+        const hMv = idx === pi ? dsts.find(m => m.to === 43) : null;
         if (hMv) { hel.classList.add("dest"); hel.addEventListener("click", () => execM(hMv)); }
         const [sr, sc] = rot(1, 3, sd);
         addC(sr, sc, "strt", `background:color-mix(in srgb,var(--p${pNum}) 28%,#f5f5f5);border-color:var(--p${pNum});`);
@@ -1056,7 +1097,7 @@
         for (let j = 0; j < st.nw; j += 1) {
           const p = st.ps[i][j], key = `${i}-${j}`;
           if (p === 43 && showH !== key) continue;
-          const isTgt = dsts.some((m) => (m.tp === "w" || m.tp === "s") && m.oi === i && m.oj === j), isS = i === pi && selP === j;
+          const isTgt = dsts.some(m => (m.tp === "w" || m.tp === "s") && m.oi === i && m.oj === j), isS = i === pi && selP === j;
           let cell = null, sm = false;
           if (p === -1) { cell = cells.get(`${sr},${sc}`); sm = true; }
           else if (p === 43) cell = cells.get(`${hr},${hc}`);
@@ -1071,7 +1112,7 @@
       hub.className = "hub";
       if (st.md === "ser") {
         if (!st.cs.length) {
-          hub.innerHTML = `<div class="drow"><button class="deck" id="dck" type="button" aria-label="Draw"${busy ? " disabled" : ""}>🍈</button></div><div class="msg">${t.tapD}</div>`;
+          hub.innerHTML = `<div class="drow"><button class="deck" id="dck" type="button" aria-label="Draw"${busy ? " disabled" : ""}>🍈</button></div><div class="msg">${t("tapD")}</div>`;
           st.nwC = false; brd.appendChild(hub);
           $("dck").addEventListener("click", drwCd);
         } else {
@@ -1080,26 +1121,25 @@
             const txt = c === "S" ? "SORRY!" : c === "W" ? "SWAP" : c > 0 ? `+${c}` : `${c}`;
             return `<button class="card cbtn sm3${st.nwC ? " flip" : ""}${act ? " actc" : ""}" data-ci="${idx}" type="button"${busy ? " disabled" : ""}><span class="cnum${spc ? " sry" : ""}">${txt}</span></button>`;
           }).join("");
-          hub.innerHTML = `<div class="drow g3">${cHtml}</div><div class="msg">${t.choi}</div>`;
+          hub.innerHTML = `<div class="drow g3">${cHtml}</div><div class="msg">${t("choi")}</div>`;
           st.nwC = false; brd.appendChild(hub);
-          hub.querySelectorAll(".cbtn").forEach((btn) => btn.addEventListener("click", () => pkCd(Number(btn.dataset.ci))));
+          hub.querySelectorAll(".cbtn").forEach(btn => btn.addEventListener("click", () => pkCd(Number(btn.dataset.ci))));
         }
       } else {
         const cdTxt = st.cd === "S" ? "SORRY!" : st.cd === "W" ? "SWAP" : st.cd !== null ? (st.cd > 0 ? `+${st.cd}` : `${st.cd}`) : "?";
-        const hint = st.cd === null ? t.tapD : (mvs.length || busy ? t.pick : t.nomv);
+        const hint = st.cd === null ? t("tapD") : (mvs.length || busy ? t("pick") : t("nomv"));
         const isSpc = st.cd === "S" || st.cd === "W";
-        hub.innerHTML = `<div class="drow"><button class="deck" id="dck" type="button" aria-label="Draw"${st.cd !== null || busy ? " disabled" : ""}>🍈</button><div class="card${st.nwC ? " flip" : ""}"><span class="cnum${isSpc ? " sry" : ""}">${cdTxt}</span></div></div><div class="msg">${hint}</div>${st.cd !== null && !mvs.length && !busy ? `<button class="pbtn" id="pass" type="button">${t.pass}</button>` : ""}`;
+        hub.innerHTML = `<div class="drow"><button class="deck" id="dck" type="button" aria-label="Draw"${st.cd !== null || busy ? " disabled" : ""}>🍈</button><div class="card${st.nwC ? " flip" : ""}"><span class="cnum${isSpc ? " sry" : ""}">${cdTxt}</span></div></div><div class="msg">${hint}</div>${st.cd !== null && !mvs.length && !busy ? `<button class="pbtn" id="pass" type="button">${t("pass")}</button>` : ""}`;
         st.nwC = false; brd.appendChild(hub);
         $("dck").addEventListener("click", drwCd);
-        const pBtn = $("pass");
-        if (pBtn) pBtn.addEventListener("click", () => { sfx(400, 0.08); endT(); });
+        $("pass")?.addEventListener("click", () => { sfx(400, 0.08); endT(); });
       }
     }
 
     $("bnew").addEventListener("click", () => { sfx(580, 0.07); rPrev(); $("newm").classList.remove("hide"); });
     $("clsn").addEventListener("click", () => $("newm").classList.add("hide"));
     $("bcnt").addEventListener("click", () => {
-      const raw = localStorage.getItem(kSav);
+      const raw = ls.getItem("s_sav");
       if (!raw) return;
       st = JSON.parse(raw);
       if (!st.md) st.md = "norm";
@@ -1107,59 +1147,91 @@
       if (typeof st.ci !== "number") st.ci = -1;
       syncCfg(st.np, st.nw, st.md); st.nwC = false; busy = false; sfx(680, 0.09); showG();
     });
-    $("bset").addEventListener("click", () => { sfx(580, 0.07); $("setm").classList.remove("hide"); });
-    $("bgs").addEventListener("click", () => { sfx(580, 0.07); $("setm").classList.remove("hide"); });
+    [$("bset"), $("bgs")].forEach(el => el.addEventListener("click", () => { sfx(580, 0.07); $("setm").classList.remove("hide"); }));
     $("clss").addEventListener("click", () => $("setm").classList.add("hide"));
     $("bhom").addEventListener("click", () => { if (!busy) { sfx(460, 0.07); showM(); } });
 
-    $("mcnt").addEventListener("click", (e) => {
+    ["mcnt", "pcnt", "wcnt"].forEach(id => $(id).addEventListener("click", e => {
       const btn = e.target.closest(".sbtn");
       if (!btn) return;
-      syncCfg(nPlr, nPwn, btn.dataset.v);
+      const v = btn.dataset.v;
+      syncCfg(id === "pcnt" ? Number(v) : nPlr, id === "wcnt" ? Number(v) : nPwn, id === "mcnt" ? v : gMd);
       sfx(540, 0.06);
-    });
-    $("pcnt").addEventListener("click", (e) => {
-      const btn = e.target.closest(".sbtn");
-      if (!btn) return;
-      syncCfg(Number(btn.dataset.v), nPwn, gMd);
-      sfx(540, 0.06); rPrev();
-    });
-    $("wcnt").addEventListener("click", (e) => {
-      const btn = e.target.closest(".sbtn");
-      if (!btn) return;
-      syncCfg(nPlr, Number(btn.dataset.v), gMd);
-      sfx(540, 0.06);
-    });
+      if (id === "pcnt") rPrev();
+    }));
 
     $("go").addEventListener("click", () => { $("newm").classList.add("hide"); sfx(740, 0.11); initG(nPlr, nPwn, gMd); });
     $("agn").addEventListener("click", () => { $("winm").classList.add("hide"); sfx(740, 0.11); initG(nPlr, nPwn, gMd); });
     $("wmnu").addEventListener("click", () => { $("winm").classList.add("hide"); showM(); });
 
-    [1, 2, 3, 4].forEach((n) => {
-      $(`p${n}c`).addEventListener("input", (e) => { cols[n - 1] = e.target.value; apCol(); });
+    [1, 2, 3, 4].forEach(n => {
+      $(`p${n}c`).addEventListener("input", e => { cols[n - 1] = e.target.value; apCol(); });
       $(`p${n}s`).addEventListener("click", () => {
         shps[n - 1] = shpList[(shpList.indexOf(shps[n - 1]) + 1) % shpList.length];
-        sfx(560, 0.06);
-        apShp();
+        sfx(560, 0.06); apShp();
       });
     });
     $("rstc").addEventListener("click", () => { cols = [...defC]; sfx(460, 0.07); apCol(); });
     $("rsts").addEventListener("click", () => { shps = [...defS]; sfx(460, 0.07); apShp(); });
-    $("sthm").addEventListener("change", () => setT($("sthm").value));
-    $("slng").addEventListener("change", () => setL($("slng").value));
-    $("saur").addEventListener("change", (e) => { b.classList.toggle("aur", e.target.checked); localStorage.setItem(kAur, String(e.target.checked)); ptcs(); });
-    $("snoa").addEventListener("change", (e) => { b.classList.toggle("noa", e.target.checked); localStorage.setItem(kNoa, String(e.target.checked)); ptcs(); });
 
-    window.addEventListener("storage", (e) => {
-      if (e.key === kCst) {
-        cst = JSON.parse(e.newValue || "{}");
-        const cur = $("sthm").value;
-        opts();
-        setT(cur.startsWith("own:") && !cst[cur.slice(4)] ? "mdk" : cur);
-      }
+    $("sthm").addEventListener("change", e => setT(e.target.value));
+    $("addT").addEventListener("click", () => $("mln").click());
+    $("mln").addEventListener("change", async e => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const vals = pThm(await f.text());
+      e.target.value = "";
+      if (!vals) return;
+      const name = f.name.replace(/\.melon$/i, "") || "Theme";
+      const id = name.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "cst";
+      cst[id] = { name, values: vals };
+      ls.setItem("thm", JSON.stringify(cst));
+      opts(); setT(`own:${id}`);
+    });
+    $("delT").addEventListener("click", () => {
+      if (!curT.startsWith("own:")) return;
+      delete cst[curT.slice(4)];
+      ls.setItem("thm", JSON.stringify(cst));
+      opts(); setT("mdk");
     });
 
-    window.addEventListener("keydown", (e) => {
+    $("slng").addEventListener("change", e => setL(e.target.value));
+    $("addL").addEventListener("click", () => $("mlg").click());
+    $("mlg").addEventListener("change", async e => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const data = pMlg(await f.text());
+      e.target.value = "";
+      const id = f.name.replace(/\.mlg$/i, "").replace(new RegExp(`^${app}-`, "i"), "") || "custom";
+      langs[app] = langs[app] || {};
+      langs[app][id] = { name: data.name || id, tr: data.tr };
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts(); setL(`own:${id}`);
+    });
+    $("delL").addEventListener("click", () => {
+      if (!curL.startsWith("own:")) return;
+      delete langs[app]?.[curL.slice(4)];
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts(); setL("en");
+    });
+
+    $("saur").addEventListener("change", e => setAur(e.target.checked));
+    $("snoa").addEventListener("change", e => setA(e.target.checked));
+
+    window.addEventListener("storage", e => {
+      if (e.key === "thm") { cst = JSON.parse(e.newValue || "{}"); opts(); setT(curT); }
+      else if (e.key === "t" && e.newValue) setT(e.newValue);
+      else if (e.key === "lang") { langs = JSON.parse(e.newValue || "{}"); lOpts(); setL(curL); }
+      else if (e.key === "lng" && e.newValue) setL(e.newValue);
+      else if (e.key === "noa" && e.newValue !== null) setA(e.newValue === "true");
+      else if (e.key === "aur" && e.newValue !== null) setAur(e.newValue === "true");
+    });
+
+    window.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        if (!$("newm").classList.contains("hide")) return $("newm").classList.add("hide");
+        if (!$("setm").classList.contains("hide")) return $("setm").classList.add("hide");
+      }
       if (!st || $("game").classList.contains("hide") || busy) return;
       if (e.code === "Space" && st.cd === null && !st.cs.length) { e.preventDefault(); drwCd(); }
       if (st.md === "ser" && st.cs.length && ["Digit1", "Digit2", "Digit3"].includes(e.code)) {
@@ -1167,17 +1239,12 @@
       }
     });
 
-    opts(); apCol();
-    const mapT = { "melon-light": "mlt", "melon-dark": "mdk", crimson: "crim", nebula: "nebu", eyeburn: "burn" };
-    const rawT = localStorage.getItem(kThm), sThm = mapT[rawT] || rawT, aThm = ["light", "dark", "mlt", "mdk", "crim", "nebu", "burn"];
-    const vThm = !sThm ? "mdk" : (!aThm.includes(sThm) && !cst[sThm.slice(4)]) ? "dark" : sThm;
-    const vLng = localStorage.getItem(kLng) || "en", vAur = localStorage.getItem(kAur) === "true", vNoa = localStorage.getItem(kNoa) === "true";
-
-    setT(vThm); $("slng").value = vLng; setL(vLng);
-    $("saur").checked = vAur; b.classList.toggle("aur", vAur);
-    $("snoa").checked = vNoa; b.classList.toggle("noa", vNoa);
-    $("bcnt").disabled = !localStorage.getItem(kSav);
-    ptcs();
+    opts(); lOpts(); apCol();
+    setT(ls.getItem("t") || "mdk");
+    setL(ls.getItem("lng") || "en");
+    setAur(ls.getItem("aur") === "true");
+    setA(ls.getItem("noa") === "true");
+    $("bcnt").disabled = !ls.getItem("s_sav");
   </script>
 </body>
 </html>
