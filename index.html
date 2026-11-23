@@ -18,7 +18,7 @@
       --rad: 24px;
     }
 
-    html { font-size: 110%; }
+    html { font-size: 110%; min-height: 100%; }
 
     [data-t="light"] {
       --bg: #e9eee7;
@@ -109,8 +109,6 @@
     }
 
     * { box-sizing: border-box; }
-
-    html { min-height: 100%; }
 
     body {
       position: relative;
@@ -346,12 +344,45 @@
     .set { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; border-top: 1px solid var(--line); }
     .set label, .set span { font-size: .88rem; }
 
-    select {
+    select, .mbtn {
       color: var(--txt);
       border: 1px solid var(--line);
       border-radius: 9px;
       padding: .45rem .55rem;
       background: var(--src);
+    }
+
+    .ctl {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      min-width: 0;
+    }
+
+    .ctl select {
+      min-width: 0;
+      max-width: 140px;
+    }
+
+    .mbtn {
+      padding: .45rem .6rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: color .2s ease, border-color .2s ease;
+    }
+
+    .mbtn:hover, .mbtn:focus-visible {
+      color: var(--acc);
+      border-color: var(--acc);
+      outline: none;
+    }
+
+    .mbtn[hidden] { display: none; }
+
+    .clr {
+      width: 100%;
+      padding: .55rem .75rem;
+      font-size: .88rem;
     }
 
     .swch { position: relative; width: 2.8rem; height: 1.55rem; }
@@ -441,7 +472,7 @@
 
     <div class="hdg">
       <h2 data-i="h2">.</h2>
-      <p class="hint" data-i="hint">.</p>
+      <p data-i="hint">.</p>
     </div>
 
     <section class="apps" aria-label="Melon applications">
@@ -472,7 +503,7 @@
       </a>
       <a class="card" href="web/Chess.html">
         <span class="icon" aria-hidden="true">🐴</span>
-        <span><h3 data-i="chsT">Melon Chess & Checkers</h3><p data-i="chs">.</p></span>
+        <span><h3 data-i="chsT">Melon Chess</h3><p data-i="chs">.</p></span>
         <span class="arrw" aria-hidden="true">↗</span>
       </a>
       <a class="card more" href="web/">
@@ -507,23 +538,32 @@
         <h2 data-i="set">Settings</h2>
         <div class="set">
           <label for="thm" data-i="thmL">Theme</label>
-          <select id="thm">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-            <option value="mlt">Melon Light</option>
-            <option value="mdk">Melon Dark</option>
-            <option value="crim">Crimson</option>
-            <option value="nebu">Nebula</option>
-            <option value="burn">Eyeburn</option>
-          </select>
+          <div class="ctl">
+            <select id="thm">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="mlt">Melon Light</option>
+              <option value="mdk">Melon Dark</option>
+              <option value="crim">Crimson</option>
+              <option value="nebu">Nebula</option>
+              <option value="burn">Eyeburn</option>
+            </select>
+            <button class="mbtn" id="addT" type="button" aria-label="Import .melon">+</button>
+            <button class="mbtn" id="delT" type="button" aria-label="Remove .melon" hidden>×</button>
+            <input id="mln" type="file" accept=".melon" hidden>
+          </div>
         </div>
         <div class="set">
           <label for="lang" data-i="langL">Language</label>
-          <select id="lang">
-            <option value="en">English</option>
-            <option value="es">Español</option>
-            <option value="pt-BR">Português (Brasil)</option>
-          </select>
+          <div class="ctl">
+            <select id="lang">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+            <button class="mbtn" id="addL" type="button" aria-label="Import .mlg">+</button>
+            <button class="mbtn" id="delL" type="button" aria-label="Remove .mlg" hidden>×</button>
+            <input id="mlg" type="file" accept=".mlg" hidden>
+          </div>
         </div>
         <div class="set">
           <span data-i="auraL">Aura Guardians</span>
@@ -539,20 +579,35 @@
             <span class="sld"></span>
           </label>
         </div>
+        <div class="set">
+          <button class="mbtn clr" id="clr" type="button" data-i="clr">Clear localStorage</button>
+        </div>
       </section>
       <button class="btn" id="btn" type="button" aria-label="Open settings" aria-expanded="false">⚙</button>
     </div>
   </div>
 
   <script>
+    const app = "index";
+    const ls = localStorage;
     const b = document.body;
-    const btn = document.querySelector("#btn");
-    const pnl = document.querySelector("#pnl");
-    const thm = document.querySelector("#thm");
-    const lang = document.querySelector("#lang");
-    const aura = document.querySelector("#aura");
-    const noa = document.querySelector("#noa");
-    let cst = JSON.parse(localStorage.getItem("themeditor-themes") || "{}");
+    const q = (s) => document.querySelector(s);
+    const btn = q("#btn");
+    const pnl = q("#pnl");
+    const thm = q("#thm");
+    const addT = q("#addT");
+    const delT = q("#delT");
+    const mln = q("#mln");
+    const lang = q("#lang");
+    const addL = q("#addL");
+    const delL = q("#delL");
+    const mlg = q("#mlg");
+    const aura = q("#aura");
+    const noa = q("#noa");
+    const clr = q("#clr");
+    const tok = ["bg", "src", "str", "txt", "mut", "line", "acc"];
+    let cst = JSON.parse(ls.getItem("thm") || "{}");
+    let langs = JSON.parse(ls.getItem("lang") || "{}");
 
     const tr = {
       en: {
@@ -564,11 +619,12 @@
         thm: "Tune colors, contrast, and atmosphere to create your own flavor of Melon. This will get you code you can use in your favorite Melon apps",
         tam: "Create kitchen or workout timers to organize when to move, and when to tame your time. And say goodbye to those horrible adware wallet-eating playstore apps.",
         sor: "The classic game of sweet revenge, but now even sweeter with our lightweight and free code. Make your memorable moments with your friends more juicy!",
-        chsT: "Melon Chess & Checkers",
+        chsT: "Melon Chess",
         chs: "I know ch*ss.com exists but... nevermind lol. Chess and Checkers are now as juicy as a well planned checkmate!",
         moreT: "More soon",
         more: "The basket is still growing. If Cotton wants to get up, of course...",
-        set: "Settings", thmL: "Theme", langL: "Language", auraL: "Aura Guardians", noaL: "Disable Animations"
+        set: "Settings", thmL: "Theme", langL: "Language", auraL: "Aura Guardians", noaL: "Disable Animations",
+        clr: "Clear localStorage", sure: "Delete all localStorage data?"
       },
       es: {
         intro: "Herramientas ligeras y eficientes hechas con cuidado (y asistentes obedientes), interfaces limpias y respeto por el hardware de tu computadora. Sin bloatware en forma de Node: solo apps útiles para que la PC del tianguis sobreviva. Tus ventiladores te lo agradecerán",
@@ -583,24 +639,37 @@
         chs: "Sé que ch*ss.com existe pero... no importa xd. Ahora estos juegos son de lo más ligero como el simio!",
         moreT: "Más apps",
         more: "La lista sigue creciendo. Claro, si es que Cotton quiere trabajar...",
-        set: "Ajustes", thmL: "Tema", langL: "Idioma", auraL: "Guardianes del Aura", noaL: "Desactivar animaciones"
-      },
-      "pt-BR": {
-        intro: "Ferramentas leves e eficientes, feitas com cuidado (e assistentes realmente obedientes), interfaces limpas e respeito pelo hardware do seu computador. Nada de bloatware com cara de Node: só apps úteis para sua máquina. Sua ventoinha agradece.",
-        h2: "Escolha um Melon, qualquer Melon",
-        hint: "Tudo isso é grátis!",
-        mel: "Um espaço focado para misturar ideias, notas, tarefas e faíscas de criatividade sem limites, tudo salvo localmente.",
-        mem: "Um lugar tranquilo para guardar o que merece ser lembrado, sem alimentar uma nuvem misteriosa. Ideal para quem esquece das coisas rapidinho.",
-        thm: "Ajuste cores, contraste e clima para criar seu próprio estilo de Melon. No fim, você leva um código para usar nos seus apps Melon favoritos.",
-        tam: "Crie timers de cozinha ou treino para organizar quando se mexer e quando domar o seu tempo. E dê adeus àqueles apps horríveis da Play Store cheios de anúncios que devoram sua carteira.",
-        sor: "O clássico jogo da doce vingança, mas agora ainda mais doce com nosso código leve e gratuito. Deixe seus momentos memoráveis com os amigos um pouco mais suculentos!",
-        chsT: "Melon Xadrez e Damas",
-        chs: "Sei que ch*ss.com existe mas... deixa pra lá kkkk. Agora é tão leve que roda até no PC da Xuxa!",
-        moreT: "Mais em breve",
-        more: "A cesta continua crescendo. Se o Cotton resolver levantar, é claro...",
-        set: "Configurações", thmL: "Tema", langL: "Idioma", auraL: "Guardiões da Aura", noaL: "Desactivar animações"
+        set: "Ajustes", thmL: "Tema", langL: "Idioma", auraL: "Guardianes del Aura", noaL: "Desactivar animaciones",
+        clr: "Limpiar localStorage", sure: "¿Borrar todos los datos de localStorage?"
       }
     };
+
+    function parse(raw) {
+      const out = { name: "", tr: {} };
+      for (const line of raw.split(/\r?\n/)) {
+        const m = line.trim().match(/^(@?[a-zA-Z0-9_-]+)\s+"((?:\\"|[^"])*)"$/);
+        if (!m) continue;
+        const val = m[2].replace(/\\"/g, '"').replace(/\\n/g, "\n");
+        if (m[1] === "@name") out.name = val;
+        else if (!m[1].startsWith("@")) out.tr[m[1]] = val;
+      }
+      return out;
+    }
+
+    function pThm(raw) {
+      const v = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      if (v.length < 7 || v.length > 8) return null;
+      const got = {};
+      for (let i = 0; i < 7; i += 1) {
+        if (!/^[0-9a-f]{6}$/i.test(v[i])) return null;
+        got[tok[i]] = `#${v[i]}`;
+      }
+      if (v[7]) {
+        if (!/^-?\d+\s+-?\d+\s+\d+\s+[0-9a-f]{8}$/i.test(v[7])) return null;
+        got.shd = v[7].replace(/([0-9a-f]{8})$/i, "#$1");
+      }
+      return got;
+    }
 
     function opts() {
       thm.querySelectorAll('option[value^="own:"]').forEach((el) => el.remove());
@@ -612,12 +681,32 @@
       });
     }
 
-    function setL(v) {
-      document.querySelectorAll("[data-i]").forEach((el) => {
-        el.textContent = tr[v][el.dataset.i];
+    function lOpts() {
+      lang.querySelectorAll('option[value^="own:"]').forEach((el) => el.remove());
+      Object.entries(langs[app] || {}).forEach(([k, item]) => {
+        const opt = document.createElement("option");
+        opt.value = `own:${k}`;
+        opt.textContent = item.name;
+        lang.appendChild(opt);
       });
-      document.documentElement.lang = v;
-      localStorage.setItem("melon-language", v);
+    }
+
+    function dict(v = lang.value) {
+      return v.startsWith("own:") ? langs[app]?.[v.slice(4)]?.tr : tr[v];
+    }
+
+    function setL(v) {
+      const own = v.startsWith("own:") ? langs[app]?.[v.slice(4)] : null;
+      const code = own ? v.slice(4) : (tr[v] ? v : "en");
+      const val = own ? v : code;
+      const d = dict(val);
+      document.querySelectorAll("[data-i]").forEach((el) => {
+        el.textContent = d?.[el.dataset.i] ?? tr.en[el.dataset.i] ?? "";
+      });
+      document.documentElement.lang = code;
+      lang.value = val;
+      delL.hidden = !own;
+      ls.setItem("lng", val);
     }
 
     function drop() {
@@ -633,25 +722,21 @@
     }
 
     function setT(v) {
-      const map = { bg: "bg", src: "surface", str: "surface-strong", txt: "text", mut: "muted", line: "line", acc: "accent", shd: "shadow" };
       const own = v.startsWith("own:") ? cst[v.slice(4)] : null;
       b.dataset.t = own ? "cst" : v;
-      ["bg", "src", "str", "txt", "mut", "line", "acc"].forEach((k) => {
+      tok.forEach((k) => {
         b.style.removeProperty(`--${k}`);
-        const val = own?.values[k] || own?.values[map[k]];
-        if (val) b.style.setProperty(`--${k}`, val);
+        if (own?.values[k]) b.style.setProperty(`--${k}`, own.values[k]);
       });
       b.style.removeProperty("--shd");
       if (own) {
-        const s = own.values.shd || own.values.shadow;
-        b.style.setProperty("--shd", s
-          ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, "$1px $2px $3px #$4")
-          : "10px 20px 60px #0000004d");
+        const s = own.values.shd;
+        b.style.setProperty("--shd", s ? s.replace(/^(-?\d+)\s+(-?\d+)\s+(\d+)\s+#?([0-9a-f]{8})$/i, "$1px $2px $3px #$4") : "10px 20px 60px #0000004d");
+      }
+      if (v !== "aura") {
         thm.value = v;
-        localStorage.setItem("melon-theme", v);
-      } else if (v !== "aura") {
-        thm.value = v;
-        localStorage.setItem("melon-theme", v);
+        delT.hidden = !own;
+        ls.setItem("t", v);
       }
     }
 
@@ -661,52 +746,129 @@
     });
 
     thm.addEventListener("change", () => setT(thm.value));
+    addT.addEventListener("click", () => mln.click());
+    mln.addEventListener("change", async () => {
+      const file = mln.files?.[0];
+      if (!file) return;
+      const vals = pThm(await file.text());
+      mln.value = "";
+      if (!vals) return;
+      const name = file.name.replace(/\.melon$/i, "") || "Theme";
+      const id = name.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "cst";
+      cst[id] = { name, values: vals };
+      ls.setItem("thm", JSON.stringify(cst));
+      opts();
+      if (aura.checked) {
+        thm.value = `own:${id}`;
+        delT.hidden = false;
+        ls.setItem("pt", `own:${id}`);
+      } else {
+        setT(`own:${id}`);
+      }
+    });
+    delT.addEventListener("click", () => {
+      if (!thm.value.startsWith("own:")) return;
+      delete cst[thm.value.slice(4)];
+      ls.setItem("thm", JSON.stringify(cst));
+      opts();
+      if (aura.checked) {
+        thm.value = "mdk";
+        delT.hidden = true;
+        ls.setItem("pt", "mdk");
+      } else {
+        setT("mdk");
+      }
+    });
+
     lang.addEventListener("change", () => setL(lang.value));
+    addL.addEventListener("click", () => mlg.click());
+    mlg.addEventListener("change", async () => {
+      const file = mlg.files?.[0];
+      if (!file) return;
+      const data = parse(await file.text());
+      mlg.value = "";
+      const id = file.name.replace(/\.mlg$/i, "").replace(new RegExp(`^${app}-`, "i"), "") || "custom";
+      langs[app] = langs[app] || {};
+      langs[app][id] = { name: data.name || id, tr: data.tr };
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts();
+      setL(`own:${id}`);
+    });
+    delL.addEventListener("click", () => {
+      if (!lang.value.startsWith("own:")) return;
+      delete langs[app]?.[lang.value.slice(4)];
+      ls.setItem("lang", JSON.stringify(langs));
+      lOpts();
+      setL("en");
+    });
+
     aura.addEventListener("change", () => {
       if (aura.checked) {
-        localStorage.setItem("melon-theme-before-aura", thm.value);
+        ls.setItem("pt", thm.value);
         setT("aura");
         for (let i = 0; i < 24; i += 1) setTimeout(drop, i * 55);
       } else {
-        setT(localStorage.getItem("melon-theme-before-aura") || thm.value);
+        setT(ls.getItem("pt") || thm.value);
       }
-      localStorage.setItem("melon-aura", String(aura.checked));
+      ls.setItem("aura", String(aura.checked));
     });
 
     noa.addEventListener("change", () => {
       b.classList.toggle("noa", noa.checked);
-      localStorage.setItem("melon-disable-animations", String(noa.checked));
+      ls.setItem("noa", String(noa.checked));
+    });
+
+    clr.addEventListener("click", () => {
+      if (!confirm(dict()?.sure ?? tr.en.sure)) return;
+      ls.clear();
+      location.reload();
     });
 
     window.addEventListener("storage", (e) => {
-      if (e.key === "themeditor-themes") {
+      if (e.key === "thm") {
         cst = JSON.parse(e.newValue || "{}");
         const cur = thm.value;
         opts();
-        if (cur.startsWith("own:") && !cst[cur.slice(4)]) setT("mdk");
-        else if (!aura.checked) setT(cur);
+        if (cur.startsWith("own:") && !cst[cur.slice(4)]) {
+          if (aura.checked) {
+            thm.value = "mdk";
+            delT.hidden = true;
+            ls.setItem("pt", "mdk");
+          } else {
+            setT("mdk");
+          }
+        } else if (!aura.checked) {
+          setT(cur);
+        }
+      }
+      if (e.key === "lang") {
+        langs = JSON.parse(e.newValue || "{}");
+        const cur = lang.value;
+        lOpts();
+        if (cur.startsWith("own:") && !langs[app]?.[cur.slice(4)]) setL("en");
+        else setL(cur);
       }
     });
 
     opts();
+    lOpts();
 
-    const mapT = { "melon-light": "mlt", "melon-dark": "mdk", "crimson": "crim", "nebula": "nebu", "eyeburn": "burn" };
-    const rawT = localStorage.getItem("melon-theme");
-    const sThm = mapT[rawT] || rawT;
+    const sThm = ls.getItem("t");
     const aThm = ["light", "dark", "mlt", "mdk", "crim", "nebu", "burn"];
     const vThm = !sThm
       ? "mdk"
       : (!aThm.includes(sThm) && !cst[sThm.slice(4)])
         ? "dark"
         : sThm;
-    const vLang = localStorage.getItem("melon-language") || "en";
-    const vAura = localStorage.getItem("melon-aura") === "true";
-    const vNoa = localStorage.getItem("melon-disable-animations") === "true";
+    const rawL = ls.getItem("lng") || "en";
+    const vLang = rawL === "en" || rawL === "es" || (rawL.startsWith("own:") && langs[app]?.[rawL.slice(4)]) ? rawL : "en";
+    const vAura = ls.getItem("aura") === "true";
+    const vNoa = ls.getItem("noa") === "true";
 
     thm.value = vThm;
+    delT.hidden = !vThm.startsWith("own:");
     setT(vAura ? "aura" : vThm);
     setL(vLang);
-    lang.value = vLang;
     aura.checked = vAura;
     noa.checked = vNoa;
     b.classList.toggle("noa", vNoa);
