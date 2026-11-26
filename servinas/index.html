@@ -1032,13 +1032,13 @@
   <header class="topb" id="top">
     <div class="bar">
       <button class="brnd" id="home" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#f5c518" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--acc)" aria-hidden="true">
           <rect x="3" y="4" width="18" height="5" rx="1.5"/>
           <rect x="3" y="10" width="18" height="5" rx="1.5"/>
           <rect x="3" y="16" width="18" height="4" rx="1.5"/>
-          <circle cx="7" cy="6.5" r=".7" fill="#f5c518"/>
-          <circle cx="7" cy="12.5" r=".7" fill="#f5c518"/>
-          <circle cx="7" cy="18" r=".7" fill="#f5c518"/>
+          <circle cx="7" cy="6.5" r=".7" fill="currentColor"/>
+          <circle cx="7" cy="12.5" r=".7" fill="currentColor"/>
+          <circle cx="7" cy="18" r=".7" fill="currentColor"/>
         </svg>
         <span>Servi<span class="acc">nas</span></span>
       </button>
@@ -1493,6 +1493,7 @@
     let cur = "es", tab = 0, view = "main", tmo, raf = 0, iraf = 0, arr = [], w = 0, h = 0, dpr = 1;
     let mat = [1, 0, 0, 0, 1, 0, 0, 0, 1], vx = 0, vy = 0, drg = false, sx = 0, sy = 0, cw = 280, ch = 295, ac = null, nb = null, lvol = 100, lby = 2;
     let curMdl = "asm", zoom = 1, exploded = false, expAnim = 0;
+    let eclk = [], ovd = 0, tovd = 0, etmo = 0, eraf = 0;
 
     const tr = {
       es: {
@@ -2078,22 +2079,62 @@
       }
     }
 
+    function aply() {
+      if (ovd <= 0.001) {
+        document.documentElement.style.removeProperty("--acc");
+      } else {
+        const r = Math.round(245 + 10 * ovd);
+        const g = Math.round(197 + 58 * ovd);
+        const bl = Math.round(24 + 231 * ovd);
+        document.documentElement.style.setProperty("--acc", `rgb(${r}, ${g}, ${bl})`);
+      }
+    }
+
+    function fade() {
+      const d = tovd - ovd;
+      if (Math.abs(d) <= 0.01 || noa.checked) {
+        ovd = tovd;
+        aply();
+        eraf = 0;
+        return;
+      }
+      ovd += d * (tovd > ovd ? 0.22 : 0.12);
+      aply();
+      eraf = requestAnimationFrame(fade);
+    }
+
+    function trig() {
+      tovd = 1;
+      if (!eraf) eraf = requestAnimationFrame(fade);
+      tone(587.33, 880, 0.09, 0.36, "sine", 0);
+      tone(880, 1174.66, 0.14, 0.38, "triangle", 0.06);
+      clearTimeout(etmo);
+      etmo = setTimeout(() => {
+        tovd = 0;
+        if (!eraf) eraf = requestAnimationFrame(fade);
+      }, 5000);
+    }
+
     function loop() {
       if (nop.checked || document.hidden) {
         raf = 0;
         return;
       }
       ctx.clearRect(0, 0, w, h);
+      const spd = 1 + ovd;
+      const r = Math.round(245 + 10 * ovd);
+      const g = Math.round(197 + 58 * ovd);
+      const bl = Math.round(24 + 231 * ovd);
       for (let i = 0; i < arr.length; i += 1) {
         const p = arr[i];
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.vx * spd;
+        p.y += p.vy * spd;
         if (p.x < -12) p.x = w + 12;
         else if (p.x > w + 12) p.x = -12;
         if (p.y < -12) p.y = h + 12;
         else if (p.y > h + 12) p.y = -12;
 
-        ctx.fillStyle = `rgba(245, 197, 24, ${p.a})`;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${bl}, ${p.a})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
@@ -2116,7 +2157,6 @@
       }
     }
 
-    /* ---------- Visor WebGL 3D de modelos Servinas (OBJ+MTL / modelos.json / fallback mm) ---------- */
     const gl = cub.getContext("webgl", { antialias: true, alpha: true });
 
     const MAT_DEF = {
@@ -2128,10 +2168,10 @@
     };
 
     const MDL_META = {
-      asm:   { badge: "mb_asm",   dims: "359 × 140 × 123 mm", zoom: 1.05 },
+      asm:   { badge: "mb_asm",   dims: "359 × 140 × 140 mm", zoom: 1.05 },
       mid:   { badge: "mb_mid",   dims: "123 × 140 × 118 mm", zoom: 1.0 },
-      left:  { badge: "mb_left",  dims: "118 × 140 × 110 mm", zoom: 1.0 },
-      right: { badge: "mb_right", dims: "118 × 140 × 123 mm", zoom: 1.0 },
+      left:  { badge: "mb_left",  dims: "118 × 123 × 140 mm", zoom: 1.0 },
+      right: { badge: "mb_right", dims: "118 × 110 × 140 mm", zoom: 1.0 },
       drive: { badge: "mb_drive", dims: "180 × 94 × 42 mm",   zoom: 1.05 },
       term:  { badge: "mb_term",  dims: "118 × 97 × 22 mm",   zoom: 1.05 }
     };
@@ -2242,6 +2282,14 @@
       });
     }
 
+    function rotateTrisXNeg90(tris) {
+      return tris.map((t) => ({
+        mat: t.mat,
+        v: t.v.map(([x, y, z]) => [x, z, -y]),
+        n: t.n ? t.n.map(([nx, ny, nz]) => [nx, nz, -ny]) : null
+      }));
+    }
+
     function buildMeshData(tris) {
       const n = tris.length * 3;
       const pos = new Float32Array(n * 3);
@@ -2304,7 +2352,7 @@
       return obj;
     }
 
-    function parseOBJ(txt) {
+    function parseOBJ(txt, rotXNeg90) {
       const verts = [], norms = [], tris = [];
       let curMat = "cuerpo";
       txt.split(/\r?\n/).forEach((ln) => {
@@ -2341,12 +2389,13 @@
           }
         }
       });
-      return buildMeshData(tris);
+      return buildMeshData(rotXNeg90 ? rotateTrisXNeg90(tris) : tris);
     }
 
     function parseJSONModels(data) {
       const root = data.models || data.piezas || data;
       const keys = ["mid", "left", "right", "drive", "term"];
+      const loaded = {};
       keys.forEach((k) => {
         const m = root[k];
         if (!m || !Array.isArray(m.faces)) return;
@@ -2363,11 +2412,18 @@
             });
           }
         });
-        if (tris.length) meshes[k] = buildMeshData(tris);
+        if (tris.length) {
+          const rot = k === "left" || k === "right";
+          loaded[k] = buildMeshData(rot ? rotateTrisXNeg90(tris) : tris);
+        }
       });
+      if (loaded.mid) meshes.mid = loaded.mid;
+      if (loaded.drive) meshes.drive = loaded.drive;
+      if (loaded.term) meshes.term = loaded.term;
+      if (loaded.right) meshes.left = loaded.right;
+      if (loaded.left) meshes.right = loaded.left;
     }
 
-    /* Generador paramétrico exacto (mm) como respaldo si se abre sin HTTP server */
     function addBox(tris, cx, cy, cz, w, h, d, mat) {
       const x0 = cx - w * 0.5, x1 = cx + w * 0.5;
       const y0 = cy - h * 0.5, y1 = cy + h * 0.5;
@@ -2385,7 +2441,6 @@
     }
 
     function buildFallbackModels() {
-      // 1. Central (123 x 140 x 118 mm)
       {
         const t = [];
         addBox(t, 0, 0, 0, 123, 140, 118, "cuerpo");
@@ -2401,7 +2456,6 @@
         }
         meshes.mid = buildMeshData(t);
       }
-      // 2. Izquierda (118 x 140 x 110 mm)
       {
         const t = [];
         addBox(t, 0, 0, 0, 118, 140, 110, "cuerpo");
@@ -2410,9 +2464,8 @@
           addBox(t, 61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
           addBox(t, 61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
         }
-        meshes.left = buildMeshData(t);
+        meshes.right = buildMeshData(rotateTrisXNeg90(t));
       }
-      // 3. Derecha (118 x 140 x 123 mm)
       {
         const t = [];
         addBox(t, 0, 0, 0, 118, 140, 123, "cuerpo");
@@ -2421,9 +2474,8 @@
           addBox(t, -61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
           addBox(t, -61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
         }
-        meshes.right = buildMeshData(t);
+        meshes.left = buildMeshData(rotateTrisXNeg90(t));
       }
-      // 4. Unidad Híbrida E.C.H.O. (180 x 94 x 42 mm)
       {
         const t = [];
         addBox(t, 0, 0, 0, 180, 94, 42, "cuerpo");
@@ -2436,7 +2488,6 @@
         }
         meshes.drive = buildMeshData(t);
       }
-      // 5. Terminal (118 x 97 x 22 mm)
       {
         const t = [];
         addBox(t, 0, 0, 0, 118, 97, 22, "cuerpo");
@@ -2465,25 +2516,34 @@
       } catch (err) {}
 
       let objOk = 0;
+      const loadedObj = {};
       await Promise.all(Object.entries(OBJ_FILES).map(async ([key, file]) => {
         try {
           const res = await fetch(file);
           if (res.ok) {
-            const parsed = parseOBJ(await res.text());
+            const rot = key === "left" || key === "right";
+            const parsed = parseOBJ(await res.text(), rot);
             if (parsed.count > 0) {
-              meshes[key] = parsed;
+              loadedObj[key] = parsed;
               objOk += 1;
             }
           }
         } catch (err) {}
       }));
 
-      if (objOk === 0) {
+      if (objOk > 0) {
+        if (loadedObj.mid) meshes.mid = loadedObj.mid;
+        if (loadedObj.drive) meshes.drive = loadedObj.drive;
+        if (loadedObj.term) meshes.term = loadedObj.term;
+        if (loadedObj.right) meshes.left = loadedObj.right;
+        if (loadedObj.left) meshes.right = loadedObj.left;
+      } else {
         try {
           const jRes = await fetch("modelos.json");
           if (jRes.ok) parseJSONModels(await jRes.json());
         } catch (err) {}
       }
+      updMdlUI();
       draw();
     }
 
@@ -2545,7 +2605,17 @@
     function updMdlUI() {
       const info = MDL_META[curMdl] || MDL_META.asm;
       mbadge.textContent = t(info.badge);
-      mdims.textContent = info.dims;
+      if (curMdl === "asm" && meshes.mid && meshes.left && meshes.right) {
+        const tw = Math.round(meshes.left.size[0] + meshes.mid.size[0] + meshes.right.size[0]);
+        const th = Math.round(Math.max(meshes.left.size[1], meshes.mid.size[1], meshes.right.size[1]));
+        const td = Math.round(Math.max(meshes.left.size[2], meshes.mid.size[2], meshes.right.size[2]));
+        mdims.textContent = `${tw} × ${th} × ${td} mm`;
+      } else if (meshes[curMdl]) {
+        const s = meshes[curMdl].size;
+        mdims.textContent = `${Math.round(s[0])} × ${Math.round(s[1])} × ${Math.round(s[2])} mm`;
+      } else {
+        mdims.textContent = info.dims;
+      }
       qa(".mbtn").forEach((btn) => btn.classList.toggle("on", btn.dataset.m === curMdl));
       expBtn.classList.toggle("hide", curMdl !== "asm");
       expBtn.textContent = t(exploded ? "yjin" : "yexp");
@@ -2601,7 +2671,6 @@
 
       const camZ = 3.1 / zoom;
       const proj = persp(36, cw / ch, 0.05, 20);
-      // Traslación correcta P * T(0, 0, -camZ)
       proj[14] -= proj[10] * camZ;
       proj[15] += camZ;
 
@@ -2616,26 +2685,16 @@
       if (curMdl === "asm" && meshes.mid && meshes.left && meshes.right) {
         const mC = meshes.mid, mL = meshes.left, mR = meshes.right;
         const gap = expAnim * 34;
-        const alreadyPlaced = mL.max[0] < mC.min[0] + 5 && mR.min[0] > mC.max[0] - 5;
         const totalW = mL.size[0] + mC.size[0] + mR.size[0] + gap * 2;
         const maxH = Math.max(mL.size[1], mC.size[1], mR.size[1]);
         const maxD = Math.max(mL.size[2], mC.size[2], mR.size[2]);
         const scale = 1.95 / (Math.hypot(totalW, maxH, maxD) * 0.5 || 1);
 
-        if (alreadyPlaced) {
-          const cx = (mL.min[0] + mR.max[0]) * 0.5;
-          const cy = (Math.min(mL.min[1], mC.min[1], mR.min[1]) + Math.max(mL.max[1], mC.max[1], mR.max[1])) * 0.5;
-          const cz = (Math.min(mL.min[2], mC.min[2], mR.min[2]) + Math.max(mL.max[2], mC.max[2], mR.max[2])) * 0.5;
-          renderMesh(mL, [-cx - gap, -cy, -cz], scale);
-          renderMesh(mC, [-cx, -cy, -cz], scale);
-          renderMesh(mR, [-cx + gap, -cy, -cz], scale);
-        } else {
-          const xL = -(mC.size[0] * 0.5 + mL.size[0] * 0.5 + gap);
-          const xR = +(mC.size[0] * 0.5 + mR.size[0] * 0.5 + gap);
-          renderMesh(mL, [xL - mL.center[0], -mL.center[1], -mL.center[2]], scale);
-          renderMesh(mC, [-mC.center[0], -mC.center[1], -mC.center[2]], scale);
-          renderMesh(mR, [xR - mR.center[0], -mR.center[1], -mR.center[2]], scale);
-        }
+        const xL = -(mC.size[0] * 0.5 + mL.size[0] * 0.5 + gap);
+        const xR = +(mC.size[0] * 0.5 + mR.size[0] * 0.5 + gap);
+        renderMesh(mL, [xL - mL.center[0], -mL.center[1], -mL.center[2]], scale);
+        renderMesh(mC, [-mC.center[0], -mC.center[1], -mC.center[2]], scale);
+        renderMesh(mR, [xR - mR.center[0], -mR.center[1], -mR.center[2]], scale);
       } else {
         const m = meshes[curMdl] || meshes.mid;
         if (m) {
@@ -2738,6 +2797,13 @@
     }, { passive: false });
 
     expBtn.addEventListener("click", () => {
+      const now = performance.now();
+      eclk = eclk.filter((x) => now - x < 1400);
+      eclk.push(now);
+      if (eclk.length >= 5) {
+        eclk = [];
+        trig();
+      }
       exploded = !exploded;
       stog(exploded);
       updMdlUI();
