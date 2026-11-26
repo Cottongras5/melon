@@ -42,7 +42,8 @@
       z-index: 0;
       pointer-events: none;
       content: "";
-      background: radial-gradient(ellipse 78% 48% at 50% -8%, #f5c51822 0%, transparent 72%);
+      background: radial-gradient(ellipse 78% 48% at 50% -8%, var(--acc) 0%, transparent 72%);
+      opacity: .14;
     }
 
     .cnv {
@@ -106,6 +107,7 @@
       width: 1.5rem;
       height: 1.5rem;
       flex-shrink: 0;
+      color: var(--acc);
     }
 
     .nav {
@@ -429,9 +431,9 @@
       width: 2.55rem;
       height: 2.55rem;
       place-items: center;
-      border: 1px solid #f5c51840;
+      border: 1px solid var(--line);
       border-radius: 13px;
-      background: #f5c51814;
+      background: var(--str);
       color: var(--acc);
     }
 
@@ -463,7 +465,7 @@
       transition: border-color .25s ease;
     }
 
-    .sys:hover { border-color: #f5c51866; }
+    .sys:hover { border-color: var(--acc); }
 
     .sbox {
       display: flex;
@@ -491,12 +493,12 @@
       height: 100%;
     }
 
-    .mbadge {
+    .bdg {
       position: absolute;
       top: .65rem;
       left: .75rem;
       padding: .22rem .6rem;
-      border: 1px solid #f5c51844;
+      border: 1px solid var(--line);
       border-radius: 8px;
       background: #09090dcc;
       color: var(--acc);
@@ -507,7 +509,7 @@
       backdrop-filter: blur(8px);
     }
 
-    .mdims {
+    .dim {
       position: absolute;
       bottom: .65rem;
       right: .75rem;
@@ -522,13 +524,13 @@
       backdrop-filter: blur(8px);
     }
 
-    .mpills {
+    .mpl {
       display: flex;
       flex-wrap: wrap;
       gap: .32rem;
     }
 
-    .mbtn {
+    .mbt {
       padding: .26rem .58rem;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -540,9 +542,9 @@
       transition: border-color .2s ease, color .2s ease, background .2s ease;
     }
 
-    .mbtn:hover { color: var(--txt); border-color: #f5c51866; }
-    .mbtn.on {
-      background: #f5c5181f;
+    .mbt:hover { color: var(--txt); border-color: var(--acc); }
+    .mbt.on {
+      background: var(--str);
       border-color: var(--acc);
       color: var(--acc);
     }
@@ -555,7 +557,7 @@
       flex-wrap: wrap;
     }
 
-    .sacts {
+    .sac {
       display: flex;
       align-items: center;
       gap: .4rem;
@@ -774,7 +776,7 @@
     }
 
     .bay.on {
-      border-color: #f5c51888;
+      border-color: var(--acc);
       background: #181712;
       transform: translateY(-1px);
     }
@@ -1032,7 +1034,7 @@
   <header class="topb" id="top">
     <div class="bar">
       <button class="brnd" id="home" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--acc)" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="3" y="4" width="18" height="5" rx="1.5"/>
           <rect x="3" y="10" width="18" height="5" rx="1.5"/>
           <rect x="3" y="16" width="18" height="4" rx="1.5"/>
@@ -1159,20 +1161,20 @@
         <div class="sbox">
           <div class="stg" id="stg">
             <canvas class="cub" id="cub"></canvas>
-            <span class="mbadge" id="mbadge">CL4P-TP · Ensamble</span>
-            <span class="mdims" id="mdims">359 × 140 × 123 mm</span>
+            <span class="bdg" id="bdg">CL4P-TP · Ensamble</span>
+            <span class="dim" id="dim">359 × 140 × 123 mm</span>
           </div>
-          <div class="mpills" id="mpills" role="group" aria-label="Piezas 3D">
-            <button class="mbtn on" type="button" data-m="asm" data-i="mp0">Ensamble</button>
-            <button class="mbtn" type="button" data-m="mid" data-i="mp1">Central</button>
-            <button class="mbtn" type="button" data-m="left" data-i="mp2">Izquierda</button>
-            <button class="mbtn" type="button" data-m="right" data-i="mp3">Derecha</button>
-            <button class="mbtn" type="button" data-m="drive" data-i="mp4">E.C.H.O.</button>
-            <button class="mbtn" type="button" data-m="term" data-i="mp5">Terminal</button>
+          <div class="mpl" id="mpl" role="group" aria-label="Piezas 3D">
+            <button class="mbt on" type="button" data-m="asm" data-i="mp0">Ensamble</button>
+            <button class="mbt" type="button" data-m="mid" data-i="mp1">Central</button>
+            <button class="mbt" type="button" data-m="left" data-i="mp2">Izquierda</button>
+            <button class="mbt" type="button" data-m="right" data-i="mp3">Derecha</button>
+            <button class="mbt" type="button" data-m="drive" data-i="mp4">E.C.H.O.</button>
+            <button class="mbt" type="button" data-m="term" data-i="mp5">Terminal</button>
           </div>
           <div class="sbar">
             <span class="hint" data-i="yhnt">Arrastra para rotar · Rueda para zoom</span>
-            <div class="sacts">
+            <div class="sac">
               <button class="rbtn" id="exp" type="button" data-i="yexp">Separar</button>
               <button class="rbtn" id="rst" type="button" data-i="yrst">Restablecer</button>
             </div>
@@ -1488,12 +1490,12 @@
     const gear = q("#gear"), pnl = q("#pnl"), lang = q("#lang"), snd = q("#snd"), nop = q("#nop"), noa = q("#noa");
     const tst = q("#tst"), main = q("#main"), emp = q("#emp"), stg = q("#stg"), vtxt = q("#vtxt"), sp1 = q("#sp1"), sp2 = q("#sp2"), frm = q("#frm");
     const rng = q("#rng"), rval = q("#rval"), rtier = q("#rtier"), bays = q("#bays");
-    const mbadge = q("#mbadge"), mdims = q("#mdims"), expBtn = q("#exp");
+    const bdg = q("#bdg"), dim = q("#dim"), exp = q("#exp");
 
-    let cur = "es", tab = 0, view = "main", tmo, raf = 0, iraf = 0, arr = [], w = 0, h = 0, dpr = 1;
+    let cur = "es", tab = 0, view = "main", tmo, raf = 0, iraf = 0, eraf = 0, arr = [], w = 0, h = 0, dpr = 1;
     let mat = [1, 0, 0, 0, 1, 0, 0, 0, 1], vx = 0, vy = 0, drg = false, sx = 0, sy = 0, cw = 280, ch = 295, ac = null, nb = null, lvol = 100, lby = 2;
-    let curMdl = "asm", zoom = 1, exploded = false, expAnim = 0;
-    let eclk = [], ovd = 0, tovd = 0, etmo = 0, eraf = 0;
+    let cmdl = "asm", zoom = 1, expl = false, eani = 0;
+    let et0 = 0, etl = 0, etc = 0, eon = false, efad = 0, pspd = 1, acrg = [245, 197, 24];
 
     const tr = {
       es: {
@@ -2038,7 +2040,7 @@
       vtxt.innerHTML = fmt(t(`yv${tab + 1}`));
       sp1.innerHTML = fmt(t(`ys${tab + 1}a`));
       sp2.innerHTML = fmt(t(`ys${tab + 1}b`));
-      updMdlUI();
+      umdl();
       upd(rng.value);
       try { ls.setItem("lng", cur); } catch (err) {}
     }
@@ -2079,62 +2081,22 @@
       }
     }
 
-    function aply() {
-      if (ovd <= 0.001) {
-        document.documentElement.style.removeProperty("--acc");
-      } else {
-        const r = Math.round(245 + 10 * ovd);
-        const g = Math.round(197 + 58 * ovd);
-        const bl = Math.round(24 + 231 * ovd);
-        document.documentElement.style.setProperty("--acc", `rgb(${r}, ${g}, ${bl})`);
-      }
-    }
-
-    function fade() {
-      const d = tovd - ovd;
-      if (Math.abs(d) <= 0.01 || noa.checked) {
-        ovd = tovd;
-        aply();
-        eraf = 0;
-        return;
-      }
-      ovd += d * (tovd > ovd ? 0.22 : 0.12);
-      aply();
-      eraf = requestAnimationFrame(fade);
-    }
-
-    function trig() {
-      tovd = 1;
-      if (!eraf) eraf = requestAnimationFrame(fade);
-      tone(587.33, 880, 0.09, 0.36, "sine", 0);
-      tone(880, 1174.66, 0.14, 0.38, "triangle", 0.06);
-      clearTimeout(etmo);
-      etmo = setTimeout(() => {
-        tovd = 0;
-        if (!eraf) eraf = requestAnimationFrame(fade);
-      }, 5000);
-    }
-
     function loop() {
       if (nop.checked || document.hidden) {
         raf = 0;
         return;
       }
       ctx.clearRect(0, 0, w, h);
-      const spd = 1 + ovd;
-      const r = Math.round(245 + 10 * ovd);
-      const g = Math.round(197 + 58 * ovd);
-      const bl = Math.round(24 + 231 * ovd);
       for (let i = 0; i < arr.length; i += 1) {
         const p = arr[i];
-        p.x += p.vx * spd;
-        p.y += p.vy * spd;
+        p.x += p.vx * pspd;
+        p.y += p.vy * pspd;
         if (p.x < -12) p.x = w + 12;
         else if (p.x > w + 12) p.x = -12;
         if (p.y < -12) p.y = h + 12;
         else if (p.y > h + 12) p.y = -12;
 
-        ctx.fillStyle = `rgba(${r}, ${g}, ${bl}, ${p.a})`;
+        ctx.fillStyle = `rgba(${acrg[0]}, ${acrg[1]}, ${acrg[2]}, ${p.a})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
@@ -2157,9 +2119,48 @@
       }
     }
 
+    function fade(to) {
+      if (eraf) cancelAnimationFrame(eraf);
+      const from = efad;
+      const t0 = performance.now();
+      const dur = 420;
+      function step(now) {
+        const k = Math.min(1, (now - t0) / dur);
+        efad = from + (to - from) * k;
+        const r = Math.round(245 + 10 * efad);
+        const g = Math.round(197 + 58 * efad);
+        const bl = Math.round(24 + 231 * efad);
+        acrg = [r, g, bl];
+        if (efad <= 0.001) {
+          document.documentElement.style.removeProperty("--acc");
+        } else {
+          const hex = `#${[r, g, bl].map((n) => n.toString(16).padStart(2, "0")).join("")}`;
+          document.documentElement.style.setProperty("--acc", hex);
+        }
+        draw();
+        if (k < 1) eraf = requestAnimationFrame(step);
+        else eraf = 0;
+      }
+      eraf = requestAnimationFrame(step);
+    }
+
+    function trge() {
+      eon = true;
+      et0 = 0;
+      etl = 0;
+      etc = 0;
+      pspd = 2;
+      fade(1);
+      setTimeout(() => {
+        pspd = 1;
+        fade(0);
+        eon = false;
+      }, 5000);
+    }
+
     const gl = cub.getContext("webgl", { antialias: true, alpha: true });
 
-    const MAT_DEF = {
+    const matd = {
       cuerpo: { kd: [0.145, 0.153, 0.185], ks: [0.22, 0.22, 0.25], ns: 36 },
       oro:    { kd: [0.961, 0.773, 0.094], ks: [1.0, 0.88, 0.42], ns: 96 },
       verde:  { kd: [0.115, 0.445, 0.265], ks: [0.28, 0.45, 0.32], ns: 48 },
@@ -2167,16 +2168,16 @@
       blanco: { kd: [0.935, 0.945, 0.965], ks: [0.35, 0.35, 0.38], ns: 42 }
     };
 
-    const MDL_META = {
-      asm:   { badge: "mb_asm",   dims: "359 × 140 × 140 mm", zoom: 1.05 },
-      mid:   { badge: "mb_mid",   dims: "123 × 140 × 118 mm", zoom: 1.0 },
-      left:  { badge: "mb_left",  dims: "118 × 123 × 140 mm", zoom: 1.0 },
-      right: { badge: "mb_right", dims: "118 × 110 × 140 mm", zoom: 1.0 },
-      drive: { badge: "mb_drive", dims: "180 × 94 × 42 mm",   zoom: 1.05 },
-      term:  { badge: "mb_term",  dims: "118 × 97 × 22 mm",   zoom: 1.05 }
+    const meta = {
+      asm:   { bdg: "mb_asm",   dim: "359 × 140 × 123 mm", zoom: 1.05 },
+      mid:   { bdg: "mb_mid",   dim: "123 × 140 × 118 mm", zoom: 1.0 },
+      left:  { bdg: "mb_left",  dim: "110 × 140 × 118 mm", zoom: 1.0 },
+      right: { bdg: "mb_right", dim: "123 × 140 × 118 mm", zoom: 1.0 },
+      drive: { bdg: "mb_drive", dim: "180 × 94 × 42 mm",   zoom: 1.05 },
+      term:  { bdg: "mb_term",  dim: "118 × 97 × 22 mm",   zoom: 1.05 }
     };
 
-    const OBJ_FILES = {
+    const objs = {
       mid: "central.obj",
       left: "izquierda.obj",
       right: "derecha.obj",
@@ -2184,10 +2185,10 @@
       term: "terminal.obj"
     };
 
-    const meshes = {};
-    let glProg = null, glLoc = null;
+    const msh = {};
+    let prg = null, loc = null;
 
-    function initGL() {
+    function mkgl() {
       if (!gl) return;
       const vs = `
         attribute vec3 aPos;
@@ -2219,6 +2220,7 @@
         varying vec3 vCol;
         varying vec2 vSpec;
         uniform vec3 uCam;
+        uniform vec3 uAcc;
         void main() {
           vec3 n = normalize(vNor);
           if (!gl_FrontFacing) n = -n;
@@ -2233,7 +2235,7 @@
           vec3 amb = vCol * 0.34;
           vec3 dif = vCol * (d1 * 0.78 + d2 * 0.24);
           vec3 specCol = mix(vec3(1.0), vCol * 1.25, 0.45) * sp * 0.65;
-          vec3 rimCol = vec3(0.96, 0.77, 0.09) * rim;
+          vec3 rimCol = uAcc * rim;
           gl_FragColor = vec4(amb + dif + specCol + rimCol, 1.0);
         }
       `;
@@ -2243,27 +2245,28 @@
         gl.compileShader(sh);
         return sh;
       }
-      glProg = gl.createProgram();
-      gl.attachShader(glProg, comp(gl.VERTEX_SHADER, vs));
-      gl.attachShader(glProg, comp(gl.FRAGMENT_SHADER, fs));
-      gl.linkProgram(glProg);
-      gl.useProgram(glProg);
-      glLoc = {
-        aPos: gl.getAttribLocation(glProg, "aPos"),
-        aNor: gl.getAttribLocation(glProg, "aNor"),
-        aCol: gl.getAttribLocation(glProg, "aCol"),
-        aSpec: gl.getAttribLocation(glProg, "aSpec"),
-        uProj: gl.getUniformLocation(glProg, "uProj"),
-        uRot: gl.getUniformLocation(glProg, "uRot"),
-        uOff: gl.getUniformLocation(glProg, "uOff"),
-        uScale: gl.getUniformLocation(glProg, "uScale"),
-        uCam: gl.getUniformLocation(glProg, "uCam")
+      prg = gl.createProgram();
+      gl.attachShader(prg, comp(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prg, comp(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prg);
+      gl.useProgram(prg);
+      loc = {
+        aPos: gl.getAttribLocation(prg, "aPos"),
+        aNor: gl.getAttribLocation(prg, "aNor"),
+        aCol: gl.getAttribLocation(prg, "aCol"),
+        aSpec: gl.getAttribLocation(prg, "aSpec"),
+        uProj: gl.getUniformLocation(prg, "uProj"),
+        uRot: gl.getUniformLocation(prg, "uRot"),
+        uOff: gl.getUniformLocation(prg, "uOff"),
+        uScale: gl.getUniformLocation(prg, "uScale"),
+        uCam: gl.getUniformLocation(prg, "uCam"),
+        uAcc: gl.getUniformLocation(prg, "uAcc")
       };
       gl.enable(gl.DEPTH_TEST);
       gl.depthFunc(gl.LEQUAL);
     }
 
-    function parseMTL(txt) {
+    function pmtl(txt) {
       let m = "cuerpo";
       txt.split(/\r?\n/).forEach((ln) => {
         const s = ln.trim();
@@ -2271,39 +2274,31 @@
         const p = s.split(/\s+/);
         if (p[0] === "newmtl" && p[1]) {
           m = p[1];
-          if (!MAT_DEF[m]) MAT_DEF[m] = { kd: [0.5, 0.5, 0.5], ks: [0.25, 0.25, 0.25], ns: 32 };
+          if (!matd[m]) matd[m] = { kd: [0.5, 0.5, 0.5], ks: [0.25, 0.25, 0.25], ns: 32 };
         } else if (p[0] === "Kd" && p.length >= 4) {
-          MAT_DEF[m].kd = [parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])];
+          matd[m].kd = [parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])];
         } else if (p[0] === "Ks" && p.length >= 4) {
-          MAT_DEF[m].ks = [parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])];
+          matd[m].ks = [parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])];
         } else if (p[0] === "Ns" && p.length >= 2) {
-          MAT_DEF[m].ns = parseFloat(p[1]) || 32;
+          matd[m].ns = parseFloat(p[1]) || 32;
         }
       });
     }
 
-    function rotateTrisXNeg90(tris) {
-      return tris.map((t) => ({
-        mat: t.mat,
-        v: t.v.map(([x, y, z]) => [x, z, -y]),
-        n: t.n ? t.n.map(([nx, ny, nz]) => [nx, nz, -ny]) : null
-      }));
-    }
-
-    function buildMeshData(tris) {
+    function bmsh(tris) {
       const n = tris.length * 3;
       const pos = new Float32Array(n * 3);
       const nor = new Float32Array(n * 3);
       const col = new Float32Array(n * 3);
       const spc = new Float32Array(n * 2);
-      const min = [Infinity, Infinity, Infinity];
-      const max = [-Infinity, -Infinity, -Infinity];
+      const mn = [Infinity, Infinity, Infinity];
+      const mx = [-Infinity, -Infinity, -Infinity];
 
       for (let i = 0; i < tris.length; i += 1) {
-        const t = tris[i];
-        const m = MAT_DEF[t.mat] || MAT_DEF.cuerpo;
-        const ksAvg = (m.ks[0] + m.ks[1] + m.ks[2]) / 3;
-        const p0 = t.v[0], p1 = t.v[1], p2 = t.v[2];
+        const ti = tris[i];
+        const m = matd[ti.mat] || matd.cuerpo;
+        const ks = (m.ks[0] + m.ks[1] + m.ks[2]) / 3;
+        const p0 = ti.v[0], p1 = ti.v[1], p2 = ti.v[2];
         const ux = p1[0] - p0[0], uy = p1[1] - p0[1], uz = p1[2] - p0[2];
         const vx1 = p2[0] - p0[0], vy1 = p2[1] - p0[1], vz1 = p2[2] - p0[2];
         let fnx = uy * vz1 - uz * vy1;
@@ -2314,240 +2309,256 @@
 
         for (let k = 0; k < 3; k += 1) {
           const idx = i * 3 + k;
-          const v = t.v[k];
-          const vn = t.n && t.n[k] ? t.n[k] : [fnx, fny, fnz];
+          const v = ti.v[k];
+          const vn = ti.n && ti.n[k] ? ti.n[k] : [fnx, fny, fnz];
           pos[idx * 3] = v[0]; pos[idx * 3 + 1] = v[1]; pos[idx * 3 + 2] = v[2];
           nor[idx * 3] = vn[0]; nor[idx * 3 + 1] = vn[1]; nor[idx * 3 + 2] = vn[2];
           col[idx * 3] = m.kd[0]; col[idx * 3 + 1] = m.kd[1]; col[idx * 3 + 2] = m.kd[2];
-          spc[idx * 2] = ksAvg; spc[idx * 2 + 1] = m.ns;
+          spc[idx * 2] = ks; spc[idx * 2 + 1] = m.ns;
           for (let a = 0; a < 3; a += 1) {
-            if (v[a] < min[a]) min[a] = v[a];
-            if (v[a] > max[a]) max[a] = v[a];
+            if (v[a] < mn[a]) mn[a] = v[a];
+            if (v[a] > mx[a]) mx[a] = v[a];
           }
         }
       }
 
-      const size = [max[0] - min[0], max[1] - min[1], max[2] - min[2]];
-      const center = [(min[0] + max[0]) * 0.5, (min[1] + max[1]) * 0.5, (min[2] + max[2]) * 0.5];
-      const radius = Math.hypot(size[0], size[1], size[2]) * 0.5 || 1;
-      const obj = { count: n, min, max, size, center, radius };
+      const sz = [mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]];
+      const ctr = [(mn[0] + mx[0]) * 0.5, (mn[1] + mx[1]) * 0.5, (mn[2] + mx[2]) * 0.5];
+      const rad = Math.hypot(sz[0], sz[1], sz[2]) * 0.5 || 1;
+      const obj = { cnt: n, pos, nor, mn, mx, sz, ctr, rad };
 
       if (gl) {
-        obj.bPos = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bPos);
+        obj.bp = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bp);
         gl.bufferData(gl.ARRAY_BUFFER, pos, gl.STATIC_DRAW);
 
-        obj.bNor = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bNor);
+        obj.bn = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bn);
         gl.bufferData(gl.ARRAY_BUFFER, nor, gl.STATIC_DRAW);
 
-        obj.bCol = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bCol);
+        obj.bc = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bc);
         gl.bufferData(gl.ARRAY_BUFFER, col, gl.STATIC_DRAW);
 
-        obj.bSpc = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bSpc);
+        obj.bs = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, obj.bs);
         gl.bufferData(gl.ARRAY_BUFFER, spc, gl.STATIC_DRAW);
       }
       return obj;
     }
 
-    function parseOBJ(txt, rotXNeg90) {
-      const verts = [], norms = [], tris = [];
-      let curMat = "cuerpo";
+    function roty(m) {
+      const p = m.pos, n = m.nor, c = m.cnt * 3;
+      const mn = [Infinity, Infinity, Infinity];
+      const mx = [-Infinity, -Infinity, -Infinity];
+      for (let i = 0; i < c; i += 3) {
+        const px = p[i], pz = p[i + 2];
+        p[i] = -pz;
+        p[i + 2] = px;
+        const nx = n[i], nz = n[i + 2];
+        n[i] = -nz;
+        n[i + 2] = nx;
+        for (let a = 0; a < 3; a += 1) {
+          const v = p[i + a];
+          if (v < mn[a]) mn[a] = v;
+          if (v > mx[a]) mx[a] = v;
+        }
+      }
+      m.mn = mn;
+      m.mx = mx;
+      m.sz = [mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]];
+      m.ctr = [(mn[0] + mx[0]) * 0.5, (mn[1] + mx[1]) * 0.5, (mn[2] + mx[2]) * 0.5];
+      m.rad = Math.hypot(m.sz[0], m.sz[1], m.sz[2]) * 0.5 || 1;
+      if (gl && m.bp) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, m.bp);
+        gl.bufferData(gl.ARRAY_BUFFER, p, gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, m.bn);
+        gl.bufferData(gl.ARRAY_BUFFER, n, gl.STATIC_DRAW);
+      }
+      return m;
+    }
+
+    function pobj(txt) {
+      const vr = [], nr = [], tris = [];
+      let cm = "cuerpo";
       txt.split(/\r?\n/).forEach((ln) => {
         const s = ln.trim();
         if (!s || s.startsWith("#")) return;
         const p = s.split(/\s+/);
         if (p[0] === "v" && p.length >= 4) {
-          verts.push([parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])]);
+          vr.push([parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])]);
         } else if (p[0] === "vn" && p.length >= 4) {
-          norms.push([parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])]);
+          nr.push([parseFloat(p[1]), parseFloat(p[2]), parseFloat(p[3])]);
         } else if (p[0] === "usemtl" && p[1]) {
-          curMat = p[1];
+          cm = p[1];
         } else if (p[0] === "f" && p.length >= 4) {
           const fv = [], fn = [];
           for (let i = 1; i < p.length; i += 1) {
-            const parts = p[i].split("/");
-            let vi = parseInt(parts[0], 10);
-            vi = vi < 0 ? verts.length + vi : vi - 1;
-            fv.push(verts[vi] || [0, 0, 0]);
-            if (parts[2]) {
-              let ni = parseInt(parts[2], 10);
-              ni = ni < 0 ? norms.length + ni : ni - 1;
-              fn.push(norms[ni] || null);
+            const pts = p[i].split("/");
+            let vi = parseInt(pts[0], 10);
+            vi = vi < 0 ? vr.length + vi : vi - 1;
+            fv.push(vr[vi] || [0, 0, 0]);
+            if (pts[2]) {
+              let ni = parseInt(pts[2], 10);
+              ni = ni < 0 ? nr.length + ni : ni - 1;
+              fn.push(nr[ni] || null);
             } else {
               fn.push(null);
             }
           }
           for (let i = 1; i < fv.length - 1; i += 1) {
             tris.push({
-              mat: curMat,
+              mat: cm,
               v: [fv[0], fv[i], fv[i + 1]],
               n: fn[0] && fn[i] && fn[i + 1] ? [fn[0], fn[i], fn[i + 1]] : null
             });
           }
         }
       });
-      return buildMeshData(rotXNeg90 ? rotateTrisXNeg90(tris) : tris);
+      return bmsh(tris);
     }
 
-    function parseJSONModels(data) {
+    function pjsn(data) {
       const root = data.models || data.piezas || data;
       const keys = ["mid", "left", "right", "drive", "term"];
-      const loaded = {};
       keys.forEach((k) => {
         const m = root[k];
         if (!m || !Array.isArray(m.faces)) return;
         const tris = [];
         m.faces.forEach((f) => {
           const pts = f.verts || f.vertices || f.v || [];
-          const matName = f.mat || f.material || "cuerpo";
+          const mn = f.mat || f.material || "cuerpo";
           const fn = f.normal || f.n || null;
           for (let i = 1; i < pts.length - 1; i += 1) {
             tris.push({
-              mat: matName,
+              mat: mn,
               v: [pts[0], pts[i], pts[i + 1]],
               n: fn ? [fn, fn, fn] : null
             });
           }
         });
         if (tris.length) {
-          const rot = k === "left" || k === "right";
-          loaded[k] = buildMeshData(rot ? rotateTrisXNeg90(tris) : tris);
+          const obj = bmsh(tris);
+          msh[k] = k === "left" || k === "right" ? roty(obj) : obj;
         }
       });
-      if (loaded.mid) meshes.mid = loaded.mid;
-      if (loaded.drive) meshes.drive = loaded.drive;
-      if (loaded.term) meshes.term = loaded.term;
-      if (loaded.right) meshes.left = loaded.right;
-      if (loaded.left) meshes.right = loaded.left;
     }
 
-    function addBox(tris, cx, cy, cz, w, h, d, mat) {
-      const x0 = cx - w * 0.5, x1 = cx + w * 0.5;
-      const y0 = cy - h * 0.5, y1 = cy + h * 0.5;
-      const z0 = cz - d * 0.5, z1 = cz + d * 0.5;
-      const q = (a, b, c, e) => {
-        tris.push({ mat, v: [a, b, c] });
-        tris.push({ mat, v: [a, c, e] });
+    function abox(tris, cx, cy, cz, wd, ht, dp, mat) {
+      const x0 = cx - wd * 0.5, x1 = cx + wd * 0.5;
+      const y0 = cy - ht * 0.5, y1 = cy + ht * 0.5;
+      const z0 = cz - dp * 0.5, z1 = cz + dp * 0.5;
+      const qd = (a, c, d, e) => {
+        tris.push({ mat, v: [a, c, d] });
+        tris.push({ mat, v: [a, d, e] });
       };
-      q([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]);
-      q([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0]);
-      q([x0, y1, z1], [x1, y1, z1], [x1, y1, z0], [x0, y1, z0]);
-      q([x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]);
-      q([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1]);
-      q([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]);
+      qd([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]);
+      qd([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0]);
+      qd([x0, y1, z1], [x1, y1, z1], [x1, y1, z0], [x0, y1, z0]);
+      qd([x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1]);
+      qd([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1]);
+      qd([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]);
     }
 
-    function buildFallbackModels() {
+    function fbck() {
       {
-        const t = [];
-        addBox(t, 0, 0, 0, 123, 140, 118, "cuerpo");
+        const ti = [];
+        abox(ti, 0, 0, 0, 123, 140, 118, "cuerpo");
         for (let i = -3; i <= 3; i += 1) {
-          addBox(t, 0, -24 + i * 7.5, 59.15, 76, 3.6, 0.4, "negro");
+          abox(ti, 0, -24 + i * 7.5, 59.15, 76, 3.6, 0.4, "negro");
         }
         const tz = 59.25;
-        t.push({ mat: "oro", v: [[-18, 20, tz], [18, 20, tz], [0, 50, tz]] });
-        t.push({ mat: "oro", v: [[-18, 20, tz - 0.3], [0, 50, tz - 0.3], [18, 20, tz - 0.3]] });
+        ti.push({ mat: "oro", v: [[-18, 20, tz], [18, 20, tz], [0, 50, tz]] });
+        ti.push({ mat: "oro", v: [[-18, 20, tz - 0.3], [0, 50, tz - 0.3], [18, 20, tz - 0.3]] });
         for (let r = -2; r <= 2; r += 1) {
-          addBox(t, -61.7, r * 20, 0, 0.6, 9, 34, "oro");
-          addBox(t, 61.7, r * 20, 0, 0.6, 9, 34, "oro");
+          abox(ti, -61.7, r * 20, 0, 0.6, 9, 34, "oro");
+          abox(ti, 61.7, r * 20, 0, 0.6, 9, 34, "oro");
         }
-        meshes.mid = buildMeshData(t);
+        msh.mid = bmsh(ti);
       }
       {
-        const t = [];
-        addBox(t, 0, 0, 0, 118, 140, 110, "cuerpo");
-        addBox(t, -8, 0, 55.15, 72, 92, 0.4, "negro");
+        const ti = [];
+        abox(ti, 0, 0, 0, 118, 140, 110, "cuerpo");
+        abox(ti, -8, 0, 55.15, 72, 92, 0.4, "negro");
         for (let r = -2; r <= 2; r += 1) {
-          addBox(t, 61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
-          addBox(t, 61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
+          abox(ti, 61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
+          abox(ti, 61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
         }
-        meshes.right = buildMeshData(rotateTrisXNeg90(t));
+        msh.left = roty(bmsh(ti));
       }
       {
-        const t = [];
-        addBox(t, 0, 0, 0, 118, 140, 123, "cuerpo");
-        addBox(t, 8, 0, 61.65, 72, 92, 0.4, "negro");
+        const ti = [];
+        abox(ti, 0, 0, 0, 118, 140, 123, "cuerpo");
+        abox(ti, 8, 0, 61.65, 72, 92, 0.4, "negro");
         for (let r = -2; r <= 2; r += 1) {
-          addBox(t, -61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
-          addBox(t, -61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
+          abox(ti, -61.5, r * 20, -10, 5.5, 4.2, 4.2, "oro");
+          abox(ti, -61.5, r * 20, 10, 5.5, 4.2, 4.2, "oro");
         }
-        meshes.left = buildMeshData(rotateTrisXNeg90(t));
+        msh.right = roty(bmsh(ti));
       }
       {
-        const t = [];
-        addBox(t, 0, 0, 0, 180, 94, 42, "cuerpo");
-        addBox(t, 0, 8, 21.3, 146, 56, 0.8, "verde");
-        addBox(t, -26, 8, 22.0, 52, 34, 1.0, "negro");
-        addBox(t, 36, 8, 22.0, 38, 24, 1.0, "blanco");
+        const ti = [];
+        abox(ti, 0, 0, 0, 180, 94, 42, "cuerpo");
+        abox(ti, 0, 8, 21.3, 146, 56, 0.8, "verde");
+        abox(ti, -26, 8, 22.0, 52, 34, 1.0, "negro");
+        abox(ti, 36, 8, 22.0, 38, 24, 1.0, "blanco");
         for (let i = 0; i < 24; i += 1) {
           const px = -69 + i * 6;
-          addBox(t, px, -47.3, 4, 3.2, 0.8, 18, "oro");
+          abox(ti, px, -47.3, 4, 3.2, 0.8, 18, "oro");
         }
-        meshes.drive = buildMeshData(t);
+        msh.drive = bmsh(ti);
       }
       {
-        const t = [];
-        addBox(t, 0, 0, 0, 118, 97, 22, "cuerpo");
-        addBox(t, 0, 21, 11.3, 96, 42, 0.8, "blanco");
+        const ti = [];
+        abox(ti, 0, 0, 0, 118, 97, 22, "cuerpo");
+        abox(ti, 0, 21, 11.3, 96, 42, 0.8, "blanco");
         for (let r = 0; r < 3; r += 1) {
           const cols = 8 - r;
           const kw = 88 / cols;
           for (let c = 0; c < cols; c += 1) {
             const kx = -44 + kw * (c + 0.5);
             const ky = -10 - r * 11;
-            addBox(t, kx, ky, 11.4, kw - 2.2, 8.2, 0.9, "negro");
+            abox(ti, kx, ky, 11.4, kw - 2.2, 8.2, 0.9, "negro");
           }
         }
         for (let i = -5; i <= 5; i += 1) {
-          addBox(t, i * 8, -26, -11.3, 4, 16, 0.7, "oro");
+          abox(ti, i * 8, -26, -11.3, 4, 16, 0.7, "oro");
         }
-        meshes.term = buildMeshData(t);
+        msh.term = bmsh(ti);
       }
     }
 
-    async function loadServinasModels() {
-      buildFallbackModels();
+    async function load() {
+      fbck();
       try {
-        const mtlRes = await fetch("materiales.mtl");
-        if (mtlRes.ok) parseMTL(await mtlRes.text());
+        const mr = await fetch("materiales.mtl");
+        if (mr.ok) pmtl(await mr.text());
       } catch (err) {}
 
-      let objOk = 0;
-      const loadedObj = {};
-      await Promise.all(Object.entries(OBJ_FILES).map(async ([key, file]) => {
+      let ok = 0;
+      await Promise.all(Object.entries(objs).map(async ([k, file]) => {
         try {
           const res = await fetch(file);
           if (res.ok) {
-            const rot = key === "left" || key === "right";
-            const parsed = parseOBJ(await res.text(), rot);
-            if (parsed.count > 0) {
-              loadedObj[key] = parsed;
-              objOk += 1;
+            const prs = pobj(await res.text());
+            if (prs.cnt > 0) {
+              msh[k] = k === "left" || k === "right" ? roty(prs) : prs;
+              ok += 1;
             }
           }
         } catch (err) {}
       }));
 
-      if (objOk > 0) {
-        if (loadedObj.mid) meshes.mid = loadedObj.mid;
-        if (loadedObj.drive) meshes.drive = loadedObj.drive;
-        if (loadedObj.term) meshes.term = loadedObj.term;
-        if (loadedObj.right) meshes.left = loadedObj.right;
-        if (loadedObj.left) meshes.right = loadedObj.left;
-      } else {
+      if (ok === 0) {
         try {
-          const jRes = await fetch("modelos.json");
-          if (jRes.ok) parseJSONModels(await jRes.json());
+          const jr = await fetch("modelos.json");
+          if (jr.ok) pjsn(await jr.json());
         } catch (err) {}
       }
-      updMdlUI();
       draw();
     }
 
-    function rotM(ax, ay) {
+    function rotm(ax, ay) {
       const cx = Math.cos(ax), sx1 = Math.sin(ax);
       const cy = Math.cos(ay), sy1 = Math.sin(ay);
       return [
@@ -2557,7 +2568,7 @@
       ];
     }
 
-    function mulM(a, c) {
+    function mulm(a, c) {
       return [
         a[0] * c[0] + a[1] * c[3] + a[2] * c[6],
         a[0] * c[1] + a[1] * c[4] + a[2] * c[7],
@@ -2571,7 +2582,7 @@
       ];
     }
 
-    function ortM(m) {
+    function ortm(m) {
       const l0 = Math.hypot(m[0], m[1], m[2]) || 1;
       const r0 = [m[0] / l0, m[1] / l0, m[2] / l0];
       const d01 = r0[0] * m[3] + r0[1] * m[4] + r0[2] * m[5];
@@ -2586,46 +2597,36 @@
       return [r0[0], r0[1], r0[2], r1[0], r1[1], r1[2], r2[0], r2[1], r2[2]];
     }
 
-    function rstM() {
-      mat = ortM(rotM(0.36, -0.56));
-      zoom = MDL_META[curMdl]?.zoom || 1;
+    function rstm() {
+      mat = ortm(rotm(0.36, -0.56));
+      zoom = meta[cmdl]?.zoom || 1;
     }
 
-    function persp(fovDeg, aspect, near, far) {
-      const f = 1 / Math.tan((fovDeg * Math.PI) / 360);
+    function pers(fov, asp, near, far) {
+      const f = 1 / Math.tan((fov * Math.PI) / 360);
       const nf = 1 / (near - far);
       return new Float32Array([
-        f / aspect, 0, 0, 0,
+        f / asp, 0, 0, 0,
         0, f, 0, 0,
         0, 0, (far + near) * nf, -1,
         0, 0, 2 * far * near * nf, 0
       ]);
     }
 
-    function updMdlUI() {
-      const info = MDL_META[curMdl] || MDL_META.asm;
-      mbadge.textContent = t(info.badge);
-      if (curMdl === "asm" && meshes.mid && meshes.left && meshes.right) {
-        const tw = Math.round(meshes.left.size[0] + meshes.mid.size[0] + meshes.right.size[0]);
-        const th = Math.round(Math.max(meshes.left.size[1], meshes.mid.size[1], meshes.right.size[1]));
-        const td = Math.round(Math.max(meshes.left.size[2], meshes.mid.size[2], meshes.right.size[2]));
-        mdims.textContent = `${tw} × ${th} × ${td} mm`;
-      } else if (meshes[curMdl]) {
-        const s = meshes[curMdl].size;
-        mdims.textContent = `${Math.round(s[0])} × ${Math.round(s[1])} × ${Math.round(s[2])} mm`;
-      } else {
-        mdims.textContent = info.dims;
-      }
-      qa(".mbtn").forEach((btn) => btn.classList.toggle("on", btn.dataset.m === curMdl));
-      expBtn.classList.toggle("hide", curMdl !== "asm");
-      expBtn.textContent = t(exploded ? "yjin" : "yexp");
+    function umdl() {
+      const inf = meta[cmdl] || meta.asm;
+      bdg.textContent = t(inf.bdg);
+      dim.textContent = inf.dim;
+      qa(".mbt").forEach((btn) => btn.classList.toggle("on", btn.dataset.m === cmdl));
+      exp.classList.toggle("hide", cmdl !== "asm");
+      exp.textContent = t(expl ? "yjin" : "yexp");
     }
 
-    function setMdl(key) {
-      if (!MDL_META[key]) return;
-      curMdl = key;
-      zoom = MDL_META[key].zoom || 1;
-      updMdlUI();
+    function smdl(key) {
+      if (!meta[key]) return;
+      cmdl = key;
+      zoom = meta[key].zoom || 1;
+      umdl();
       draw();
     }
 
@@ -2639,90 +2640,90 @@
       draw();
     }
 
-    function renderMesh(mesh, off, scale) {
-      if (!gl || !glProg || !mesh || !mesh.bPos) return;
-      gl.uniform3f(glLoc.uOff, off[0], off[1], off[2]);
-      gl.uniform1f(glLoc.uScale, scale);
+    function rmsh(m, off, sc) {
+      if (!gl || !prg || !m || !m.bp) return;
+      gl.uniform3f(loc.uOff, off[0], off[1], off[2]);
+      gl.uniform1f(loc.uScale, sc);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bPos);
-      gl.enableVertexAttribArray(glLoc.aPos);
-      gl.vertexAttribPointer(glLoc.aPos, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, m.bp);
+      gl.enableVertexAttribArray(loc.aPos);
+      gl.vertexAttribPointer(loc.aPos, 3, gl.FLOAT, false, 0, 0);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bNor);
-      gl.enableVertexAttribArray(glLoc.aNor);
-      gl.vertexAttribPointer(glLoc.aNor, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, m.bn);
+      gl.enableVertexAttribArray(loc.aNor);
+      gl.vertexAttribPointer(loc.aNor, 3, gl.FLOAT, false, 0, 0);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bCol);
-      gl.enableVertexAttribArray(glLoc.aCol);
-      gl.vertexAttribPointer(glLoc.aCol, 3, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, m.bc);
+      gl.enableVertexAttribArray(loc.aCol);
+      gl.vertexAttribPointer(loc.aCol, 3, gl.FLOAT, false, 0, 0);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, mesh.bSpc);
-      gl.enableVertexAttribArray(glLoc.aSpec);
-      gl.vertexAttribPointer(glLoc.aSpec, 2, gl.FLOAT, false, 0, 0);
+      gl.bindBuffer(gl.ARRAY_BUFFER, m.bs);
+      gl.enableVertexAttribArray(loc.aSpec);
+      gl.vertexAttribPointer(loc.aSpec, 2, gl.FLOAT, false, 0, 0);
 
-      gl.drawArrays(gl.TRIANGLES, 0, mesh.count);
+      gl.drawArrays(gl.TRIANGLES, 0, m.cnt);
     }
 
     function draw() {
-      if (!gl || !glProg) return;
+      if (!gl || !prg) return;
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.useProgram(glProg);
+      gl.useProgram(prg);
 
-      const camZ = 3.1 / zoom;
-      const proj = persp(36, cw / ch, 0.05, 20);
-      proj[14] -= proj[10] * camZ;
-      proj[15] += camZ;
+      const cz = 3.1 / zoom;
+      const proj = pers(36, cw / ch, 0.05, 20);
+      proj[14] -= proj[10] * cz;
+      proj[15] += cz;
 
-      gl.uniformMatrix4fv(glLoc.uProj, false, proj);
-      gl.uniformMatrix3fv(glLoc.uRot, false, new Float32Array([
+      gl.uniformMatrix4fv(loc.uProj, false, proj);
+      gl.uniformMatrix3fv(loc.uRot, false, new Float32Array([
         mat[0], mat[3], mat[6],
         mat[1], mat[4], mat[7],
         mat[2], mat[5], mat[8]
       ]));
-      gl.uniform3f(glLoc.uCam, 0, 0, camZ);
+      gl.uniform3f(loc.uCam, 0, 0, cz);
+      gl.uniform3f(loc.uAcc, acrg[0] / 255, acrg[1] / 255, acrg[2] / 255);
 
-      if (curMdl === "asm" && meshes.mid && meshes.left && meshes.right) {
-        const mC = meshes.mid, mL = meshes.left, mR = meshes.right;
-        const gap = expAnim * 34;
-        const totalW = mL.size[0] + mC.size[0] + mR.size[0] + gap * 2;
-        const maxH = Math.max(mL.size[1], mC.size[1], mR.size[1]);
-        const maxD = Math.max(mL.size[2], mC.size[2], mR.size[2]);
-        const scale = 1.95 / (Math.hypot(totalW, maxH, maxD) * 0.5 || 1);
-
-        const xL = -(mC.size[0] * 0.5 + mL.size[0] * 0.5 + gap);
-        const xR = +(mC.size[0] * 0.5 + mR.size[0] * 0.5 + gap);
-        renderMesh(mL, [xL - mL.center[0], -mL.center[1], -mL.center[2]], scale);
-        renderMesh(mC, [-mC.center[0], -mC.center[1], -mC.center[2]], scale);
-        renderMesh(mR, [xR - mR.center[0], -mR.center[1], -mR.center[2]], scale);
+      if (cmdl === "asm" && msh.mid && msh.left && msh.right) {
+        const mc = msh.mid, ml = msh.left, mr = msh.right;
+        const gap = eani * 34;
+        const tw = mr.sz[0] + mc.sz[0] + ml.sz[0] + gap * 2;
+        const mh = Math.max(mr.sz[1], mc.sz[1], ml.sz[1]);
+        const md = Math.max(mr.sz[2], mc.sz[2], ml.sz[2]);
+        const sc = 1.95 / (Math.hypot(tw, mh, md) * 0.5 || 1);
+        const xl = -(mc.sz[0] * 0.5 + mr.sz[0] * 0.5 + gap);
+        const xr = +(mc.sz[0] * 0.5 + ml.sz[0] * 0.5 + gap);
+        rmsh(mr, [xl - mr.ctr[0], -mr.ctr[1], -mr.ctr[2]], sc);
+        rmsh(mc, [-mc.ctr[0], -mc.ctr[1], -mc.ctr[2]], sc);
+        rmsh(ml, [xr - ml.ctr[0], -ml.ctr[1], -ml.ctr[2]], sc);
       } else {
-        const m = meshes[curMdl] || meshes.mid;
+        const m = msh[cmdl] || msh.mid;
         if (m) {
-          const scale = 1.55 / m.radius;
-          renderMesh(m, [-m.center[0], -m.center[1], -m.center[2]], scale);
+          const sc = 1.55 / m.rad;
+          rmsh(m, [-m.ctr[0], -m.ctr[1], -m.ctr[2]], sc);
         }
       }
     }
 
     function spin() {
-      const targetExp = exploded ? 1 : 0;
-      const dExp = targetExp - expAnim;
-      const animExp = Math.abs(dExp) > 0.004;
-      const animRot = !drg && !noa.checked && (Math.abs(vx) >= 0.0008 || Math.abs(vy) >= 0.0008);
+      const te = expl ? 1 : 0;
+      const de = te - eani;
+      const ae = Math.abs(de) > 0.004;
+      const ar = !drg && !noa.checked && (Math.abs(vx) >= 0.0008 || Math.abs(vy) >= 0.0008);
 
-      if (!animExp && !animRot) {
+      if (!ae && !ar) {
         iraf = 0;
         vx = 0;
         vy = 0;
-        expAnim = targetExp;
+        eani = te;
         return;
       }
-      if (animExp) {
-        expAnim += noa.checked ? dExp : dExp * 0.2;
-        if (Math.abs(targetExp - expAnim) <= 0.004) expAnim = targetExp;
+      if (ae) {
+        eani += noa.checked ? de : de * 0.2;
+        if (Math.abs(te - eani) <= 0.004) eani = te;
       }
-      if (animRot) {
-        mat = ortM(mulM(rotM(vx, vy), mat));
+      if (ar) {
+        mat = ortm(mulm(rotm(vx, vy), mat));
         vx *= 0.92;
         vy *= 0.92;
       }
@@ -2774,7 +2775,7 @@
       sy = e.clientY;
       vy = dx * 0.0095;
       vx = dy * 0.0095;
-      mat = ortM(mulM(rotM(vx, vy), mat));
+      mat = ortm(mulm(rotm(vx, vy), mat));
       draw();
     });
 
@@ -2791,46 +2792,50 @@
 
     stg.addEventListener("wheel", (e) => {
       e.preventDefault();
-      const factor = e.deltaY < 0 ? 1.08 : 0.92;
-      zoom = Math.min(2.3, Math.max(0.6, zoom * factor));
+      const f = e.deltaY < 0 ? 1.08 : 0.92;
+      zoom = Math.min(2.3, Math.max(0.6, zoom * f));
       draw();
     }, { passive: false });
 
-    expBtn.addEventListener("click", () => {
-      const now = performance.now();
-      eclk = eclk.filter((x) => now - x < 1400);
-      eclk.push(now);
-      if (eclk.length >= 5) {
-        eclk = [];
-        trig();
-      }
-      exploded = !exploded;
-      stog(exploded);
-      updMdlUI();
+    exp.addEventListener("click", () => {
+      expl = !expl;
+      stog(expl);
+      umdl();
       if (noa.checked) {
-        expAnim = exploded ? 1 : 0;
+        eani = expl ? 1 : 0;
         draw();
       } else if (!iraf) {
         iraf = requestAnimationFrame(spin);
       }
+      if (!eon) {
+        const now = performance.now();
+        if (!etl || now - etl > 1100) {
+          et0 = now;
+          etc = 1;
+        } else {
+          etc += 1;
+        }
+        etl = now;
+        if (now - et0 >= 30000 && etc >= 25) trge();
+      }
     });
 
-    q("#mpills").addEventListener("click", (e) => {
-      const btn = e.target.closest(".mbtn");
+    q("#mpl").addEventListener("click", (e) => {
+      const btn = e.target.closest(".mbt");
       if (!btn) return;
       sclk();
-      setMdl(btn.dataset.m);
+      smdl(btn.dataset.m);
     });
 
     q("#rst").addEventListener("click", () => {
       srst();
       vx = 0;
       vy = 0;
-      rstM();
+      rstm();
       draw();
     });
 
-    const TAB_MDL = ["asm", "drive", "mid", "term"];
+    const tmdl = ["asm", "drive", "mid", "term"];
 
     q("#tabs").addEventListener("click", (e) => {
       const el = e.target.closest(".tab");
@@ -2841,7 +2846,7 @@
       vtxt.innerHTML = fmt(t(`yv${tab + 1}`));
       sp1.innerHTML = fmt(t(`ys${tab + 1}a`));
       sp2.innerHTML = fmt(t(`ys${tab + 1}b`));
-      setMdl(TAB_MDL[tab] || "asm");
+      smdl(tmdl[tab] || "asm");
     });
 
     rng.addEventListener("input", () => {
@@ -2935,12 +2940,12 @@
       if (!document.hidden && !nop.checked && !raf) raf = requestAnimationFrame(loop);
     });
 
-    initGL();
-    rstM();
+    mkgl();
+    rstm();
     bld();
     size();
     init();
-    loadServinasModels();
+    load();
     try {
       const sv = ls.getItem("snd");
       setS(sv === null ? true : sv === "true");
