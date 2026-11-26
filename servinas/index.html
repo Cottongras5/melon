@@ -2389,15 +2389,12 @@
       {
         const t = [];
         addBox(t, 0, 0, 0, 123, 140, 118, "cuerpo");
-        // Rejilla frontal (negro)
         for (let i = -3; i <= 3; i += 1) {
           addBox(t, 0, -24 + i * 7.5, 59.15, 76, 3.6, 0.4, "negro");
         }
-        // Triángulo dorado frontal (oro)
         const tz = 59.25;
         t.push({ mat: "oro", v: [[-18, 20, tz], [18, 20, tz], [0, 50, tz]] });
         t.push({ mat: "oro", v: [[-18, 20, tz - 0.3], [0, 50, tz - 0.3], [18, 20, tz - 0.3]] });
-        // Conectores dorados en ambos laterales (oro)
         for (let r = -2; r <= 2; r += 1) {
           addBox(t, -61.7, r * 20, 0, 0.6, 9, 34, "oro");
           addBox(t, 61.7, r * 20, 0, 0.6, 9, 34, "oro");
@@ -2430,11 +2427,9 @@
       {
         const t = [];
         addBox(t, 0, 0, 0, 180, 94, 42, "cuerpo");
-        // Placa verde SSD
         addBox(t, 0, 8, 21.3, 146, 56, 0.8, "verde");
         addBox(t, -26, 8, 22.0, 52, 34, 1.0, "negro");
         addBox(t, 36, 8, 22.0, 38, 24, 1.0, "blanco");
-        // 24 contactos dorados en la base
         for (let i = 0; i < 24; i += 1) {
           const px = -69 + i * 6;
           addBox(t, px, -47.3, 4, 3.2, 0.8, 18, "oro");
@@ -2445,9 +2440,7 @@
       {
         const t = [];
         addBox(t, 0, 0, 0, 118, 97, 22, "cuerpo");
-        // Pantalla blanca superior
         addBox(t, 0, 21, 11.3, 96, 42, 0.8, "blanco");
-        // Teclado trapezoidal inferior
         for (let r = 0; r < 3; r += 1) {
           const cols = 8 - r;
           const kw = 88 / cols;
@@ -2457,7 +2450,6 @@
             addBox(t, kx, ky, 11.4, kw - 2.2, 8.2, 0.9, "negro");
           }
         }
-        // Contactos traseros
         for (let i = -5; i <= 5; i += 1) {
           addBox(t, i * 8, -26, -11.3, 4, 16, 0.7, "oro");
         }
@@ -2609,8 +2601,8 @@
 
       const camZ = 3.1 / zoom;
       const proj = persp(36, cw / ch, 0.05, 20);
-      // Traslada el mundo -camZ en Z para la cámara en (0,0,camZ)
-      proj[14] -= camZ;
+      // Traslación correcta P * T(0, 0, -camZ)
+      proj[14] -= proj[10] * camZ;
       proj[15] += camZ;
 
       gl.uniformMatrix4fv(glLoc.uProj, false, proj);
